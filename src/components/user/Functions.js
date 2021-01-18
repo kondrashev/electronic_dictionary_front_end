@@ -5,10 +5,16 @@ export async function getNewContent(props) {
     setGetContent(response);
 }
 export async function getCountPages(props) {
-    const { url, range, setCountItems } = props;
+    const { showListCategories, showListWords, url, setCountCategories, setCountWords } = props;
     let response = await fetch(url);
     response = await response.json();
-    setCountItems(
-        response % range > 0 ? Math.round(response / range) + 1 : Math.round(response / range)
-    )
+    if (showListCategories === true) {
+        setCountCategories(
+            response % 5 > 0 ? Math.round(response / 5) + 1 : Math.round(response / 5)
+        );
+    } else if (showListWords === true) {
+        setCountWords(
+            response % 24 > 0 ? Math.round(response / 24) + 1 : Math.round(response / 24)
+        );
+    }
 }

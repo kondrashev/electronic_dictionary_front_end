@@ -105,7 +105,10 @@ const MainMenu = (props) => {
                         setAlertMistakes={props.setAlertMistakes}
                         setTypeMistake={props.setTypeMistake}
                         setGetContent={props.setGetContent}
-                        setCountItems={props.setCountItems}
+                        showListCategories={props.showListCategories}
+                        showListWords={props.showListWords}
+                        setCountCategories={props.setCountCategories}
+                        setCountWords={props.setCountWords}
                     />
                     <Typography
                         className={classes.title}

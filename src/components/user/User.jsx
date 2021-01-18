@@ -17,7 +17,8 @@ const User = (props) => {
     const [alertMistakes, setAlertMistakes] = React.useState(false);
     const [typeMistake, setTypeMistake] = React.useState('');
     const [startListCategories, setStartListCategories] = React.useState(true);
-    const [countItems, setCountItems] = React.useState(0);
+    const [countCategories, setCountCategories] = React.useState(0);
+    const [countWords, setCountWords] = React.useState(0);
     if (sessionStorage.userName === '' || sessionStorage.getItem('login') === 'logout' || sessionStorage.userName === 'admin') {
         return null;
     } else {
@@ -29,9 +30,9 @@ const User = (props) => {
                     setGetContent(response);
                     setStartListCategories(false);
                     let data = {
+                        showListCategories: showListCategories,
                         url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/categories?userName=${sessionStorage.userName}`}`,
-                        range: 5,
-                        setCountItems: setCountItems
+                        setCountCategories: setCountCategories
                     }
                     getCountPages(data);
                 })();
@@ -43,7 +44,9 @@ const User = (props) => {
                 <MainMenu
                     login={sessionStorage.userName}
                     setShowListCategories={setShowListCategories}
+                    showListCategories={showListCategories}
                     setShowListWords={setShowListWords}
+                    showListWords={showListWords}
                     setShowSearchWord={setShowSearchWord}
                     setValueSearchWord={setValueSearchWord}
                     valueSearchWord={valueSearchWord}
@@ -52,7 +55,8 @@ const User = (props) => {
                     numberPageWord={numberPageWord}
                     setAlertMistakes={setAlertMistakes}
                     setTypeMistake={setTypeMistake}
-                    setCountItems={setCountItems}
+                    setCountCategories={setCountCategories}
+                    setCountWords={setCountWords}
                 />
                 <MenuNavigation
                     setShowListCategories={setShowListCategories}
@@ -66,7 +70,7 @@ const User = (props) => {
                     valueSearchWord={valueSearchWord}
                     setGetContent={setGetContent}
                     searchWord={getContent}
-                    setCountItems={setCountItems}
+                    setCountWords={setCountWords}
                 />
                 <Content
                     showListCategories={showListCategories}
@@ -85,8 +89,10 @@ const User = (props) => {
                     numberPageWord={numberPageWord}
                     setGetContent={setGetContent}
                     getContent={getContent}
-                    setCountItems={setCountItems}
-                    countItems={countItems}
+                    setCountCategories={setCountCategories}
+                    countCategories={countCategories}
+                    setCountWords={setCountWords}
+                    countWords={countWords}
                 />
                 {alertMistakes === true &&
                     <Alerts

@@ -4,7 +4,7 @@ import { getNewContent } from './Functions';
 
 const PaginationButtons = (props) => {
     const { showListCategories, showListWords, setNumberPageCategory, setNumberPageWord,
-        currentNameCategory, countItems, setGetContent } = props;
+        currentNameCategory, setGetContent, countCategories, countWords } = props;
     const handleChange = (event, value) => {
         if (event.target.value !== undefined) {
             if (showListCategories === true) {
@@ -26,6 +26,13 @@ const PaginationButtons = (props) => {
             }
         }
     }
+    const countItems = (() => {
+        if (showListCategories === true) {
+            return countCategories;
+        } else if (showListWords === true) {
+            return countWords;
+        }
+    })()
     return (
         <Pagination
             count={countItems}

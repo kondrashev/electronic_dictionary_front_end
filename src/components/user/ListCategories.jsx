@@ -12,10 +12,11 @@ const ListCategories = (props) => {
                     getIdCategory={props.getIdCategory}
                     setShowListCategories={props.setShowListCategories}
                     setShowListWords={props.setShowListWords}
+                    showListWords={props.showListWords}
                     setCurrentNameCategory={props.setCurrentNameCategory}
                     numberPageCategory={props.numberPageCategory}
-                    setCountItems={props.setCountItems}
                     setGetContent={props.setGetContent}
+                    setCountWords={props.setCountWords}
                 />
             )
         })
