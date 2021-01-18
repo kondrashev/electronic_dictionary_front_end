@@ -1,0 +1,50 @@
+body{
+    background-color: #ffffff;
+}
+.user_page{
+    width: 100%;
+    height: auto;
+}
+.category_form{
+    position: absolute;
+    top:120px;
+    width: 350px;
+    height: 280px;
+    background-color: #3A80BA;
+    border-radius: 10px;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+.category_form .close_category_form,
+.word_form .close_word_form
+{
+    width: 30px;
+    height: 30px;
+    align-self: flex-end;
+    border: none;
+    background-color: initial;
+    cursor: pointer;
+}
+.close_category_form:hover,
+.close_word_form:hover
+{
+    border-radius: 50%;
+    background-color: grey;
+}
+.word_form{
+    position: absolute;
+    top:120px;
+    width: 350px;
+    height: 400px;
+    background-color: #3A80BA;
+    border-radius: 10px;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+.category_name:hover{
+    text-decoration: underline;
+}
