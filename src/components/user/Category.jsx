@@ -16,8 +16,7 @@ function Category(props) {
     const [border, setBorder] = useState(0);
     const [oldNameCategory, setOldNameCategory] = useState('');
     const [newNameCategory, setNewNameCategory] = useState('');
-    const { setGetContent, numberPageCategory,
-        setCurrentNameCategory, setCountWords,
+    const { setGetContent, numberPageCategory, setCurrentNameCategory, setCountWords,
         setShowListCategories, setShowListWords, showListWords } = props;
     async function getNameCategory(name) {
         setGetContent([]);
