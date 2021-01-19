@@ -26,7 +26,7 @@ import { getNewContent, getCountPages } from './Functions';
 
 function TableWords(props) {
     const { setGetContent, numberPageWord,
-        currentNameCategory, setCountWords, showListWords } = props;
+        currentNameCategory, setCountItems } = props;
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
             return -1;
@@ -285,9 +285,9 @@ function TableWords(props) {
         }
         getNewContent(data);
         let anotherData = {
-            showListWords: showListWords,
             url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/words?categoryName=${currentNameCategory}&userName=${sessionStorage.userName}`}`,
-            setCountWords: setCountWords
+            range: 24,
+            setCountItems: setCountItems
         }
         getCountPages(anotherData);
     }

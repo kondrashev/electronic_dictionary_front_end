@@ -17,10 +17,11 @@ function Category(props) {
     const [oldNameCategory, setOldNameCategory] = useState('');
     const [newNameCategory, setNewNameCategory] = useState('');
     const { setGetContent, numberPageCategory,
-        setCurrentNameCategory, setCountWords, setShowListCategories, setCountCategories,
-        showListCategories, setShowListWords, showListWords } = props;
+        setCurrentNameCategory, setCountItems,
+        setShowListCategories, setShowListWords } = props;
     async function getNameCategory(name) {
         setGetContent([]);
+        setCountItems(0);
         setCurrentNameCategory(name);
         setShowListCategories(false);
         setShowListWords(true);
@@ -28,11 +29,9 @@ function Category(props) {
         response = await response.json();
         props.setGetContent(response);
         let data = {
-            showListCategories: showListCategories,
-            showListWords: showListWords,
             url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/words?categoryName=${name}&userName=${sessionStorage.userName}`}`,
-            setCountCategories: setCountCategories,
-            setCountWords: setCountWords
+            range: 24,
+            setCountItems: setCountItems
         }
         getCountPages(data);
     }

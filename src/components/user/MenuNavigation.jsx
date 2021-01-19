@@ -7,16 +7,23 @@ import { getCountPages } from './Functions';
 
 const MenuNavigation = (props) => {
     const { setGetContent, setShowListCategories,
-        setShowListWords, setShowSearchWord, showListWords,
-        setCurrentNameCategory, setCountWords } = props;
+        setShowListWords, setShowSearchWord,
+        setCurrentNameCategory, setCountItems } = props;
     async function listCategories() {
         setGetContent([]);
+        setCountItems(0);
         setShowListCategories(true);
         setShowListWords(false);
         setShowSearchWord(false);
         let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/categories?userName=${sessionStorage.userName}`}`);
         response = await response.json();
         setGetContent(response);
+        let data = {
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/categories?userName=${sessionStorage.userName}`}`,
+            range: 5,
+            setCountItems: setCountItems
+        }
+        getCountPages(data);
     }
     async function currentCategory() {
         setCurrentNameCategory(props.searchWord.categoryName);
@@ -24,13 +31,14 @@ const MenuNavigation = (props) => {
         setShowSearchWord(false);
         setShowListWords(true);
         setGetContent([]);
+        setCountItems(0);
         let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/words?page=${0}&categoryName=${props.searchWord.categoryName}&userName=${sessionStorage.userName}`}`);
         response = await response.json();
         setGetContent(response);
         let data = {
-            showListWords: showListWords,
             url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/words?categoryName=${props.searchWord.categoryName}&userName=${sessionStorage.userName}`}`,
-            setCountWords: setCountWords
+            range: 24,
+            setCountItems: setCountItems
         }
         getCountPages(data);
     }

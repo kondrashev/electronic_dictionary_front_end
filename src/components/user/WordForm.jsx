@@ -13,7 +13,7 @@ const WordForm = (props) => {
     const [valueSelect, setValueSelect] = React.useState('');
     const [allCategories, setAllCategories] = React.useState([]);
     const [getListAllCategories, setGetListAllCategories] = React.useState(true);
-    const { setGetContent, numberPageWord, setCountWords, showListWords } = props;
+    const { setGetContent, numberPageWord, setCountItems } = props;
     getListAllCategories === true &&
         (async () => {
             let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/all/categories?userName=${sessionStorage.userName}`}`);
@@ -45,6 +45,7 @@ const WordForm = (props) => {
         props.setShowFormWord(false);
     }
     async function addWord() {
+        setCountItems(0);
         const checkDate = () => {
             if (new Date().getDate() < 10) {
                 return `${'0'}${new Date().getDate()}`;
@@ -91,9 +92,9 @@ const WordForm = (props) => {
             }
             getNewContent(data);
             let anotherData = {
-                showListWords,
                 url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/words?categoryName=${valueSelect}&userName=${sessionStorage.userName}`}`,
-                setCountWords: setCountWords
+                range: 24,
+                setCountItems: setCountItems
             }
             getCountPages(anotherData);
         } else {
