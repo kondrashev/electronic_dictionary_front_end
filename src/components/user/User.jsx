@@ -18,6 +18,7 @@ const User = (props) => {
     const [typeMistake, setTypeMistake] = React.useState('');
     const [startListCategories, setStartListCategories] = React.useState(true);
     const [countItems, setCountItems] = React.useState(0);
+    const [countWords, setCountWords] = React.useState(0);
     if (sessionStorage.userName === '' || sessionStorage.getItem('login') === 'logout' || sessionStorage.userName === 'admin') {
         return null;
     } else {
@@ -87,6 +88,8 @@ const User = (props) => {
                     getContent={getContent}
                     setCountItems={setCountItems}
                     countItems={countItems}
+                    setCountWords={setCountWords}
+                    countWords={countWords}
                 />
                 {alertMistakes === true &&
                     <Alerts
