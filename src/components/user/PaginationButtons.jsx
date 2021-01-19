@@ -2,9 +2,9 @@ import React from 'react';
 import Pagination from '@material-ui/lab/Pagination';
 import { getNewContent } from './Functions';
 
-const PaginationButtonsWords = (props) => {
+const PaginationButtons = (props) => {
     const { showListCategories, showListWords, setNumberPageCategory, setNumberPageWord,
-        currentNameCategory, setGetContent, countWords } = props;
+        currentNameCategory, setGetContent, countCategories, countWords } = props;
     const handleChange = (event, value) => {
         if (event.target.value !== undefined) {
             if (showListCategories === true) {
@@ -26,9 +26,16 @@ const PaginationButtonsWords = (props) => {
             }
         }
     }
+    const countItems = (() => {
+        if (showListCategories === true) {
+            return countCategories;
+        } else if (showListWords === true) {
+            return countWords;
+        }
+    })();
     return (
         <Pagination
-            count={countWords}
+            count={countItems}
             variant="outlined"
             onChange={handleChange}
             shape="rounded"
@@ -41,4 +48,4 @@ const PaginationButtonsWords = (props) => {
         />
     )
 }
-export default PaginationButtonsWords;
+export default PaginationButtons;

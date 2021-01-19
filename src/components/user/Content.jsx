@@ -5,8 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import TableWords from './TableWords';
 import SearchWord from './SearchWord';
-import PaginationButtonsCategories from './PaginationButtonsCategories';
-import PaginationButtonsWords from './PaginationButtonsWords';
+import PaginationButtons from './PaginationButtons';
 import ListCategories from './ListCategories';
 import { getNewContent, getCountPages } from './Functions';
 
@@ -128,25 +127,8 @@ const Content = (props) => {
                 }
             </div>
             {
-                props.showListCategories === true &&
-                <PaginationButtonsCategories
-                    setShowListCategories={setShowListCategories}
-                    showListCategories={showListCategories}
-                    setShowListWords={setShowListWords}
-                    showListWords={showListWords}
-                    currentNameCategory={props.currentNameCategory}
-                    setNumberPageCategory={props.setNumberPageCategory}
-                    setNumberPageWord={props.setNumberPageWord}
-                    setGetContent={setGetContent}
-                    setCountCategories={setCountCategories}
-                    countCategories={countCategories}
-                    setCountWords={setCountWords}
-                    countWords={countWords}
-                />
-            }
-            {
-                props.showListWords === true &&
-                <PaginationButtonsWords
+                props.showSearchWord === false &&
+                <PaginationButtons
                     setShowListCategories={setShowListCategories}
                     showListCategories={showListCategories}
                     setShowListWords={setShowListWords}
