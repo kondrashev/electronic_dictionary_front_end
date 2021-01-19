@@ -11,11 +11,13 @@ const ListCategories = (props) => {
                     index={index}
                     getIdCategory={props.getIdCategory}
                     setShowListCategories={props.setShowListCategories}
+                    showListCategories={props.showListCategories}
                     setShowListWords={props.setShowListWords}
                     showListWords={props.showListWords}
                     setCurrentNameCategory={props.setCurrentNameCategory}
                     numberPageCategory={props.numberPageCategory}
                     setGetContent={props.setGetContent}
+                    setCountCategories={props.setCountCategories}
                     setCountWords={props.setCountWords}
                 />
             )

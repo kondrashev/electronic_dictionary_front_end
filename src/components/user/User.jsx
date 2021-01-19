@@ -31,8 +31,10 @@ const User = (props) => {
                     setStartListCategories(false);
                     let data = {
                         showListCategories: showListCategories,
+                        showListWords: showListWords,
                         url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/categories?userName=${sessionStorage.userName}`}`,
-                        setCountCategories: setCountCategories
+                        setCountCategories: setCountCategories,
+                        setCountWords: setCountWords
                     }
                     getCountPages(data);
                 })();

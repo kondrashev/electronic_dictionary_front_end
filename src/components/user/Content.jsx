@@ -104,6 +104,7 @@ const Content = (props) => {
                         setGetContent={setGetContent}
                         categories={props.getContent}
                         setCountPages={props.setCountPages}
+                        setCountCategories={setCountCategories}
                         setCountWords={setCountWords}
                     />
                 }
