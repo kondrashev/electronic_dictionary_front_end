@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import TableWords from './TableWords';
 import SearchWord from './SearchWord';
-import PaginationButtons from './PaginationButtons';
+import PaginationButtonsCategories from './PaginationButtonsCategories';
 import PaginationButtonsWords from './PaginationButtonsWords';
 import ListCategories from './ListCategories';
 import { getNewContent, getCountPages } from './Functions';
@@ -13,10 +13,10 @@ import { getNewContent, getCountPages } from './Functions';
 const Content = (props) => {
     const [showDeleteButtonCategory, setShowDeleteButtonCategory] = React.useState(false);
     const [listIdCategories, setListIdCategories] = React.useState([]);
-    const { setGetContent, numberPageCategory, setCountItems, countItems,
-        setCountWords, countWords } = props;
+    const { setGetContent, numberPageCategory, setCountCategories,
+        countCategories, setCountWords, countWords } = props;
     async function deleteCategories() {
-        setCountItems(0);
+        setCountCategories(0);
         let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${'https://specialdictionary.herokuapp.com/delete/categories'}`, {
             method: 'POST',
             headers: {
@@ -44,7 +44,7 @@ const Content = (props) => {
         let anotherData = {
             url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/categories?userName=${sessionStorage.userName}`}`,
             range: 5,
-            setCountItems: setCountItems
+            setCountCategories: setCountCategories
         }
         getCountPages(anotherData);
     }
@@ -98,11 +98,10 @@ const Content = (props) => {
                         showListCategories={props.showListCategories}
                         setShowListWords={props.setShowListWords}
                         setCurrentNameCategory={props.setCurrentNameCategory}
-                        numberPageCategory={props.numberPageCategory}
-                        setGetContent={props.setGetContent}
+                        numberPageCategory={numberPageCategory}
+                        setGetContent={setGetContent}
                         categories={props.getContent}
                         setCountPages={props.setCountPages}
-                        setCountItems={setCountItems}
                         setCountWords={setCountWords}
                     />
                 }
@@ -111,9 +110,9 @@ const Content = (props) => {
                     <TableWords
                         currentNameCategory={props.currentNameCategory}
                         numberPageWord={props.numberPageWord}
-                        setGetContent={props.setGetContent}
+                        setGetContent={setGetContent}
                         words={props.getContent}
-                        setCountItems={setCountItems}
+                        setCountWords={setCountWords}
                     />
                 }
                 {
@@ -125,31 +124,20 @@ const Content = (props) => {
                 }
             </div>
             {
-                props.showSearchWord === false &&
-                <PaginationButtons
-                    setShowListCategories={props.setShowListCategories}
-                    showListCategories={props.showListCategories}
-                    setShowListWords={props.setShowListWords}
-                    showListWords={props.showListWords}
-                    currentNameCategory={props.currentNameCategory}
-                    countItems={countItems}
+                props.showListCategories === true &&
+                <PaginationButtonsCategories
+                    countCategories={countCategories}
                     setNumberPageCategory={props.setNumberPageCategory}
-                    setNumberPageWord={props.setNumberPageWord}
-                    setGetContent={props.setGetContent}
+                    setGetContent={setGetContent}
                 />
             }
             {
-                props.showSearchWord === false &&
+                props.showListWords === true &&
                 <PaginationButtonsWords
-                    setShowListCategories={props.setShowListCategories}
-                    showListCategories={props.showListCategories}
-                    setShowListWords={props.setShowListWords}
-                    showListWords={props.showListWords}
                     currentNameCategory={props.currentNameCategory}
                     countWords={countWords}
-                    setNumberPageCategory={props.setNumberPageCategory}
                     setNumberPageWord={props.setNumberPageWord}
-                    setGetContent={props.setGetContent}
+                    setGetContent={setGetContent}
                 />
             }
         </div >

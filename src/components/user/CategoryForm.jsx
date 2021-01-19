@@ -5,12 +5,12 @@ import { getNewContent, getCountPages } from './Functions';
 
 const CategoryForm = (props) => {
     const [valueNameCategory, setValueNameCategory] = React.useState('');
-    const { setGetContent, numberPageCategory, setCountItems } = props;
+    const { setGetContent, numberPageCategory, setCountCategories } = props;
     const nameChange = (event) => {
         setValueNameCategory(event.target.value);
     };
     async function addCategory() {
-        setCountItems(0);
+        setCountCategories(0);
         const checkDate = () => {
             if (new Date().getDate() < 10) {
                 return `${'0'}${new Date().getDate()}`;
@@ -52,7 +52,7 @@ const CategoryForm = (props) => {
             let anotherData = {
                 url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/categories?userName=${sessionStorage.userName}`}`,
                 range: 5,
-                setCountItems: setCountItems
+                setCountCategories: setCountCategories
             }
             getCountPages(anotherData);
         } else {

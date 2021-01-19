@@ -26,7 +26,7 @@ import { getNewContent, getCountPages } from './Functions';
 
 function TableWords(props) {
     const { setGetContent, numberPageWord,
-        currentNameCategory, setCountItems } = props;
+        currentNameCategory, setCountWords } = props;
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
             return -1;
@@ -242,6 +242,7 @@ function TableWords(props) {
         }
     }
     async function deleteWords() {
+        setCountWords(0);
         let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/delete/words?categoryName=${categoryName}`}`, {
             method: 'POST',
             headers: {
@@ -287,7 +288,7 @@ function TableWords(props) {
         let anotherData = {
             url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/words?categoryName=${currentNameCategory}&userName=${sessionStorage.userName}`}`,
             range: 24,
-            setCountItems: setCountItems
+            setCountWords: setCountWords
         }
         getCountPages(anotherData);
     }

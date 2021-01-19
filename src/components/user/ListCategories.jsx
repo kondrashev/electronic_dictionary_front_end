@@ -14,7 +14,6 @@ const ListCategories = (props) => {
                     setShowListWords={props.setShowListWords}
                     setCurrentNameCategory={props.setCurrentNameCategory}
                     numberPageCategory={props.numberPageCategory}
-                    setCountItems={props.setCountItems}
                     setCountWords={props.setCountWords}
                     setGetContent={props.setGetContent}
                 />
