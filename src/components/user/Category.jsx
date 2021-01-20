@@ -20,6 +20,7 @@ function Category(props) {
         setCurrentNameCategory, setCountWords,
         setShowListCategories, setShowListWords } = props;
     async function getNameCategory(name) {
+        setCountWords(0);
         setGetContent([]);
         setCurrentNameCategory(name);
         setShowListCategories(false);
