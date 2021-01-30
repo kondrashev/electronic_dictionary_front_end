@@ -6,9 +6,10 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import { getCountPages } from './Functions';
 
 const MenuNavigation = (props) => {
-    const { setGetContent, setShowListCategories, numberPageCategory,
-        setShowListWords, setShowSearchWord,
-        setCurrentNameCategory, setCountWords } = props;
+    const { setShowListCategories, setShowListWords, showListWords,
+        setCurrentNameCategory, currentNameCategory, setShowSearchWord,
+        showSearchWord, valueSearchWord, setGetContent,
+        searchWord, setCountWords, numberPageCategory } = props;
     async function listCategories() {
         setGetContent([]);
         setShowListCategories(true);
@@ -19,16 +20,16 @@ const MenuNavigation = (props) => {
         setGetContent(response);
     }
     async function currentCategory() {
-        setCurrentNameCategory(props.searchWord.categoryName);
+        setCurrentNameCategory(searchWord.categoryName);
         setShowListCategories(false);
         setShowSearchWord(false);
         setShowListWords(true);
         setGetContent([]);
-        let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/words?page=${0}&categoryName=${props.searchWord.categoryName}&userName=${sessionStorage.userName}`}`);
+        let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/words?page=${0}&categoryName=${searchWord.categoryName}&userName=${sessionStorage.userName}`}`);
         response = await response.json();
         setGetContent(response);
         let data = {
-            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/words?categoryName=${props.searchWord.categoryName}&userName=${sessionStorage.userName}`}`,
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/words?categoryName=${searchWord.categoryName}&userName=${sessionStorage.userName}`}`,
             range: 24,
             setCountWords: setCountWords
         }
@@ -57,7 +58,7 @@ const MenuNavigation = (props) => {
                     Categories
                 </Link>
                 {
-                    props.showSearchWord === true &&
+                    showSearchWord === true &&
                     <Link
                         style={{
                             cursor: 'pointer'
@@ -65,19 +66,19 @@ const MenuNavigation = (props) => {
                         color="inherit"
                         onClick={currentCategory}
                     >
-                        {props.searchWord.categoryName}
+                        {searchWord.categoryName}
                     </Link>
                 }
                 <Typography
                     color="textPrimary"
                 >
                     {
-                        props.showListWords === true &&
-                        props.currentNameCategory
+                        showListWords === true &&
+                        currentNameCategory
                     }
                     {
-                        props.showSearchWord === true &&
-                        props.valueSearchWord
+                        showSearchWord === true &&
+                        valueSearchWord
                     }
                 </Typography>
             </Breadcrumbs>

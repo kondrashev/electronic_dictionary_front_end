@@ -10,6 +10,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import HomeIcon from '@material-ui/icons/Home';
 
 export default function MenuAdmin(props) {
+    const { setSearchUserMark, setGetSearchUser, listUsers } = props;
     const useStyles = makeStyles((theme) => ({
         root: {
             flexGrow: 1,
@@ -68,8 +69,8 @@ export default function MenuAdmin(props) {
     }
     const searchUserGet = (event) => {
         if (event.keyCode == 13) {
-            props.setGetSearchUser(props.listUsers.filter(user => user.login === event.target.value))
-            props.setSearchUserMark(true);
+            setGetSearchUser(listUsers.filter(user => user.login === event.target.value))
+            setSearchUserMark(true);
             event.target.value = '';
         }
     }

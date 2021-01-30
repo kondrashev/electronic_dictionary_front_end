@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 export default function Alerts(props) {
+    const { number, setAlertMistakes, typeMistake } = props;
     const useStyles = makeStyles((theme) => ({
         root: {
             width: '100%',
@@ -19,7 +20,7 @@ export default function Alerts(props) {
         top: '50%',
         transform: 'translate(-50%,-50%)'
     }
-    switch (props.number) {
+    switch (number) {
         case 1:
             return (
                 <div
@@ -80,10 +81,10 @@ export default function Alerts(props) {
                 >
                     <Alert
                         severity="info"
-                        onClose={() => props.setAlertMistakes(false)}
+                        onClose={() => setAlertMistakes(false)}
                     >
                         <AlertTitle>Info</AlertTitle>
-                        {props.typeMistake}<strong>check it out!</strong>
+                        {typeMistake}<strong>check it out!</strong>
                     </Alert>
                 </div>
             )

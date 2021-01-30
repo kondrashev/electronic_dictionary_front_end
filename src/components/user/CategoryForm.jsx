@@ -5,7 +5,8 @@ import { getNewContent, getCountPages } from './Functions';
 
 const CategoryForm = (props) => {
     const [valueNameCategory, setValueNameCategory] = React.useState('');
-    const { setGetContent, numberPageCategory, setCountCategories, showListCategories } = props;
+    const { setGetContent, numberPageCategory, setCountCategories, showListCategories,
+        setShowMainMenu, setShowFormCategory, setAlertMistakes, setTypeMistake } = props;
     const nameChange = (event) => {
         setValueNameCategory(event.target.value);
     };
@@ -59,8 +60,8 @@ const CategoryForm = (props) => {
             getCountPages(anotherData);
         } else {
             setValueNameCategory('');
-            props.setTypeMistake('This category already has in the dictionary-');
-            props.setAlertMistakes(true);
+            setTypeMistake('This category already has in the dictionary-');
+            setAlertMistakes(true);
         }
     }
     const onKeyPress = (event) => {
@@ -69,8 +70,8 @@ const CategoryForm = (props) => {
         }
     }
     const closeFormCategory = () => {
-        props.setShowMainMenu(true);
-        props.setShowFormCategory(false);
+        setShowMainMenu(true);
+        setShowFormCategory(false);
     }
     return (
         <div

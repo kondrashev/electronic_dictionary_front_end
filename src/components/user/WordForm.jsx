@@ -13,7 +13,8 @@ const WordForm = (props) => {
     const [valueSelect, setValueSelect] = React.useState('');
     const [allCategories, setAllCategories] = React.useState([]);
     const [getListAllCategories, setGetListAllCategories] = React.useState(true);
-    const { setGetContent, numberPageWord, setCountWords, showListWords } = props;
+    const { setGetContent, numberPageWord, setCountWords, showListWords,
+        setShowMainMenu, setShowFormWord, setAlertMistakes, setTypeMistake } = props;
     getListAllCategories === true &&
         (async () => {
             let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/all/categories?userName=${sessionStorage.userName}`}`);
@@ -41,8 +42,8 @@ const WordForm = (props) => {
         setValueMeaning(transformLetters(event));
     }
     const closeFormWord = () => {
-        props.setShowMainMenu(true);
-        props.setShowFormWord(false);
+        setShowMainMenu(true);
+        setShowFormWord(false);
     }
     async function addWord() {
         setCountWords(0);
@@ -103,8 +104,8 @@ const WordForm = (props) => {
             setValueSelect('');
             setValueName('');
             setValueMeaning('');
-            props.setTypeMistake('This word already has in the dictionary-');
-            props.setAlertMistakes(true);
+            setTypeMistake('This word already has in the dictionary-');
+            setAlertMistakes(true);
         }
     }
     const onKeyPress = (event) => {

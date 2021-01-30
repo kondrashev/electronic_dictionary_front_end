@@ -42,14 +42,12 @@ const User = (props) => {
                 className='user_page'
             >
                 <MainMenu
-                    login={sessionStorage.userName}
                     setShowListCategories={setShowListCategories}
                     showListCategories={showListCategories}
                     setShowListWords={setShowListWords}
                     showListWords={showListWords}
                     setShowSearchWord={setShowSearchWord}
                     setValueSearchWord={setValueSearchWord}
-                    valueSearchWord={valueSearchWord}
                     setGetContent={setGetContent}
                     numberPageCategory={numberPageCategory}
                     numberPageWord={numberPageWord}
@@ -66,7 +64,6 @@ const User = (props) => {
                     currentNameCategory={currentNameCategory}
                     setShowSearchWord={setShowSearchWord}
                     showSearchWord={showSearchWord}
-                    setValueSearchWord={setValueSearchWord}
                     valueSearchWord={valueSearchWord}
                     setGetContent={setGetContent}
                     searchWord={getContent}
@@ -81,8 +78,6 @@ const User = (props) => {
                     setCurrentNameCategory={setCurrentNameCategory}
                     currentNameCategory={currentNameCategory}
                     setShowSearchWord={setShowSearchWord}
-                    showSearchWord={showSearchWord}
-                    setValueSearchWord={setValueSearchWord}
                     valueSearchWord={valueSearchWord}
                     setNumberPageCategory={setNumberPageCategory}
                     numberPageCategory={numberPageCategory}

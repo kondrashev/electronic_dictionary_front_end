@@ -13,8 +13,10 @@ import { getNewContent, getCountPages } from './Functions';
 const Content = (props) => {
     const [showDeleteButtonCategory, setShowDeleteButtonCategory] = React.useState(false);
     const [listIdCategories, setListIdCategories] = React.useState([]);
-    const { setGetContent, numberPageCategory, setCountCategories,
-        countCategories, setCountWords, countWords } = props;
+    const { showListCategories, setShowListCategories, showListWords, setShowListWords, setCurrentNameCategory,
+        currentNameCategory, showSearchWord, valueSearchWord, setNumberPageCategory,
+        numberPageCategory, setNumberPageWord, numberPageWord, setGetContent, getContent,
+        setCountCategories, countCategories, setCountWords, countWords } = props;
     async function deleteCategories() {
         setCountCategories(0);
         let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${'https://specialdictionary.herokuapp.com/delete/categories'}`, {
@@ -91,52 +93,50 @@ const Content = (props) => {
                     </List>
                 }
                 {
-                    props.showListCategories === true &&
+                    showListCategories === true &&
                     <ListCategories
                         getIdCategory={getIdCategory}
-                        setShowListCategories={props.setShowListCategories}
-                        showListCategories={props.showListCategories}
-                        setShowListWords={props.setShowListWords}
-                        setCurrentNameCategory={props.setCurrentNameCategory}
+                        setShowListCategories={setShowListCategories}
+                        setShowListWords={setShowListWords}
+                        setCurrentNameCategory={setCurrentNameCategory}
                         numberPageCategory={numberPageCategory}
                         setGetContent={setGetContent}
-                        categories={props.getContent}
-                        setCountPages={props.setCountPages}
+                        categories={getContent}
                         setCountWords={setCountWords}
                     />
                 }
                 {
-                    props.showListWords === true &&
+                    showListWords === true &&
                     <TableWords
-                        currentNameCategory={props.currentNameCategory}
-                        numberPageWord={props.numberPageWord}
+                        currentNameCategory={currentNameCategory}
+                        numberPageWord={numberPageWord}
                         setGetContent={setGetContent}
-                        words={props.getContent}
+                        words={getContent}
                         setCountWords={setCountWords}
                     />
                 }
                 {
-                    props.showSearchWord === true &&
+                    showSearchWord === true &&
                     <SearchWord
-                        valueSearchWord={props.valueSearchWord}
-                        searchWord={props.getContent}
+                        valueSearchWord={valueSearchWord}
+                        searchWord={getContent}
                     />
                 }
             </div>
             {
-                props.showListCategories === true &&
+                showListCategories === true &&
                 <PaginationButtonsCategories
                     countCategories={countCategories}
-                    setNumberPageCategory={props.setNumberPageCategory}
+                    setNumberPageCategory={setNumberPageCategory}
                     setGetContent={setGetContent}
                 />
             }
             {
-                props.showListWords === true &&
+                showListWords === true &&
                 <PaginationButtonsWords
-                    currentNameCategory={props.currentNameCategory}
+                    currentNameCategory={currentNameCategory}
                     countWords={countWords}
-                    setNumberPageWord={props.setNumberPageWord}
+                    setNumberPageWord={setNumberPageWord}
                     setGetContent={setGetContent}
                 />
             }

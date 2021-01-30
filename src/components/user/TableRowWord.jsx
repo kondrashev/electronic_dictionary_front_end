@@ -12,7 +12,8 @@ const TableRowWord = (props) => {
     const [newNameWord, setNewNameWord] = React.useState('');
     const [oldMeaningWord, setOldMeaningWord] = React.useState('');
     const [newMeaningWord, setNewMeaningWord] = React.useState('');
-    const { setGetContent, numberPageWord, currentNameCategory } = props;
+    const { row, isItemSelected, getIdWord, handleClick, labelId,
+        currentNameCategory, numberPageWord, setGetContent } = props;
     const pronunciation = (name) => {
         return `${'https://translate.google.com/#view=home&op=translate&sl=en&tl=uk&text='}${name}`;
     }
@@ -52,7 +53,7 @@ const TableRowWord = (props) => {
                 setShowEditNameWord(false);
                 let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
                 Object.entries(user.categories).map(([, value]) => {
-                    if (value.name === props.currentNameCategory) {
+                    if (value.name === currentNameCategory) {
                         value.words.map((word) => {
                             if (word.name === oldNameWord) {
                                 word.name = newNameWord
@@ -91,7 +92,7 @@ const TableRowWord = (props) => {
                 setShowEditMeaningWord(false);
                 let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
                 Object.entries(user.categories).map(([, value]) => {
-                    if (value.name === props.currentNameCategory) {
+                    if (value.name === currentNameCategory) {
                         value.words.map((word) => {
                             if (word.meaning === oldMeaningWord) {
                                 word.meaning = newMeaningWord
@@ -112,19 +113,19 @@ const TableRowWord = (props) => {
         <TableRow
             hover
             role="checkbox"
-            aria-checked={props.isItemSelected}
+            aria-checked={isItemSelected}
             tabIndex={-1}
-            key={props.row.name}
-            selected={props.isItemSelected}
+            key={row.name}
+            selected={isItemSelected}
             className='row_edit_word'
         >
             <TableCell padding="checkbox">
                 <Checkbox
-                    checked={props.isItemSelected}
-                    inputProps={{ 'aria-labelledby': props.labelId }}
-                    value={props.row.id}
-                    onChange={props.getIdWord}
-                    onClick={(event) => props.handleClick(event, props.row.name)}
+                    checked={isItemSelected}
+                    inputProps={{ 'aria-labelledby': labelId }}
+                    value={row.id}
+                    onChange={getIdWord}
+                    onClick={(event) => handleClick(event, row.name)}
                 />
             </TableCell>
             <Tooltip
@@ -132,16 +133,16 @@ const TableRowWord = (props) => {
             >
                 <TableCell
                     component="th"
-                    id={props.labelId}
+                    id={labelId}
                     scope="row"
                     padding="none"
                     className='name_word'
-                    onClick={() => editNameWordShow(props.row.name)}
+                    onClick={() => editNameWordShow(row.name)}
                     style={{
                         cursor: 'pointer'
                     }}
                 >
-                    {props.row.name}
+                    {row.name}
                 </TableCell>
             </Tooltip>
             {showEditNameWord === true &&
@@ -169,12 +170,12 @@ const TableRowWord = (props) => {
                 <TableCell
                     align="right"
                     className='meaning_word'
-                    onClick={() => editMeaningWordShow(props.row.name, props.row.meaning)}
+                    onClick={() => editMeaningWordShow(row.name, row.meaning)}
                     style={{
                         cursor: 'pointer'
                     }}
                 >
-                    {props.row.meaning}
+                    {row.meaning}
                 </TableCell>
             </Tooltip>
             {showEditMeaningWord === true &&
@@ -197,14 +198,14 @@ const TableRowWord = (props) => {
                 </TableCell>
             }
             <TableCell align="right">
-                {props.row.date}
+                {row.date}
             </TableCell>
             <TableCell align="right">
                 <a
-                    href={pronunciation(props.row.name)}
+                    href={pronunciation(row.name)}
                     target='_blank'
                 >
-                    {props.row.name}
+                    {row.name}
                 </a>
             </TableCell>
         </TableRow>

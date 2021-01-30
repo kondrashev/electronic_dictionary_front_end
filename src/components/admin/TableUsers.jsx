@@ -21,6 +21,7 @@ import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 export default function UsersTable(props) {
+    const { setListUsers, setSearchUserMark, users } = props;
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
             return -1;
@@ -193,7 +194,7 @@ export default function UsersTable(props) {
         },
     }));
     const userList = () => {
-        props.setSearchUserMark(false);
+        setSearchUserMark(false);
     }
     const [userListId, setUserListId] = React.useState([]);
     const handleSelectAllClick = (event) => {
@@ -235,9 +236,9 @@ export default function UsersTable(props) {
         setSelected([]);
         response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/users?pattern=${'user'}`}`);
         response = await response.json();
-        props.setListUsers(response);
+        setListUsers(response);
     }
-    const rows = props.users;
+    const rows = users;
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');

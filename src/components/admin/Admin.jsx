@@ -6,6 +6,7 @@ const Admin = (props) => {
     const [searchUserMark, setSearchUserMark] = React.useState(false);
     const [getSearchUser, setGetSearchUser] = React.useState([]);
     const [getUsers, setGetUsers] = React.useState(true);
+    const { listUsers, setListUsers } = props;
     if (sessionStorage.login === 'log_in' && sessionStorage.userName === 'admin') {
         getUsers === true &&
             (async () => {
@@ -19,10 +20,10 @@ const Admin = (props) => {
                 <MenuAdmin
                     setSearchUserMark={setSearchUserMark}
                     setGetSearchUser={setGetSearchUser}
-                    listUsers={props.listUsers}
+                    listUsers={listUsers}
                 />
                 <TableUsers
-                    setListUsers={props.setListUsers}
+                    setListUsers={setListUsers}
                     setSearchUserMark={setSearchUserMark}
                     users={searchUserMark === false ? props.listUsers : getSearchUser}
                 />

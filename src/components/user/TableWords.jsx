@@ -25,8 +25,7 @@ import TableRowWord from './TableRowWord';
 import { getNewContent, getCountPages } from './Functions';
 
 function TableWords(props) {
-    const { setGetContent, numberPageWord,
-        currentNameCategory, setCountWords } = props;
+    const { currentNameCategory, numberPageWord, setGetContent, words, setCountWords } = props;
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
             return -1;
@@ -292,7 +291,7 @@ function TableWords(props) {
         }
         getCountPages(anotherData);
     }
-    const rows = props.words;
+    const rows = words;
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -376,9 +375,9 @@ function TableWords(props) {
                                             getIdWord={getIdWord}
                                             handleClick={handleClick}
                                             labelId={labelId}
-                                            currentNameCategory={props.currentNameCategory}
-                                            numberPageWord={props.numberPageWord}
-                                            setGetContent={props.setGetContent}
+                                            currentNameCategory={currentNameCategory}
+                                            numberPageWord={numberPageWord}
+                                            setGetContent={setGetContent}
                                         />
                                     );
                                 })}

@@ -4,8 +4,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 
 const ChooseCategory = (props) => {
+    const { showChooseCategory, selectCategory } = props;
     const [allCategories, setAllCategories] = React.useState([]);
-    props.showChooseCategory === true &&
+    showChooseCategory === true &&
         (async () => {
             let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/all/categories?userName=${sessionStorage.userName}`}`);
             response = await response.json();
@@ -26,7 +27,7 @@ const ChooseCategory = (props) => {
             <Select
                 native
                 label='name'
-                onChange={props.selectCategory}
+                onChange={selectCategory}
                 inputProps={{
                     name: 'name'
                 }}

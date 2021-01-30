@@ -11,6 +11,9 @@ import Tooltip from '@material-ui/core/Tooltip';
 import HomeIcon from '@material-ui/icons/Home';
 
 const MainMenu = (props) => {
+    const { setShowListCategories, showListCategories, setShowListWords, showListWords, setShowSearchWord,
+        setValueSearchWord, setGetContent, numberPageCategory, numberPageWord, setAlertMistakes,
+        setTypeMistake, setCountCategories, setCountWords } = props;
     const useStyles = makeStyles((theme) => ({
         root: {
             flexGrow: 1,
@@ -69,21 +72,21 @@ const MainMenu = (props) => {
     }
     async function searchWordGet(event) {
         if (event.keyCode == 13) {
-            props.setShowListCategories(false);
-            props.setShowListWords(false);
-            props.setGetContent([]);
-            props.setShowSearchWord(true);
-            props.setValueSearchWord(event.target.value);
+            setShowListCategories(false);
+            setShowListWords(false);
+            setGetContent([]);
+            setShowSearchWord(true);
+            setValueSearchWord(event.target.value);
             let nameSearchWord = event.target.value;
             event.target.value = '';
             let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/search/word?wordName=${nameSearchWord}&userName=${sessionStorage.userName}`}`);
             response = await response.json();
             if (response.name !== null) {
-                props.setGetContent(response);
+                setGetContent(response);
             } else {
-                props.setShowSearchWord(false);
-                props.setTypeMistake(`This word didn't find-`);
-                props.setAlertMistakes(true);
+                setShowSearchWord(false);
+                setTypeMistake(`This word didn't find-`);
+                setAlertMistakes(true);
             }
         }
     }
@@ -100,15 +103,15 @@ const MainMenu = (props) => {
             >
                 <Toolbar>
                     <OpenMenu
-                        numberPageCategory={props.numberPageCategory}
-                        numberPageWord={props.numberPageWord}
-                        setAlertMistakes={props.setAlertMistakes}
-                        setTypeMistake={props.setTypeMistake}
-                        setGetContent={props.setGetContent}
-                        setCountCategories={props.setCountCategories}
-                        setCountWords={props.setCountWords}
-                        showListCategories={props.showListCategories}
-                        showListWords={props.showListWords}
+                        numberPageCategory={numberPageCategory}
+                        numberPageWord={numberPageWord}
+                        setAlertMistakes={setAlertMistakes}
+                        setTypeMistake={setTypeMistake}
+                        setGetContent={setGetContent}
+                        setCountCategories={setCountCategories}
+                        setCountWords={setCountWords}
+                        showListCategories={showListCategories}
+                        showListWords={showListWords}
                     />
                     <Typography
                         className={classes.title}
