@@ -13,7 +13,7 @@ const WordForm = (props) => {
     const [valueSelect, setValueSelect] = React.useState('');
     const [allCategories, setAllCategories] = React.useState([]);
     const [getListAllCategories, setGetListAllCategories] = React.useState(true);
-    const { setGetContent, numberPageWord, setCountWords } = props;
+    const { setGetContent, numberPageWord, setCountWords, showListWords } = props;
     getListAllCategories === true &&
         (async () => {
             let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/all/categories?userName=${sessionStorage.userName}`}`);
@@ -86,11 +86,13 @@ const WordForm = (props) => {
                 }
             })
             localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-            let data = {
-                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/words?page=${numberPageWord - 1}&categoryName=${valueSelect}&userName=${sessionStorage.userName}`}`,
-                setGetContent: setGetContent
+            if (showListWords === true) {
+                let data = {
+                    url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/words?page=${numberPageWord - 1}&categoryName=${valueSelect}&userName=${sessionStorage.userName}`}`,
+                    setGetContent: setGetContent
+                }
+                getNewContent(data);
             }
-            getNewContent(data);
             let anotherData = {
                 url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/words?categoryName=${valueSelect}&userName=${sessionStorage.userName}`}`,
                 range: 24,

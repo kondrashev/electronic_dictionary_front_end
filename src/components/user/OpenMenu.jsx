@@ -12,7 +12,8 @@ const OpenMenu = (props) => {
     const [showFormCategory, setShowFormCategory] = React.useState(false);
     const [showFormWord, setShowFormWord] = React.useState(false);
     const { numberPageCategory, numberPageWord, setAlertMistakes,
-        setTypeMistake, setGetContent, setCountCategories, setCountWords } = props;
+        setTypeMistake, setGetContent, setCountCategories, setCountWords,
+        showListCategories, showListWords } = props;
     const formCategoryShow = () => {
         setShowMainMenu(false);
         setShowFormCategory(true);
@@ -80,6 +81,7 @@ const OpenMenu = (props) => {
                             setTypeMistake={setTypeMistake}
                             setGetContent={setGetContent}
                             setCountCategories={setCountCategories}
+                            showListCategories={showListCategories}
                         />
                     </animated.div>
                 ))}
@@ -104,6 +106,7 @@ const OpenMenu = (props) => {
                             numberPageWord={numberPageWord}
                             setGetContent={setGetContent}
                             setCountWords={setCountWords}
+                            showListWords={showListWords}
                         />
                     </animated.div>
                 ))}

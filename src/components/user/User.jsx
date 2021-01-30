@@ -44,7 +44,9 @@ const User = (props) => {
                 <MainMenu
                     login={sessionStorage.userName}
                     setShowListCategories={setShowListCategories}
+                    showListCategories={showListCategories}
                     setShowListWords={setShowListWords}
+                    showListWords={showListWords}
                     setShowSearchWord={setShowSearchWord}
                     setValueSearchWord={setValueSearchWord}
                     valueSearchWord={valueSearchWord}

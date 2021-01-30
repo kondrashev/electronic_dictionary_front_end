@@ -5,7 +5,7 @@ import { getNewContent, getCountPages } from './Functions';
 
 const CategoryForm = (props) => {
     const [valueNameCategory, setValueNameCategory] = React.useState('');
-    const { setGetContent, numberPageCategory, setCountCategories } = props;
+    const { setGetContent, numberPageCategory, setCountCategories, showListCategories } = props;
     const nameChange = (event) => {
         setValueNameCategory(event.target.value);
     };
@@ -44,11 +44,13 @@ const CategoryForm = (props) => {
             let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
             user.categories.push(category);
             localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-            let data = {
-                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/categories?userName=${sessionStorage.userName}&page=${numberPageCategory - 1}`}`,
-                setGetContent: setGetContent
+            if (showListCategories === true) {
+                let data = {
+                    url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/categories?userName=${sessionStorage.userName}&page=${numberPageCategory - 1}`}`,
+                    setGetContent: setGetContent
+                }
+                getNewContent(data);
             }
-            getNewContent(data);
             let anotherData = {
                 url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/categories?userName=${sessionStorage.userName}`}`,
                 range: 5,
