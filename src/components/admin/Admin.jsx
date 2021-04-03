@@ -12,7 +12,7 @@ const Admin = (props) => {
             (async () => {
                 let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/users?pattern=${'user'}`}`);
                 response = await response.json();
-                props.setListUsers(response);
+                setListUsers(response);
                 setGetUsers(false);
             })();
         return (
