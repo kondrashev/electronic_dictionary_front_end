@@ -27,7 +27,7 @@ function Category(props) {
         setShowListWords(true);
         let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/words?page=${0}&categoryName=${name}&userName=${sessionStorage.userName}`}`);
         response = await response.json();
-        props.setGetContent(response);
+        setGetContent(response);
         let data = {
             url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/words?categoryName=${name}&userName=${sessionStorage.userName}`}`,
             range: 24,
