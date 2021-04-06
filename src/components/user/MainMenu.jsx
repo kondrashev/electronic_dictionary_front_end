@@ -120,7 +120,7 @@ const MainMenu = (props) => {
                             marginLeft: '20px'
                         }}
                     >
-                        {props.login}
+                        {sessionStorage.userName}
                     </Typography>
                     <div className={classes.search}>
                         <div className={classes.searchIcon}>
