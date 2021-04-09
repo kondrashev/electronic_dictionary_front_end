@@ -6,36 +6,55 @@ import Alerts from './authorization/Alerts';
 import RegistrationForm from './authorization/RegistrationForm';
 
 const Applictation = () => {
-    const [listUsers, setListUsers] = React.useState([]);
-    return (
-        <div>
-            {
-                window.location.search.replace('?', '') === '' ||
-                    window.location.search.replace('?', '') === 'logout' ?
-                    <AuthorizationForm /> :
-                    window.location.search.replace('?', '') === 'admin' ?
+    const [values, setValues] = React.useState({
+        listUsers: [],
+        searchUserMark: false,
+        getSearchUser: [],
+        alertMistakes: false,
+        typeMistake: '',
+        login: '',
+        password: '',
+        number: 0
+    });
+    const startApplication = () => {
+        if (window.location.search.replace('?', '') === '' ||
+            window.location.search.replace('?', '') === 'logout') {
+            return (
+                <AuthorizationForm />
+            )
+        } else {
+            switch (window.location.search.replace('?', '')) {
+                case 'admin':
+                    return (
                         <Admin
-                            setListUsers={setListUsers}
-                            listUsers={listUsers}
-                        /> :
-                        window.location.search.replace('?', '') === 'user' ?
-                            <User /> :
-                            window.location.search.replace('?', '') === 'registration' ?
-                                <RegistrationForm /> :
-                                window.location.search.replace('?', '') === '1' ?
-                                    <Alerts
-                                        number={1}
-                                    /> :
-                                    window.location.search.replace('?', '') === '2' ?
-                                        <Alerts
-                                            number={2}
-                                        /> :
-                                        window.location.search.replace('?', '') === '3' ?
-                                            <Alerts
-                                                number={3}
-                                            /> : null
+                            values={values}
+                            setValues={setValues}
+                        />
+                    )
+                case 'user':
+                    return (
+                        <User
+                            values={values}
+                            setValues={setValues}
+                        />
+                    )
+                case 'registration':
+                    return (
+                        <RegistrationForm
+                            values={values}
+                            setValues={setValues}
+                        />
+                    )
+                default:
+                    return (
+                        <Alerts
+                            values={values}
+                            setValues={setValues}
+                        />
+                    )
             }
-        </div>
-    )
+        }
+    }
+    return <>{startApplication()}</>
 }
 export default Applictation;

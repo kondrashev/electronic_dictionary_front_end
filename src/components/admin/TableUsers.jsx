@@ -21,7 +21,7 @@ import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 export default function UsersTable(props) {
-    const { setListUsers, setSearchUserMark, users } = props;
+    const { values, setValues } = props;
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
             return -1;
@@ -140,20 +140,20 @@ export default function UsersTable(props) {
                         {numSelected} selected
                     </Typography>
                 ) : (
-                        <Typography
-                            className={classes.title}
-                            variant="h6"
-                            id="tableTitle"
-                            onClick={userList}
-                            component="div"
-                            style={{
-                                paddingLeft: '50px',
-                                cursor: 'pointer'
-                            }}
-                        >
-                            Users
-                        </Typography>
-                    )}
+                    <Typography
+                        className={classes.title}
+                        variant="h6"
+                        id="tableTitle"
+                        onClick={userList}
+                        component="div"
+                        style={{
+                            paddingLeft: '50px',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        Users
+                    </Typography>
+                )}
                 {numSelected > 0 ? (
                     <Tooltip title="Delete">
                         <IconButton
@@ -194,7 +194,10 @@ export default function UsersTable(props) {
         },
     }));
     const userList = () => {
-        setSearchUserMark(false);
+        setValues({
+            ...values,
+            searchUserMark: false
+        });
     }
     const [userListId, setUserListId] = React.useState([]);
     const handleSelectAllClick = (event) => {
@@ -236,9 +239,12 @@ export default function UsersTable(props) {
         setSelected([]);
         response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/users?pattern=${'user'}`}`);
         response = await response.json();
-        setListUsers(response);
+        setValues({
+            ...values,
+            listUsers: response
+        });
     }
-    const rows = users;
+    const rows = values.searchUserMark === false ? values.listUsers : values.getSearchUser;
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');

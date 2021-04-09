@@ -3,16 +3,21 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 const RegistrationForm = (props) => {
-    const [login, setLogin] = React.useState('');
-    const [password, setPassword] = React.useState('');
+    const { values, setValues } = props;
     const closeFormRegistration = () => {
         window.location.href = '/';
     }
     const loginChange = (event) => {
-        setLogin(event.target.value);
+        setValues({
+            ...values,
+            login: event.target.value
+        });
     }
     const passwordChange = (event) => {
-        setPassword(event.target.value);
+        setValues({
+            ...values,
+            password: event.target.value
+        });
     }
     async function addUser() {
         const checkDate = () => {
@@ -30,8 +35,8 @@ const RegistrationForm = (props) => {
             }
         }
         let user = {
-            login: login,
-            password: password,
+            login: values.login,
+            password: values.password,
             date: `${checkDate()}.${checkMonth()}.${new Date().getFullYear()}p.`
         }
         let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${'https://specialdictionary.herokuapp.com/add/user'}`, {
@@ -42,7 +47,7 @@ const RegistrationForm = (props) => {
             body: JSON.stringify(user)
         })
         response = await response.json();
-        if (response.login != null) {
+        if (response.login !== null) {
             let user = {
                 login: response.login,
                 password: response.password,
@@ -120,7 +125,7 @@ const RegistrationForm = (props) => {
                 }}
             >
                 Registration
-                </Button>
+            </Button>
         </div>
     )
 }
