@@ -5,7 +5,6 @@ import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import transformLetters from './TransformLetters';
-import { getNewContent, getCountPages } from './Functions';
 
 const WordForm = (props) => {
     const [valueName, setValueName] = React.useState('');
@@ -14,14 +13,15 @@ const WordForm = (props) => {
     const [allCategories, setAllCategories] = React.useState([]);
     const [getListAllCategories, setGetListAllCategories] = React.useState(true);
     const { setGetContent, numberPageWord, setCountWords, showListWords,
-        setShowMainMenu, setShowFormWord, setAlertMistakes, setTypeMistake } = props;
-    getListAllCategories === true &&
+        setShowMainMenu, setShowFormWord, setAlertMistakes,
+        setTypeMistake, setLoadWords, currentNameCategory, setCurrentNameCategory } = props;
+    React.useEffect(() => {
         (async () => {
             let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/all/categories?userName=${sessionStorage.userName}`}`);
             response = await response.json();
             setAllCategories(response);
-            setGetListAllCategories(false);
         })();
+    }, [])
     const nameChange = (event) => {
         if (event.target.value === '') {
             setValueMeaning('');
@@ -37,6 +37,7 @@ const WordForm = (props) => {
             setValueMeaning('');
         }
         setValueSelect(event.target.value);
+        setCurrentNameCategory(event.target.value);
     }
     const keyLetter = (event) => {
         setValueMeaning(transformLetters(event));
@@ -68,7 +69,7 @@ const WordForm = (props) => {
             date: `${checkDate()}.${checkMonth()}.${new Date().getFullYear()}p.`,
             categoryName: valueSelect
         }
-        let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/add/word?userName=${sessionStorage.userName}&categoryName=${valueSelect}`}`, {
+        let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/add/word?userName=${sessionStorage.userName}&categoryName=${currentNameCategory}`}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -87,19 +88,7 @@ const WordForm = (props) => {
                 }
             })
             localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-            if (showListWords === true) {
-                let data = {
-                    url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/words?page=${numberPageWord - 1}&categoryName=${valueSelect}&userName=${sessionStorage.userName}`}`,
-                    setGetContent: setGetContent
-                }
-                getNewContent(data);
-            }
-            let anotherData = {
-                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/words?categoryName=${valueSelect}&userName=${sessionStorage.userName}`}`,
-                range: 24,
-                setCountWords: setCountWords
-            }
-            getCountPages(anotherData);
+            setLoadWords(response.name);
         } else {
             setValueSelect('');
             setValueName('');

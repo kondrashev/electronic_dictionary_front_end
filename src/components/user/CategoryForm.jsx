@@ -1,12 +1,11 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import { getNewContent, getCountPages } from './Functions';
 
 const CategoryForm = (props) => {
     const [valueNameCategory, setValueNameCategory] = React.useState('');
     const { setGetContent, numberPageCategory, setCountCategories, showListCategories,
-        setShowMainMenu, setShowFormCategory, setAlertMistakes, setTypeMistake } = props;
+        setShowMainMenu, setShowFormCategory, setAlertMistakes, setTypeMistake, setLoadCategories } = props;
     const nameChange = (event) => {
         setValueNameCategory(event.target.value);
     };
@@ -45,19 +44,7 @@ const CategoryForm = (props) => {
             let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
             user.categories.push(category);
             localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-            if (showListCategories === true) {
-                let data = {
-                    url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/categories?userName=${sessionStorage.userName}&page=${numberPageCategory - 1}`}`,
-                    setGetContent: setGetContent
-                }
-                getNewContent(data);
-            }
-            let anotherData = {
-                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/categories?userName=${sessionStorage.userName}`}`,
-                range: 5,
-                setCountCategories: setCountCategories
-            }
-            getCountPages(anotherData);
+            showListCategories === true && setLoadCategories(response.name);
         } else {
             setValueNameCategory('');
             setTypeMistake('This category already has in the dictionary-');

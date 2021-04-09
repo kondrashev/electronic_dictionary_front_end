@@ -7,14 +7,15 @@ const Admin = (props) => {
     const [getSearchUser, setGetSearchUser] = React.useState([]);
     const [getUsers, setGetUsers] = React.useState(true);
     const { listUsers, setListUsers } = props;
+    React.useEffect(() => {
+        (async () => {
+            let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/users?pattern=${'user'}`}`);
+            response = await response.json();
+            setListUsers(response);
+            setGetUsers(false);
+        })();
+    }, []);
     if (sessionStorage.login === 'log_in' && sessionStorage.userName === 'admin') {
-        getUsers === true &&
-            (async () => {
-                let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/users?pattern=${'user'}`}`);
-                response = await response.json();
-                setListUsers(response);
-                setGetUsers(false);
-            })();
         return (
             <div>
                 <MenuAdmin

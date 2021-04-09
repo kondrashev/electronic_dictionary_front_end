@@ -13,7 +13,8 @@ import HomeIcon from '@material-ui/icons/Home';
 const MainMenu = (props) => {
     const { setShowListCategories, showListCategories, setShowListWords, showListWords, setShowSearchWord,
         setValueSearchWord, setGetContent, numberPageCategory, numberPageWord, setAlertMistakes,
-        setTypeMistake, setCountCategories, setCountWords } = props;
+        setTypeMistake, setCountCategories, setCountWords, setLoadCategories,
+        setLoadWords, currentNameCategory, setCurrentNameCategory } = props;
     const useStyles = makeStyles((theme) => ({
         root: {
             flexGrow: 1,
@@ -72,9 +73,9 @@ const MainMenu = (props) => {
     }
     async function searchWordGet(event) {
         if (event.keyCode == 13) {
+            setGetContent([]);
             setShowListCategories(false);
             setShowListWords(false);
-            setGetContent([]);
             setShowSearchWord(true);
             setValueSearchWord(event.target.value);
             let nameSearchWord = event.target.value;
@@ -112,6 +113,10 @@ const MainMenu = (props) => {
                         setCountWords={setCountWords}
                         showListCategories={showListCategories}
                         showListWords={showListWords}
+                        setLoadCategories={setLoadCategories}
+                        setLoadWords={setLoadWords}
+                        currentNameCategory={currentNameCategory}
+                        setCurrentNameCategory={setCurrentNameCategory}
                     />
                     <Typography
                         className={classes.title}

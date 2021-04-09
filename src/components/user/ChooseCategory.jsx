@@ -6,12 +6,13 @@ import Select from '@material-ui/core/Select';
 const ChooseCategory = (props) => {
     const { showChooseCategory, selectCategory } = props;
     const [allCategories, setAllCategories] = React.useState([]);
-    showChooseCategory === true &&
+    React.useEffect(() => {
         (async () => {
             let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/all/categories?userName=${sessionStorage.userName}`}`);
             response = await response.json();
             setAllCategories(response);
         })();
+    }, []);
     return (
         <FormControl
             variant="outlined"

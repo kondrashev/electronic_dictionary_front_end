@@ -3,7 +3,6 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import Checkbox from '@material-ui/core/Checkbox';
 import Tooltip from '@material-ui/core/Tooltip';
-import { getNewContent } from './Functions';
 
 const TableRowWord = (props) => {
     const [showEditNameWord, setShowEditNameWord] = React.useState(false);
@@ -13,7 +12,7 @@ const TableRowWord = (props) => {
     const [oldMeaningWord, setOldMeaningWord] = React.useState('');
     const [newMeaningWord, setNewMeaningWord] = React.useState('');
     const { row, isItemSelected, getIdWord, handleClick, labelId,
-        currentNameCategory, numberPageWord, setGetContent } = props;
+        currentNameCategory, numberPageWord, setGetContent, setLoadWords } = props;
     const pronunciation = (name) => {
         return `${'https://translate.google.com/#view=home&op=translate&sl=en&tl=uk&text='}${name}`;
     }
@@ -62,11 +61,7 @@ const TableRowWord = (props) => {
                     }
                 })
                 localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-                let data = {
-                    url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/words?page=${numberPageWord - 1}&categoryName=${currentNameCategory}&userName=${sessionStorage.userName}`}`,
-                    setGetContent: setGetContent
-                }
-                getNewContent(data);
+                setLoadWords(response.name);
             }
         }
     }
@@ -101,11 +96,7 @@ const TableRowWord = (props) => {
                     }
                 })
                 localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-                let data = {
-                    url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/words?page=${numberPageWord - 1}&categoryName=${currentNameCategory}&userName=${sessionStorage.userName}`}`,
-                    setGetContent
-                }
-                getNewContent(data);
+                setLoadWords(response.name);
             }
         }
     }

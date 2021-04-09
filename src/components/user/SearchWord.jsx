@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 const SearchWord = (props) => {
+    const { searchWord } = props;
     const useStyles = makeStyles({
         table: {
             minWidth: 650,
@@ -18,7 +19,7 @@ const SearchWord = (props) => {
         return `${'https://translate.google.com/#view=home&op=translate&sl=en&tl=uk&text='}${name}`;
     }
     const classes = useStyles();
-    if (props.searchWord.name === null) {
+    if (searchWord.name === null) {
         sessionStorage.setItem('mistake', 'This word not found-');
         window.location.href = '/?3';
     } else {
@@ -36,16 +37,16 @@ const SearchWord = (props) => {
                     <TableBody>
                         <TableRow>
                             <TableCell component="th" scope="row">
-                                {props.searchWord.name}
+                                {searchWord.name}
                             </TableCell>
-                            <TableCell align="right">{props.searchWord.meaning}</TableCell>
-                            <TableCell align="right">{props.searchWord.date}</TableCell>
+                            <TableCell align="right">{searchWord.meaning}</TableCell>
+                            <TableCell align="right">{searchWord.date}</TableCell>
                             <TableCell align="right">
                                 <a
-                                    href={pronunciation(props.searchWord.name)}
+                                    href={pronunciation(searchWord.name)}
                                     target='_blank'
                                 >
-                                    {props.searchWord.name}
+                                    {searchWord.name}
                                 </a>
                             </TableCell>
                         </TableRow>

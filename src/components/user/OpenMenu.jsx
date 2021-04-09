@@ -13,7 +13,8 @@ const OpenMenu = (props) => {
     const [showFormWord, setShowFormWord] = React.useState(false);
     const { numberPageCategory, numberPageWord, setAlertMistakes,
         setTypeMistake, setGetContent, setCountCategories, setCountWords,
-        showListCategories, showListWords } = props;
+        showListCategories, showListWords, setLoadCategories,
+        setLoadWords, currentNameCategory, setCurrentNameCategory } = props;
     const formCategoryShow = () => {
         setShowMainMenu(false);
         setShowFormCategory(true);
@@ -33,7 +34,7 @@ const OpenMenu = (props) => {
                 popupId="demo-popup-menu"
             >
                 {(popupState) => (
-                    <React.Fragment>
+                    <>
                         <Button
                             variant="contained"
                             color="primary" {...bindTrigger(popupState)}
@@ -58,7 +59,7 @@ const OpenMenu = (props) => {
                                     Add word
                             </MenuItem>
                             </Menu>}
-                    </React.Fragment>
+                    </>
                 )}
             </PopupState >
             <Transition
@@ -82,6 +83,7 @@ const OpenMenu = (props) => {
                             setGetContent={setGetContent}
                             setCountCategories={setCountCategories}
                             showListCategories={showListCategories}
+                            setLoadCategories={setLoadCategories}
                         />
                     </animated.div>
                 ))}
@@ -107,6 +109,9 @@ const OpenMenu = (props) => {
                             setGetContent={setGetContent}
                             setCountWords={setCountWords}
                             showListWords={showListWords}
+                            currentNameCategory={currentNameCategory}
+                            setCurrentNameCategory={setCurrentNameCategory}
+                            setLoadWords={setLoadWords}
                         />
                     </animated.div>
                 ))}

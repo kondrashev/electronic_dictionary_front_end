@@ -3,7 +3,8 @@ import Category from './Category';
 
 const ListCategories = (props) => {
     const { getIdCategory, setShowListCategories, setShowListWords, setCurrentNameCategory,
-        numberPageCategory, setGetContent, categories, setCountWords } = props;
+        currentNameCategory, numberPageCategory, setGetContent, categories, setCountWords,
+        setLoadCategories, loadWords, setLoadWords, getWords } = props;
     return (
         categories.map((category, index) => {
             return (
@@ -14,10 +15,15 @@ const ListCategories = (props) => {
                     getIdCategory={getIdCategory}
                     setShowListCategories={setShowListCategories}
                     setShowListWords={setShowListWords}
+                    currentNameCategory={currentNameCategory}
                     setCurrentNameCategory={setCurrentNameCategory}
                     numberPageCategory={numberPageCategory}
                     setCountWords={setCountWords}
                     setGetContent={setGetContent}
+                    setLoadCategories={setLoadCategories}
+                    loadWords={loadWords}
+                    setLoadWords={setLoadWords}
+                    getWords={getWords}
                 />
             )
         })

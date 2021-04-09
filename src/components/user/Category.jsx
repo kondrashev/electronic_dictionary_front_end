@@ -9,7 +9,6 @@ import FolderIcon from '@material-ui/icons/Folder';
 import Checkbox from '@material-ui/core/Checkbox';
 import CreateIcon from '@material-ui/icons/Create';
 import Tooltip from '@material-ui/core/Tooltip';
-import { getNewContent, getCountPages } from './Functions';
 
 function Category(props) {
     const [show, setShow] = useState(true);
@@ -17,23 +16,17 @@ function Category(props) {
     const [oldNameCategory, setOldNameCategory] = useState('');
     const [newNameCategory, setNewNameCategory] = useState('');
     const { setGetContent, numberPageCategory,
-        setCurrentNameCategory, setCountWords,
-        setShowListCategories, setShowListWords } = props;
-    async function getNameCategory(name) {
+        currentNameCategory, setCurrentNameCategory, setCountWords,
+        setShowListCategories, setShowListWords,
+        setLoadCategories, loadWords, setLoadWords,
+        getWords, index, item, getIdCategory } = props;
+    const getNameCategory = (name) => {
         setCountWords(0);
         setGetContent([]);
         setCurrentNameCategory(name);
         setShowListCategories(false);
         setShowListWords(true);
-        let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/words?page=${0}&categoryName=${name}&userName=${sessionStorage.userName}`}`);
-        response = await response.json();
-        setGetContent(response);
-        let data = {
-            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/words?categoryName=${name}&userName=${sessionStorage.userName}`}`,
-            range: 24,
-            setCountWords: setCountWords
-        }
-        getCountPages(data);
+        getWords(name);
     }
     const showEdit = (event) => {
         setShow(!show);
@@ -70,11 +63,7 @@ function Category(props) {
                         }
                     })
                     localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-                    let data = {
-                        url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/categories?userName=${sessionStorage.userName}&page=${numberPageCategory - 1}`}`,
-                        setGetContent: setGetContent
-                    }
-                    getNewContent(data);
+                    setLoadCategories(response.name);
                 }
             })();
         }
@@ -93,8 +82,8 @@ function Category(props) {
                 >
                     <Checkbox
                         color="primary"
-                        value={props.item.id}
-                        onChange={props.getIdCategory}
+                        value={item.id}
+                        onChange={getIdCategory}
                     />
                 </div>
                 <ListItemAvatar>
@@ -107,14 +96,14 @@ function Category(props) {
                         cursor: 'pointer',
                         width: '300px'
                     }}
-                    primary={props.item.name}
-                    onClick={() => getNameCategory(props.item.name)}
+                    primary={item.name}
+                    onClick={() => getNameCategory(item.name)}
                 />
                 <input
                     disabled={show}
-                    name={props.index}
+                    name={index}
                     value={newNameCategory}
-                    onChange={(event) => editNameCategory(event, props.item.name)}
+                    onChange={(event) => editNameCategory(event, item.name)}
                     onKeyUp={nameEditCategory}
                     style={{
                         width: '150px',
@@ -125,15 +114,15 @@ function Category(props) {
                 >
                 </input>
                 <ListItem>
-                    {props.item.date}
+                    {item.date}
                 </ListItem>
                 <Tooltip
                     title='Edit'
                 >
                     <IconButton
                         aria-label='Edit'
-                        value={props.index}
-                        name={props.item.name}
+                        value={index}
+                        name={item.name}
                         onClick={showEdit}
                     >
                         <CreateIcon />

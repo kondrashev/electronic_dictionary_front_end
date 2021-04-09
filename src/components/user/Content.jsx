@@ -8,15 +8,15 @@ import SearchWord from './SearchWord';
 import PaginationButtonsCategories from './PaginationButtonsCategories';
 import PaginationButtonsWords from './PaginationButtonsWords';
 import ListCategories from './ListCategories';
-import { getNewContent, getCountPages } from './Functions';
 
 const Content = (props) => {
     const [showDeleteButtonCategory, setShowDeleteButtonCategory] = React.useState(false);
     const [listIdCategories, setListIdCategories] = React.useState([]);
-    const { showListCategories, setShowListCategories, showListWords, setShowListWords, setCurrentNameCategory,
-        currentNameCategory, showSearchWord, valueSearchWord, setNumberPageCategory,
-        numberPageCategory, setNumberPageWord, numberPageWord, setGetContent, getContent,
-        setCountCategories, countCategories, setCountWords, countWords } = props;
+    const { showListCategories, setShowListCategories, showListWords, setShowListWords,
+        setCurrentNameCategory, currentNameCategory, showSearchWord, valueSearchWord,
+        setNumberPageCategory, numberPageCategory, setNumberPageWord, numberPageWord, setGetContent,
+        getContent, setCountCategories, countCategories, setCountWords, countWords,
+        setLoadCategories, loadWords, setLoadWords, getWords } = props;
     async function deleteCategories() {
         setCountCategories(0);
         let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${'https://specialdictionary.herokuapp.com/delete/categories'}`, {
@@ -36,19 +36,9 @@ const Content = (props) => {
             })
         })
         localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
+        setLoadCategories(listIdCategories);
         setListIdCategories([]);
         setShowDeleteButtonCategory(false);
-        let data = {
-            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/categories?userName=${sessionStorage.userName}&page=${numberPageCategory - 1}`}`,
-            setGetContent: setGetContent
-        }
-        getNewContent(data);
-        let anotherData = {
-            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/categories?userName=${sessionStorage.userName}`}`,
-            range: 5,
-            setCountCategories: setCountCategories
-        }
-        getCountPages(anotherData);
     }
     const getIdCategory = (event) => {
         let listId = listIdCategories;
@@ -98,11 +88,16 @@ const Content = (props) => {
                         getIdCategory={getIdCategory}
                         setShowListCategories={setShowListCategories}
                         setShowListWords={setShowListWords}
+                        currentNameCategory={currentNameCategory}
                         setCurrentNameCategory={setCurrentNameCategory}
                         numberPageCategory={numberPageCategory}
                         setGetContent={setGetContent}
                         categories={getContent}
                         setCountWords={setCountWords}
+                        setLoadCategories={setLoadCategories}
+                        loadWords={loadWords}
+                        setLoadWords={setLoadWords}
+                        getWords={getWords}
                     />
                 }
                 {
@@ -113,12 +108,12 @@ const Content = (props) => {
                         setGetContent={setGetContent}
                         words={getContent}
                         setCountWords={setCountWords}
+                        setLoadWords={setLoadWords}
                     />
                 }
                 {
                     showSearchWord === true &&
                     <SearchWord
-                        valueSearchWord={valueSearchWord}
                         searchWord={getContent}
                     />
                 }
@@ -129,6 +124,7 @@ const Content = (props) => {
                     countCategories={countCategories}
                     setNumberPageCategory={setNumberPageCategory}
                     setGetContent={setGetContent}
+                    setLoadCategories={setLoadCategories}
                 />
             }
             {
@@ -138,6 +134,7 @@ const Content = (props) => {
                     countWords={countWords}
                     setNumberPageWord={setNumberPageWord}
                     setGetContent={setGetContent}
+                    setLoadWords={setLoadWords}
                 />
             }
         </div >

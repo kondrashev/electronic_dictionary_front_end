@@ -3,7 +3,6 @@ import MainMenu from './MainMenu';
 import MenuNavigation from './MenuNavigation';
 import Content from './Content';
 import Alerts from '../authorization/Alerts';
-import { getCountPages } from './Functions';
 
 const User = (props) => {
     const [showListCategories, setShowListCategories] = React.useState(true);
@@ -19,24 +18,56 @@ const User = (props) => {
     const [startListCategories, setStartListCategories] = React.useState(true);
     const [countCategories, setCountCategories] = React.useState(0);
     const [countWords, setCountWords] = React.useState(0);
-    if (sessionStorage.userName === '' || sessionStorage.getItem('login') === 'logout' || sessionStorage.userName === 'admin') {
+    const [loadCategories, setLoadCategories] = React.useState('');
+    const [loadWords, setLoadWords] = React.useState('');
+    const [changeCountPages, setChangeCountPages] = React.useState('');
+    React.useEffect(() => {
+        (async () => {
+            let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/categories?userName=${sessionStorage.userName}&page=${numberPageCategory - 1}`}`);
+            response = await response.json();
+            setGetContent(response);
+            let data = {
+                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/categories?userName=${sessionStorage.userName}`}`,
+                range: 5,
+                setCountPages: setCountCategories
+            }
+            setChangeCountPages(data);
+        })();
+    }, [loadCategories]);
+    const getWords = async (name) => {
+        if (name || currentNameCategory) {
+            setCountWords(0);
+            setGetContent([]);
+            setShowListCategories(false);
+            setShowListWords(true);
+            let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/words?page=${numberPageWord - 1}&categoryName=${name || currentNameCategory}&userName=${sessionStorage.userName}`}`);
+            response = await response.json();
+            setGetContent(response);
+            let data = {
+                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/words?categoryName=${name || currentNameCategory}&userName=${sessionStorage.userName}`}`,
+                range: 24,
+                setCountPages: setCountWords
+            }
+            setChangeCountPages(data);
+        }
+    }
+    React.useEffect(() => {
+        getWords();
+    }, [loadWords]);
+    const getCountPages = async (props) => {
+        const { url, range, setCountPages } = props;
+        let response = await fetch(url);
+        response = await response.json();
+        setCountPages(response % range > 0 ? Math.round(response / range) + 1 : Math.round(response / range));
+    }
+    React.useEffect(() => {
+        getCountPages(changeCountPages);
+    }, [changeCountPages]);
+    if (sessionStorage.userName === '' ||
+        sessionStorage.getItem('login') === 'logout' ||
+        sessionStorage.userName === 'admin') {
         return null;
     } else {
-        if (showListCategories === true && alertMistakes === false) {
-            startListCategories === true &&
-                (async () => {
-                    let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/categories?userName=${sessionStorage.userName}`}`);
-                    response = await response.json();
-                    setGetContent(response);
-                    setStartListCategories(false);
-                    let data = {
-                        url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/categories?userName=${sessionStorage.userName}`}`,
-                        range: 5,
-                        setCountCategories: setCountCategories
-                    }
-                    getCountPages(data);
-                })();
-        }
         return (
             <div
                 className='user_page'
@@ -55,8 +86,13 @@ const User = (props) => {
                     setTypeMistake={setTypeMistake}
                     setCountCategories={setCountCategories}
                     setCountWords={setCountWords}
+                    setLoadCategories={setLoadCategories}
+                    setLoadWords={setLoadWords}
+                    currentNameCategory={currentNameCategory}
+                    setCurrentNameCategory={setCurrentNameCategory}
                 />
                 <MenuNavigation
+                    showListCategories={showListCategories}
                     setShowListCategories={setShowListCategories}
                     setShowListWords={setShowListWords}
                     showListWords={showListWords}
@@ -69,12 +105,15 @@ const User = (props) => {
                     searchWord={getContent}
                     setCountWords={setCountWords}
                     numberPageCategory={numberPageCategory}
+                    setLoadCategories={setLoadCategories}
+                    setLoadWords={setLoadWords}
                 />
                 <Content
                     showListCategories={showListCategories}
                     setShowListCategories={setShowListCategories}
                     showListWords={showListWords}
                     setShowListWords={setShowListWords}
+                    showSearchWord={showSearchWord}
                     setCurrentNameCategory={setCurrentNameCategory}
                     currentNameCategory={currentNameCategory}
                     setShowSearchWord={setShowSearchWord}
@@ -89,6 +128,10 @@ const User = (props) => {
                     countCategories={countCategories}
                     setCountWords={setCountWords}
                     countWords={countWords}
+                    setLoadCategories={setLoadCategories}
+                    loadWords={loadWords}
+                    setLoadWords={setLoadWords}
+                    getWords={getWords}
                 />
                 {alertMistakes === true &&
                     <Alerts

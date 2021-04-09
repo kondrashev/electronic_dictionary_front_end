@@ -8,20 +8,21 @@ const AuthorizationForm = (props) => {
         .css({
             background: '#999999'
         })
-    async function getUsers() {
-        let users = [];
-        for (let i = 0; i < localStorage.length; i++) {
-            users[i] = JSON.parse(localStorage.getItem(localStorage.key(i)));
-        }
-        fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/load/users?pattern=${'user'}`}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(users)
-        });
-    }
-    if (window.location.search.replace('?', '') === '' || window.location.search.replace('?', '') === 'logout') getUsers();
+    React.useEffect(() => {
+        (async () => {
+            let users = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                users[i] = JSON.parse(localStorage.getItem(localStorage.key(i)));
+            }
+            fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/load/users?pattern=${'user'}`}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(users)
+            });
+        })();
+    }, []);
     const loginChange = (event) => {
         sessionStorage.setItem('userName', event.target.value);
     }

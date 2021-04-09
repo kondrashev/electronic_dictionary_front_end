@@ -22,10 +22,10 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import ChooseCategory from './ChooseCategory';
 import TableRowWord from './TableRowWord';
-import { getNewContent, getCountPages } from './Functions';
 
 function TableWords(props) {
-    const { currentNameCategory, numberPageWord, setGetContent, words, setCountWords } = props;
+    const { currentNameCategory, numberPageWord, setGetContent,
+        words, setCountWords, setLoadWords } = props;
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
             return -1;
@@ -140,10 +140,10 @@ function TableWords(props) {
                         {numSelected} selected
                     </Typography>
                 ) : (
-                        <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-                            Words
-                        </Typography>
-                    )}
+                    <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+                        Words
+                    </Typography>
+                )}
                 {numSelected > 0 && (
                     <div>
                         {
@@ -256,7 +256,7 @@ function TableWords(props) {
         let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
         let moveWords = [];
         user.categories.map((category) => {
-            if (props.currentNameCategory === category.name) {
+            if (currentNameCategory === category.name) {
                 response.map((wordName) => {
                     category.words.map((word, index) => {
                         if (wordName === word.name) {
@@ -279,17 +279,7 @@ function TableWords(props) {
             setCategoryName('');
         }
         localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-        let data = {
-            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/words?page=${numberPageWord - 1}&categoryName=${currentNameCategory}&userName=${sessionStorage.userName}`}`,
-            setGetContent: setGetContent
-        }
-        getNewContent(data);
-        let anotherData = {
-            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/words?categoryName=${currentNameCategory}&userName=${sessionStorage.userName}`}`,
-            range: 24,
-            setCountWords: setCountWords
-        }
-        getCountPages(anotherData);
+        setLoadWords(response);
     }
     const rows = words;
     const classes = useStyles();
@@ -378,6 +368,7 @@ function TableWords(props) {
                                             currentNameCategory={currentNameCategory}
                                             numberPageWord={numberPageWord}
                                             setGetContent={setGetContent}
+                                            setLoadWords={setLoadWords}
                                         />
                                     );
                                 })}
