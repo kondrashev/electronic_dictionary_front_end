@@ -11,38 +11,45 @@ import CreateIcon from '@material-ui/icons/Create';
 import Tooltip from '@material-ui/core/Tooltip';
 
 function Category(props) {
-    const [show, setShow] = useState(true);
-    const [border, setBorder] = useState(0);
-    const [oldNameCategory, setOldNameCategory] = useState('');
-    const [newNameCategory, setNewNameCategory] = useState('');
-    const { setGetContent, numberPageCategory,
-        currentNameCategory, setCurrentNameCategory, setCountWords,
-        setShowListCategories, setShowListWords,
-        setLoadCategories, loadWords, setLoadWords,
-        getWords, index, item, getIdCategory } = props;
+    const [valuesCategory, setValuesCategory] = useState({
+        show: true,
+        border: 0,
+        oldNameCategory: '',
+        newNameCategory: ''
+    });
+    const { values, setValues, getIdCategory, itemCategory, indexCategory } = props;
     const getNameCategory = (name) => {
-        setCountWords(0);
-        setGetContent([]);
-        setCurrentNameCategory(name);
-        setShowListCategories(false);
-        setShowListWords(true);
-        getWords(name);
+        setValues({
+            ...values,
+            countWords: 0,
+            getContent: [],
+            currentNameCategory: name,
+            showListCategories: false,
+            showListWords: true,
+            getWords: name
+        });
     }
     const showEdit = (event) => {
-        setShow(!show);
-        setBorder(show == true ? 1 : 0);
+        setValuesCategory({
+            ...valuesCategory,
+            show: !valuesCategory.show,
+            border: valuesCategory.show == true ? 1 : 0
+        });
     }
     const editNameCategory = (event, name) => {
-        setOldNameCategory(name);
-        setNewNameCategory(event.target.value);
+        setValuesCategory({
+            ...valuesCategory,
+            oldNameCategory: name,
+            newNameCategory: event.target.value
+        });
     }
     const nameEditCategory = (event) => {
         if (event.keyCode == 13) {
             (async function editCategory() {
                 let editCategory = {
                     userName: sessionStorage.userName,
-                    name: oldNameCategory,
-                    newName: newNameCategory
+                    name: valuesCategory.oldNameCategory,
+                    newName: valuesCategory.newNameCategory
                 }
                 let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/edit/category`}`, {
                     method: 'POST',
@@ -53,17 +60,23 @@ function Category(props) {
                 });
                 response = await response.json();
                 if (response.name !== null) {
-                    setShow(!show);
-                    setBorder(show == true ? 1 : 0);
-                    setNewNameCategory('');
+                    setValuesCategory({
+                        ...valuesCategory,
+                        show: !valuesCategory.show,
+                        border: valuesCategory.show == true ? 1 : 0,
+                        newNameCategory: ''
+                    });
                     let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
                     Object.entries(user.categories).map(([, value]) => {
-                        if (value.name === oldNameCategory) {
-                            value.name = newNameCategory;
+                        if (value.name === valuesCategory.oldNameCategory) {
+                            value.name = valuesCategory.newNameCategory;
                         }
                     })
                     localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-                    setLoadCategories(response.name);
+                    setValues({
+                        ...values,
+                        loadCategories: response.name
+                    });
                 }
             })();
         }
@@ -82,7 +95,7 @@ function Category(props) {
                 >
                     <Checkbox
                         color="primary"
-                        value={item.id}
+                        value={itemCategory.id}
                         onChange={getIdCategory}
                     />
                 </div>
@@ -96,33 +109,33 @@ function Category(props) {
                         cursor: 'pointer',
                         width: '300px'
                     }}
-                    primary={item.name}
-                    onClick={() => getNameCategory(item.name)}
+                    primary={itemCategory.name}
+                    onClick={() => getNameCategory(itemCategory.name)}
                 />
                 <input
-                    disabled={show}
-                    name={index}
-                    value={newNameCategory}
-                    onChange={(event) => editNameCategory(event, item.name)}
+                    disabled={valuesCategory.show}
+                    name={indexCategory}
+                    value={valuesCategory.newNameCategory}
+                    onChange={(event) => editNameCategory(event, itemCategory.name)}
                     onKeyUp={nameEditCategory}
                     style={{
                         width: '150px',
                         height: '20px',
-                        border: `${border}px solid black`,
+                        border: `${valuesCategory.border}px solid black`,
                         background: 'none'
                     }}
                 >
                 </input>
                 <ListItem>
-                    {item.date}
+                    {itemCategory.date}
                 </ListItem>
                 <Tooltip
                     title='Edit'
                 >
                     <IconButton
                         aria-label='Edit'
-                        value={index}
-                        name={item.name}
+                        value={indexCategory}
+                        name={itemCategory.name}
                         onClick={showEdit}
                     >
                         <CreateIcon />

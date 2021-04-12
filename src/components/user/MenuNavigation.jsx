@@ -5,25 +5,27 @@ import Link from '@material-ui/core/Link';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
 const MenuNavigation = (props) => {
-    const { showListCategories, setShowListCategories, setShowListWords, showListWords,
-        setCurrentNameCategory, currentNameCategory, setShowSearchWord,
-        showSearchWord, valueSearchWord, setGetContent,
-        searchWord, setCountWords, numberPageCategory,
-        setLoadCategories, setLoadWords } = props;
+    const { values, setValues } = props;
     async function listCategories() {
-        setGetContent([]);
-        setShowListCategories(true);
-        setShowListWords(false);
-        setShowSearchWord(false);
-        setLoadCategories(showListCategories);
+        setValues({
+            ...values,
+            getContent: [],
+            showListCategories: true,
+            showListWords: false,
+            showSearchWord: false,
+            loadCategories: values.showListCategories
+        });
     }
     async function currentCategory() {
-        setGetContent([]);
-        setCurrentNameCategory(searchWord.categoryName);
-        setShowListCategories(false);
-        setShowSearchWord(false);
-        setShowListWords(true);
-        setLoadWords(searchWord.categoryName);
+        setValues({
+            ...values,
+            getContent: [],
+            currentNameCategory: values.searchWord.categoryName,
+            showListCategories: false,
+            showSearchWord: false,
+            showListWords: true,
+            loadWords: values.searchWord.categoryName
+        });
     }
     return (
         <div
@@ -48,7 +50,7 @@ const MenuNavigation = (props) => {
                     Categories
                 </Link>
                 {
-                    showSearchWord === true &&
+                    values.showSearchWord === true &&
                     <Link
                         style={{
                             cursor: 'pointer'
@@ -56,19 +58,19 @@ const MenuNavigation = (props) => {
                         color="inherit"
                         onClick={currentCategory}
                     >
-                        {searchWord.categoryName}
+                        {values.searchWord.categoryName}
                     </Link>
                 }
                 <Typography
                     color="textPrimary"
                 >
                     {
-                        showListWords === true &&
-                        currentNameCategory
+                        values.showListWords === true &&
+                        values.currentNameCategory
                     }
                     {
-                        showSearchWord === true &&
-                        valueSearchWord
+                        values.showSearchWord === true &&
+                        values.valueSearchWord
                     }
                 </Typography>
             </Breadcrumbs>

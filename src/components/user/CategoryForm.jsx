@@ -4,13 +4,15 @@ import TextField from '@material-ui/core/TextField';
 
 const CategoryForm = (props) => {
     const [valueNameCategory, setValueNameCategory] = React.useState('');
-    const { setGetContent, numberPageCategory, setCountCategories, showListCategories,
-        setShowMainMenu, setShowFormCategory, setAlertMistakes, setTypeMistake, setLoadCategories } = props;
+    const { values, setValues } = props;
     const nameChange = (event) => {
         setValueNameCategory(event.target.value);
     };
     async function addCategory() {
-        setCountCategories(0);
+        setValues({
+            ...values,
+            countCategories: 0
+        });
         const checkDate = () => {
             if (new Date().getDate() < 10) {
                 return `${'0'}${new Date().getDate()}`;
@@ -44,11 +46,18 @@ const CategoryForm = (props) => {
             let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
             user.categories.push(category);
             localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-            showListCategories === true && setLoadCategories(response.name);
+            values.showListCategories === true &&
+                setValues({
+                    ...values,
+                    loadCategories: response.name
+                });
         } else {
             setValueNameCategory('');
-            setTypeMistake('This category already has in the dictionary-');
-            setAlertMistakes(true);
+            setValues({
+                ...values,
+                typeMistake: 'This category already has in the dictionary-',
+                alertMistakes: true
+            });
         }
     }
     const onKeyPress = (event) => {
@@ -57,8 +66,11 @@ const CategoryForm = (props) => {
         }
     }
     const closeFormCategory = () => {
-        setShowMainMenu(true);
-        setShowFormCategory(false);
+        setValues({
+            ...values,
+            showMainMenu: true,
+            showFormCategory: false
+        });
     }
     return (
         <div

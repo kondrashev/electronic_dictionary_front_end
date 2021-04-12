@@ -2,28 +2,17 @@ import React from 'react';
 import Category from './Category';
 
 const ListCategories = (props) => {
-    const { getIdCategory, setShowListCategories, setShowListWords, setCurrentNameCategory,
-        currentNameCategory, numberPageCategory, setGetContent, categories, setCountWords,
-        setLoadCategories, loadWords, setLoadWords, getWords } = props;
+    const { values, setValues, getIdCategory } = props;
     return (
-        categories.map((category, index) => {
+        values.getContent.map((category, index) => {
             return (
                 <Category
                     key={category.name}
-                    item={category}
-                    index={index}
+                    itemCategory={category}
+                    indexCategory={index}
                     getIdCategory={getIdCategory}
-                    setShowListCategories={setShowListCategories}
-                    setShowListWords={setShowListWords}
-                    currentNameCategory={currentNameCategory}
-                    setCurrentNameCategory={setCurrentNameCategory}
-                    numberPageCategory={numberPageCategory}
-                    setCountWords={setCountWords}
-                    setGetContent={setGetContent}
-                    setLoadCategories={setLoadCategories}
-                    loadWords={loadWords}
-                    setLoadWords={setLoadWords}
-                    getWords={getWords}
+                    values={values}
+                    setValues={setValues}
                 />
             )
         })

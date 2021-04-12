@@ -5,49 +5,68 @@ import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import transformLetters from './TransformLetters';
+import { getAllCategories } from './GetAllCategories';
 
 const WordForm = (props) => {
-    const [valueName, setValueName] = React.useState('');
-    const [valueMeaning, setValueMeaning] = React.useState('');
-    const [valueSelect, setValueSelect] = React.useState('');
-    const [allCategories, setAllCategories] = React.useState([]);
-    const [getListAllCategories, setGetListAllCategories] = React.useState(true);
-    const { setGetContent, numberPageWord, setCountWords, showListWords,
-        setShowMainMenu, setShowFormWord, setAlertMistakes,
-        setTypeMistake, setLoadWords, currentNameCategory, setCurrentNameCategory } = props;
+    const { values, setValues } = props;
+    const [valuesWordForm, setValuesWordForm] = React.useState({
+        valueName: '',
+        valueMeaning: '',
+        valueSelect: ''
+    });
     React.useEffect(() => {
-        (async () => {
-            let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/all/categories?userName=${sessionStorage.userName}`}`);
-            response = await response.json();
-            setAllCategories(response);
-        })();
-    }, [])
+        getAllCategories(props);
+    }, []);
     const nameChange = (event) => {
         if (event.target.value === '') {
-            setValueMeaning('');
+            setValuesWordForm({
+                ...valuesWordForm,
+                valueMeaning: ''
+            });
         }
-        setValueName(event.target.value);
+        setValuesWordForm({
+            ...valuesWordForm,
+            valueName: event.target.value
+        });
     }
     const meaningChange = (event) => {
-        setValueMeaning(event.target.value);
+        setValuesWordForm({
+            ...valuesWordForm,
+            valueMeaning: event.target.value
+        });
     }
     const selectChange = (event) => {
         if (event.target.value === '') {
-            setValueName('');
-            setValueMeaning('');
+            setValuesWordForm({
+                ...valuesWordForm,
+                valueName: '',
+                valueMeaning: ''
+            });
         }
-        setValueSelect(event.target.value);
-        setCurrentNameCategory(event.target.value);
+        setValuesWordForm({
+            ...valuesWordForm,
+            valueSelect: event.target.value,
+            currentNameCategory: event.target.value
+        });
     }
     const keyLetter = (event) => {
-        setValueMeaning(transformLetters(event));
+        setValuesWordForm({
+            ...valuesWordForm,
+            valueMeaning: transformLetters(event)
+        });
     }
     const closeFormWord = () => {
-        setShowMainMenu(true);
-        setShowFormWord(false);
+        setValues({
+            ...values,
+            showMainMenu: true,
+            showFormWord: false
+        });
     }
     async function addWord() {
-        setCountWords(0);
+        setValues({
+            ...values,
+            countWords: 0
+        });
         const checkDate = () => {
             if (new Date().getDate() < 10) {
                 return `${'0'}${new Date().getDate()}`;
@@ -63,13 +82,13 @@ const WordForm = (props) => {
             }
         }
         let word = {
-            name: valueName,
-            meaning: valueMeaning,
+            name: valuesWordForm.valueName,
+            meaning: valuesWordForm.valueMeaning,
             userName: sessionStorage.userName,
             date: `${checkDate()}.${checkMonth()}.${new Date().getFullYear()}p.`,
-            categoryName: valueSelect
+            categoryName: valuesWordForm.valueSelect
         }
-        let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/add/word?userName=${sessionStorage.userName}&categoryName=${currentNameCategory}`}`, {
+        let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/add/word?userName=${sessionStorage.userName}&categoryName=${values.currentNameCategory}`}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -78,23 +97,35 @@ const WordForm = (props) => {
         })
         response = await response.json();
         if (response.name !== null) {
-            setValueSelect('');
-            setValueName('');
-            setValueMeaning('');
+            setValuesWordForm({
+                ...valuesWordForm,
+                valueSelect: '',
+                valueName: '',
+                valueMeaning: ''
+            });
             let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
             Object.entries(user.categories).map(([, value]) => {
-                if (value.name === valueSelect) {
+                if (value.name === valuesWordForm.valueSelect) {
                     value.words.push(word);
                 }
             })
             localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-            setLoadWords(response.name);
+            setValues({
+                ...values,
+                loadWords: response.name
+            });
         } else {
-            setValueSelect('');
-            setValueName('');
-            setValueMeaning('');
-            setTypeMistake('This word already has in the dictionary-');
-            setAlertMistakes(true);
+            setValuesWordForm({
+                ...valuesWordForm,
+                valueSelect: '',
+                valueName: '',
+                valueMeaning: ''
+            });
+            setValues({
+                ...values,
+                typeMistake: 'This word already has in the dictionary-',
+                alertMistakes: true
+            });
         }
     }
     const onKeyPress = (event) => {
@@ -102,8 +133,9 @@ const WordForm = (props) => {
             addWord();
         }
     };
-    const categories = allCategories.map(category =>
+    const categories = values.allCategories.map(category =>
         <option
+            key={category.name}
             value={category.name}
         >
             {category.name}
@@ -140,11 +172,11 @@ const WordForm = (props) => {
                     htmlFor="outlined-age-native-simple"
                 >
                     Name
-                    </InputLabel>
+                </InputLabel>
                 <Select
                     native
                     label='name'
-                    value={valueSelect}
+                    value={valuesWordForm.valueSelect}
                     onChange={selectChange}
                     inputProps={{
                         name: 'name',
@@ -160,8 +192,8 @@ const WordForm = (props) => {
                 label="Word name"
                 type="search"
                 variant="outlined"
-                disabled={!valueSelect}
-                value={valueName}
+                disabled={!valuesWordForm.valueSelect}
+                value={valuesWordForm.valueName}
                 onChange={nameChange}
                 style={{
                     width: '330px'
@@ -172,8 +204,8 @@ const WordForm = (props) => {
                 label="Meaning of the word"
                 type="search"
                 variant="outlined"
-                disabled={!valueName}
-                value={valueMeaning}
+                disabled={!valuesWordForm.valueName}
+                value={valuesWordForm.valueMeaning}
                 onChange={meaningChange}
                 onKeyUp={keyLetter}
                 onKeyPress={onKeyPress}
@@ -185,7 +217,7 @@ const WordForm = (props) => {
                 variant="contained"
                 color="primary"
                 disableElevation
-                disabled={!valueMeaning}
+                disabled={!valuesWordForm.valueMeaning}
                 onClick={addWord}
                 style={{
                     width: '330px',

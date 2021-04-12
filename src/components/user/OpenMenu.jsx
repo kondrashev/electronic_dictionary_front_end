@@ -8,20 +8,20 @@ import WordForm from './WordForm';
 import { Transition, animated } from 'react-spring/renderprops';
 
 const OpenMenu = (props) => {
-    const [showMainMenu, setShowMainMenu] = React.useState(true);
-    const [showFormCategory, setShowFormCategory] = React.useState(false);
-    const [showFormWord, setShowFormWord] = React.useState(false);
-    const { numberPageCategory, numberPageWord, setAlertMistakes,
-        setTypeMistake, setGetContent, setCountCategories, setCountWords,
-        showListCategories, showListWords, setLoadCategories,
-        setLoadWords, currentNameCategory, setCurrentNameCategory } = props;
+    const { values, setValues } = props;
     const formCategoryShow = () => {
-        setShowMainMenu(false);
-        setShowFormCategory(true);
+        setValues({
+            ...values,
+            showMainMenu: false,
+            showFormCategory: true
+        });
     }
     const formWordShow = () => {
-        setShowMainMenu(false);
-        setShowFormWord(true);
+        setValues({
+            ...values,
+            showMainMenu: false,
+            showFormWord: true
+        });
     }
     return (
         <div
@@ -41,7 +41,7 @@ const OpenMenu = (props) => {
                         >
                             Open Menu
                         </Button>
-                        {showMainMenu &&
+                        {values.showMainMenu &&
                             <Menu
                                 {...bindMenu(popupState)}
                                 className='main_menu'
@@ -64,7 +64,7 @@ const OpenMenu = (props) => {
             </PopupState >
             <Transition
                 native
-                items={showFormCategory}
+                items={values.showFormCategory}
                 from={{ marginLeft: -350 }}
                 enter={{ marginLeft: -24 }}
                 leave={{ marginLeft: -350 }}
@@ -75,22 +75,15 @@ const OpenMenu = (props) => {
                         style={props}
                     >
                         <CategoryForm
-                            setShowMainMenu={setShowMainMenu}
-                            setShowFormCategory={setShowFormCategory}
-                            numberPageCategory={numberPageCategory}
-                            setAlertMistakes={setAlertMistakes}
-                            setTypeMistake={setTypeMistake}
-                            setGetContent={setGetContent}
-                            setCountCategories={setCountCategories}
-                            showListCategories={showListCategories}
-                            setLoadCategories={setLoadCategories}
+                            values={values}
+                            setValues={setValues}
                         />
                     </animated.div>
                 ))}
             </Transition>
             <Transition
                 native
-                items={showFormWord}
+                items={values.showFormWord}
                 from={{ marginLeft: -350 }}
                 enter={{ marginLeft: -24 }}
                 leave={{ marginLeft: -350 }}
@@ -101,17 +94,9 @@ const OpenMenu = (props) => {
                         style={props}
                     >
                         <WordForm
-                            setShowMainMenu={setShowMainMenu}
-                            setShowFormWord={setShowFormWord}
-                            setAlertMistakes={setAlertMistakes}
-                            setTypeMistake={setTypeMistake}
-                            numberPageWord={numberPageWord}
-                            setGetContent={setGetContent}
-                            setCountWords={setCountWords}
-                            showListWords={showListWords}
-                            currentNameCategory={currentNameCategory}
-                            setCurrentNameCategory={setCurrentNameCategory}
-                            setLoadWords={setLoadWords}
+                            values={values}
+                            setValues={setValues}
+
                         />
                     </animated.div>
                 ))}

@@ -14,47 +14,69 @@ const Applictation = () => {
         typeMistake: '',
         login: '',
         password: '',
-        number: 0
+        number: 0,
+        showListCategories: true,
+        showListWords: false,
+        showSearchWord: false,
+        valueSearchWord: '',
+        currentNameCategory: '',
+        getContent: [],
+        numberPageCategory: 1,
+        numberPageWord: 1,
+        alertMistakes: false,
+        typeMistake: '',
+        countCategories: 0,
+        countWords: 0,
+        loadCategories: '',
+        loadWords: '',
+        changeCountPages: '',
+        showMainMenu: true,
+        showFormCategory: false,
+        showFormWord: false,
+        allCategories: []
     });
-    const startApplication = () => {
-        if (window.location.search.replace('?', '') === '' ||
-            window.location.search.replace('?', '') === 'logout') {
-            return (
-                <AuthorizationForm />
-            )
-        } else {
-            switch (window.location.search.replace('?', '')) {
-                case 'admin':
+    return (
+        <>
+            {(() => {
+                if (window.location.search.replace('?', '') === '' ||
+                    window.location.search.replace('?', '') === 'logout') {
                     return (
-                        <Admin
-                            values={values}
-                            setValues={setValues}
-                        />
+                        <AuthorizationForm />
                     )
-                case 'user':
-                    return (
-                        <User
-                            values={values}
-                            setValues={setValues}
-                        />
-                    )
-                case 'registration':
-                    return (
-                        <RegistrationForm
-                            values={values}
-                            setValues={setValues}
-                        />
-                    )
-                default:
-                    return (
-                        <Alerts
-                            values={values}
-                            setValues={setValues}
-                        />
-                    )
-            }
-        }
-    }
-    return <>{startApplication()}</>
+                } else {
+                    switch (window.location.search.replace('?', '')) {
+                        case 'admin':
+                            return (
+                                <Admin
+                                    values={values}
+                                    setValues={setValues}
+                                />
+                            )
+                        case 'user':
+                            return (
+                                <User
+                                    values={values}
+                                    setValues={setValues}
+                                />
+                            )
+                        case 'registration':
+                            return (
+                                <RegistrationForm
+                                    values={values}
+                                    setValues={setValues}
+                                />
+                            )
+                        default:
+                            return (
+                                <Alerts
+                                    values={values}
+                                    setValues={setValues}
+                                />
+                            )
+                    }
+                }
+            })()}
+        </>
+    )
 }
 export default Applictation;

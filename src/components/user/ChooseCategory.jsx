@@ -2,16 +2,20 @@ import React from 'react';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
+import { getAllCategories } from './GetAllCategories';
 
 const ChooseCategory = (props) => {
     const { showChooseCategory, selectCategory } = props;
     const [allCategories, setAllCategories] = React.useState([]);
+    // React.useEffect(() => {
+    //     (async () => {
+    //         let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/all/categories?userName=${sessionStorage.userName}`}`);
+    //         response = await response.json();
+    //         setAllCategories(response);
+    //     })();
+    // }, []);
     React.useEffect(() => {
-        (async () => {
-            let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/all/categories?userName=${sessionStorage.userName}`}`);
-            response = await response.json();
-            setAllCategories(response);
-        })();
+        getAllCategories(props);
     }, []);
     return (
         <FormControl

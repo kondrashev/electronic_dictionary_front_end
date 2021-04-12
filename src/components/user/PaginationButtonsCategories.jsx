@@ -2,17 +2,20 @@ import React from 'react';
 import Pagination from '@material-ui/lab/Pagination';
 
 const PaginationButtonsCategories = (props) => {
-    const { setNumberPageCategory, countCategories, setGetContent, setLoadCategories } = props;
+    const { values, setValues } = props;
     const handleChange = (event, value) => {
         if (event.target.value !== undefined) {
-            setNumberPageCategory(value);
-            setGetContent([]);
-            setLoadCategories(value);
+            setValues({
+                ...values,
+                numberPageCategory: value,
+                getContent: [],
+                loadCategories: value
+            });
         }
     }
     return (
         <Pagination
-            count={countCategories}
+            count={values.countCategories}
             variant="outlined"
             onChange={handleChange}
             shape="rounded"

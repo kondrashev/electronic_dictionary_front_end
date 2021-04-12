@@ -10,21 +10,22 @@ import PaginationButtonsWords from './PaginationButtonsWords';
 import ListCategories from './ListCategories';
 
 const Content = (props) => {
-    const [showDeleteButtonCategory, setShowDeleteButtonCategory] = React.useState(false);
-    const [listIdCategories, setListIdCategories] = React.useState([]);
-    const { showListCategories, setShowListCategories, showListWords, setShowListWords,
-        setCurrentNameCategory, currentNameCategory, showSearchWord, valueSearchWord,
-        setNumberPageCategory, numberPageCategory, setNumberPageWord, numberPageWord, setGetContent,
-        getContent, setCountCategories, countCategories, setCountWords, countWords,
-        setLoadCategories, loadWords, setLoadWords, getWords } = props;
+    const [valuesDeleteCategories, setValuesDeleteCategories] = React.useState({
+        showDeleteButtonCategory: false,
+        listIdCategories: []
+    });
+    const { values, setValues } = props;
     async function deleteCategories() {
-        setCountCategories(0);
+        setValues({
+            ...values,
+            countCategories: 0
+        });
         let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${'https://specialdictionary.herokuapp.com/delete/categories'}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(listIdCategories)
+            body: JSON.stringify(valuesDeleteCategories.listIdCategories)
         })
         response = await response.json();
         let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
@@ -36,19 +37,31 @@ const Content = (props) => {
             })
         })
         localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-        setLoadCategories(listIdCategories);
-        setListIdCategories([]);
-        setShowDeleteButtonCategory(false);
+        setValues({
+            ...values,
+            loadCategories: valuesDeleteCategories.listIdCategories
+        });
+        setValuesDeleteCategories({
+            ...valuesDeleteCategories,
+            listIdCategories: [],
+            showDeleteButtonCategory: false
+        });
     }
     const getIdCategory = (event) => {
-        let listId = listIdCategories;
+        let listId = valuesDeleteCategories.listIdCategories;
         if (event.target.checked === true) {
             listId.push(parseInt(event.target.value));
-            setListIdCategories(listId);
-            setShowDeleteButtonCategory(true);
+            setValuesDeleteCategories({
+                ...valuesDeleteCategories,
+                listIdCategories: listId,
+                showDeleteButtonCategory: true
+            });
         } else {
-            setListIdCategories(listIdCategories.filter(item => item != parseInt(event.target.value)));
-            listIdCategories.length - 1 == 0 && setShowDeleteButtonCategory(false);
+            setValuesDeleteCategories({
+                ...valuesDeleteCategories,
+                listIdCategories: valuesDeleteCategories.listIdCategories.filter(item => item != parseInt(event.target.value)),
+                showDeleteButtonCategory: valuesDeleteCategories.listIdCategories.length - 1 == 0 && false
+            });
         }
     }
     return (
@@ -64,7 +77,7 @@ const Content = (props) => {
                 }}
             >
                 {
-                    showDeleteButtonCategory === true &&
+                    valuesDeleteCategories.showDeleteButtonCategory === true &&
                     <List
                         style={{
                             float: 'right'
@@ -83,24 +96,14 @@ const Content = (props) => {
                     </List>
                 }
                 {
-                    showListCategories === true &&
+                    values.showListCategories === true &&
                     <ListCategories
                         getIdCategory={getIdCategory}
-                        setShowListCategories={setShowListCategories}
-                        setShowListWords={setShowListWords}
-                        currentNameCategory={currentNameCategory}
-                        setCurrentNameCategory={setCurrentNameCategory}
-                        numberPageCategory={numberPageCategory}
-                        setGetContent={setGetContent}
-                        categories={getContent}
-                        setCountWords={setCountWords}
-                        setLoadCategories={setLoadCategories}
-                        loadWords={loadWords}
-                        setLoadWords={setLoadWords}
-                        getWords={getWords}
+                        values={values}
+                        setValues={setValues}
                     />
                 }
-                {
+                {/* {
                     showListWords === true &&
                     <TableWords
                         currentNameCategory={currentNameCategory}
@@ -110,24 +113,22 @@ const Content = (props) => {
                         setCountWords={setCountWords}
                         setLoadWords={setLoadWords}
                     />
-                }
-                {
+                } */}
+                {/* {
                     showSearchWord === true &&
                     <SearchWord
                         searchWord={getContent}
                     />
-                }
+                } */}
             </div>
             {
-                showListCategories === true &&
+                values.showListCategories === true &&
                 <PaginationButtonsCategories
-                    countCategories={countCategories}
-                    setNumberPageCategory={setNumberPageCategory}
-                    setGetContent={setGetContent}
-                    setLoadCategories={setLoadCategories}
+                    values={values}
+                    setValues={setValues}
                 />
             }
-            {
+            {/* {
                 showListWords === true &&
                 <PaginationButtonsWords
                     currentNameCategory={currentNameCategory}
@@ -136,7 +137,7 @@ const Content = (props) => {
                     setGetContent={setGetContent}
                     setLoadWords={setLoadWords}
                 />
-            }
+            } */}
         </div >
     )
 }

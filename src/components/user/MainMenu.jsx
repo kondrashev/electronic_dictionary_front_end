@@ -11,10 +11,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import HomeIcon from '@material-ui/icons/Home';
 
 const MainMenu = (props) => {
-    const { setShowListCategories, showListCategories, setShowListWords, showListWords, setShowSearchWord,
-        setValueSearchWord, setGetContent, numberPageCategory, numberPageWord, setAlertMistakes,
-        setTypeMistake, setCountCategories, setCountWords, setLoadCategories,
-        setLoadWords, currentNameCategory, setCurrentNameCategory } = props;
+    const { values, setValues } = props;
     const useStyles = makeStyles((theme) => ({
         root: {
             flexGrow: 1,
@@ -73,21 +70,30 @@ const MainMenu = (props) => {
     }
     async function searchWordGet(event) {
         if (event.keyCode == 13) {
-            setGetContent([]);
-            setShowListCategories(false);
-            setShowListWords(false);
-            setShowSearchWord(true);
-            setValueSearchWord(event.target.value);
+            setValues({
+                ...values,
+                getContent: [],
+                showListCategories: false,
+                showListWords: false,
+                showSearchWord: true,
+                valueSearchWord: event.target.value
+            });
             let nameSearchWord = event.target.value;
             event.target.value = '';
             let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/search/word?wordName=${nameSearchWord}&userName=${sessionStorage.userName}`}`);
             response = await response.json();
             if (response.name !== null) {
-                setGetContent(response);
+                setValues({
+                    ...values,
+                    getContent: response
+                });
             } else {
-                setShowSearchWord(false);
-                setTypeMistake(`This word didn't find-`);
-                setAlertMistakes(true);
+                setValues({
+                    ...values,
+                    showSearchWord: false,
+                    typeMistake: `This word didn't find-`,
+                    alertMistakes: true
+                });
             }
         }
     }
@@ -104,19 +110,8 @@ const MainMenu = (props) => {
             >
                 <Toolbar>
                     <OpenMenu
-                        numberPageCategory={numberPageCategory}
-                        numberPageWord={numberPageWord}
-                        setAlertMistakes={setAlertMistakes}
-                        setTypeMistake={setTypeMistake}
-                        setGetContent={setGetContent}
-                        setCountCategories={setCountCategories}
-                        setCountWords={setCountWords}
-                        showListCategories={showListCategories}
-                        showListWords={showListWords}
-                        setLoadCategories={setLoadCategories}
-                        setLoadWords={setLoadWords}
-                        currentNameCategory={currentNameCategory}
-                        setCurrentNameCategory={setCurrentNameCategory}
+                        values={values}
+                        setValues={setValues}
                     />
                     <Typography
                         className={classes.title}
