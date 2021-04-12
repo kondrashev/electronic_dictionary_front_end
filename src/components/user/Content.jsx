@@ -10,10 +10,6 @@ import PaginationButtonsWords from './PaginationButtonsWords';
 import ListCategories from './ListCategories';
 
 const Content = (props) => {
-    const [valuesDeleteCategories, setValuesDeleteCategories] = React.useState({
-        showDeleteButtonCategory: false,
-        listIdCategories: []
-    });
     const { values, setValues } = props;
     async function deleteCategories() {
         setValues({
@@ -25,7 +21,7 @@ const Content = (props) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(valuesDeleteCategories.listIdCategories)
+            body: JSON.stringify(values.listIdCategories)
         })
         response = await response.json();
         let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
@@ -39,30 +35,10 @@ const Content = (props) => {
         localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
         setValues({
             ...values,
-            loadCategories: valuesDeleteCategories.listIdCategories
-        });
-        setValuesDeleteCategories({
-            ...valuesDeleteCategories,
+            loadCategories: values.listIdCategories,
             listIdCategories: [],
             showDeleteButtonCategory: false
         });
-    }
-    const getIdCategory = (event) => {
-        let listId = valuesDeleteCategories.listIdCategories;
-        if (event.target.checked === true) {
-            listId.push(parseInt(event.target.value));
-            setValuesDeleteCategories({
-                ...valuesDeleteCategories,
-                listIdCategories: listId,
-                showDeleteButtonCategory: true
-            });
-        } else {
-            setValuesDeleteCategories({
-                ...valuesDeleteCategories,
-                listIdCategories: valuesDeleteCategories.listIdCategories.filter(item => item != parseInt(event.target.value)),
-                showDeleteButtonCategory: valuesDeleteCategories.listIdCategories.length - 1 == 0 && false
-            });
-        }
     }
     return (
         < div >
@@ -77,7 +53,7 @@ const Content = (props) => {
                 }}
             >
                 {
-                    valuesDeleteCategories.showDeleteButtonCategory === true &&
+                    values.showDeleteButtonCategory === true &&
                     <List
                         style={{
                             float: 'right'
@@ -98,7 +74,6 @@ const Content = (props) => {
                 {
                     values.showListCategories === true &&
                     <ListCategories
-                        getIdCategory={getIdCategory}
                         values={values}
                         setValues={setValues}
                     />
