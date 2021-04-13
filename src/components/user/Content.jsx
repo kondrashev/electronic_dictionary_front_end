@@ -78,17 +78,13 @@ const Content = (props) => {
                         setValues={setValues}
                     />
                 }
-                {/* {
-                    showListWords === true &&
+                {
+                    values.showListWords === true &&
                     <TableWords
-                        currentNameCategory={currentNameCategory}
-                        numberPageWord={numberPageWord}
-                        setGetContent={setGetContent}
-                        words={getContent}
-                        setCountWords={setCountWords}
-                        setLoadWords={setLoadWords}
+                        values={values}
+                        setValues={setValues}
                     />
-                } */}
+                }
                 {/* {
                     showSearchWord === true &&
                     <SearchWord
@@ -103,16 +99,13 @@ const Content = (props) => {
                     setValues={setValues}
                 />
             }
-            {/* {
-                showListWords === true &&
+            {
+                values.showListWords === true &&
                 <PaginationButtonsWords
-                    currentNameCategory={currentNameCategory}
-                    countWords={countWords}
-                    setNumberPageWord={setNumberPageWord}
-                    setGetContent={setGetContent}
-                    setLoadWords={setLoadWords}
+                    values={values}
+                    setValues={setValues}
                 />
-            } */}
+            }
         </div >
     )
 }

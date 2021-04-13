@@ -5,14 +5,13 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Tooltip from '@material-ui/core/Tooltip';
 
 const TableRowWord = (props) => {
+    const { row, isItemSelected, getIdWord, handleClick, labelId, values, setValues } = props;
     const [showEditNameWord, setShowEditNameWord] = React.useState(false);
     const [showEditMeaningWord, setShowEditMeaningWord] = React.useState(false);
     const [oldNameWord, setOldNameWord] = React.useState('');
     const [newNameWord, setNewNameWord] = React.useState('');
     const [oldMeaningWord, setOldMeaningWord] = React.useState('');
     const [newMeaningWord, setNewMeaningWord] = React.useState('');
-    const { row, isItemSelected, getIdWord, handleClick, labelId,
-        currentNameCategory, numberPageWord, setGetContent, setLoadWords } = props;
     const pronunciation = (name) => {
         return `${'https://translate.google.com/#view=home&op=translate&sl=en&tl=uk&text='}${name}`;
     }
@@ -52,7 +51,7 @@ const TableRowWord = (props) => {
                 setShowEditNameWord(false);
                 let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
                 Object.entries(user.categories).map(([, value]) => {
-                    if (value.name === currentNameCategory) {
+                    if (value.name === values.currentNameCategory) {
                         value.words.map((word) => {
                             if (word.name === oldNameWord) {
                                 word.name = newNameWord
@@ -61,7 +60,10 @@ const TableRowWord = (props) => {
                     }
                 })
                 localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-                setLoadWords(response.name);
+                setValues({
+                    ...values,
+                    loadWords: response.name
+                });
             }
         }
     }
@@ -87,7 +89,7 @@ const TableRowWord = (props) => {
                 setShowEditMeaningWord(false);
                 let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
                 Object.entries(user.categories).map(([, value]) => {
-                    if (value.name === currentNameCategory) {
+                    if (value.name === values.currentNameCategory) {
                         value.words.map((word) => {
                             if (word.meaning === oldMeaningWord) {
                                 word.meaning = newMeaningWord
@@ -96,7 +98,10 @@ const TableRowWord = (props) => {
                     }
                 })
                 localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-                setLoadWords(response.name);
+                setValues({
+                    ...values,
+                    loadWords: response.name
+                });
             }
         }
     }

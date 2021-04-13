@@ -5,15 +5,7 @@ import Select from '@material-ui/core/Select';
 import { getAllCategories } from './GetAllCategories';
 
 const ChooseCategory = (props) => {
-    const { showChooseCategory, selectCategory } = props;
-    const [allCategories, setAllCategories] = React.useState([]);
-    // React.useEffect(() => {
-    //     (async () => {
-    //         let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/all/categories?userName=${sessionStorage.userName}`}`);
-    //         response = await response.json();
-    //         setAllCategories(response);
-    //     })();
-    // }, []);
+    const { selectCategory, values } = props;
     React.useEffect(() => {
         getAllCategories(props);
     }, []);
@@ -39,7 +31,7 @@ const ChooseCategory = (props) => {
             >
                 <option aria-label="None" value="" />
                 {
-                    allCategories.map((category) =>
+                    values.allCategories.map((category) =>
                         <option
                             value={category.name}
                         >

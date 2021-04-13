@@ -45,8 +45,7 @@ const WordForm = (props) => {
         }
         setValuesWordForm({
             ...valuesWordForm,
-            valueSelect: event.target.value,
-            currentNameCategory: event.target.value
+            valueSelect: event.target.value
         });
     }
     const keyLetter = (event) => {
@@ -88,7 +87,7 @@ const WordForm = (props) => {
             date: `${checkDate()}.${checkMonth()}.${new Date().getFullYear()}p.`,
             categoryName: valuesWordForm.valueSelect
         }
-        let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/add/word?userName=${sessionStorage.userName}&categoryName=${values.currentNameCategory}`}`, {
+        let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/add/word?userName=${sessionStorage.userName}&categoryName=${valuesWordForm.valueSelect}`}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -112,6 +111,9 @@ const WordForm = (props) => {
             localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
             setValues({
                 ...values,
+                showListCategories: false,
+                showListWords: true,
+                currentNameCategory: valuesWordForm.valueSelect,
                 loadWords: response.name
             });
         } else {

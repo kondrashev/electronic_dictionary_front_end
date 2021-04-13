@@ -11,13 +11,13 @@ import CreateIcon from '@material-ui/icons/Create';
 import Tooltip from '@material-ui/core/Tooltip';
 
 function Category(props) {
+    const { values, setValues, getIdCategory, itemCategory, indexCategory } = props;
     const [valuesCategory, setValuesCategory] = useState({
         show: true,
         border: 0,
         oldNameCategory: '',
         newNameCategory: ''
     });
-    const { values, setValues, getIdCategory, itemCategory, indexCategory } = props;
     const getNameCategory = (name) => {
         setValues({
             ...values,
@@ -26,7 +26,7 @@ function Category(props) {
             currentNameCategory: name,
             showListCategories: false,
             showListWords: true,
-            getWords: name
+            loadWords: name
         });
     }
     const showEdit = (event) => {

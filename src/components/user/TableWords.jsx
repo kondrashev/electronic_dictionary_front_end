@@ -24,8 +24,12 @@ import ChooseCategory from './ChooseCategory';
 import TableRowWord from './TableRowWord';
 
 function TableWords(props) {
-    const { currentNameCategory, numberPageWord, setGetContent,
-        words, setCountWords, setLoadWords } = props;
+    const { values, setValues } = props;
+    const [showChooseCategory, setShowChooseCategory] = React.useState(false);
+    const [categoryName, setCategoryName] = React.useState('');
+    const [showButtonMoveWords, setShowButtonMoveWords] = React.useState(false);
+    const [showButtonDeleteWords, setShowButtonDeleteWords] = React.useState(true);
+    const [listIdWords, setListIdWords] = React.useState([]);
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
             return -1;
@@ -124,7 +128,6 @@ function TableWords(props) {
             flex: '1 1 100%',
         },
     }));
-    const [showChooseCategory, setShowChooseCategory] = React.useState(false);
     const EnhancedTableToolbar = (props) => {
         const classes = useToolbarStyles();
         const { numSelected } = props;
@@ -203,9 +206,6 @@ function TableWords(props) {
             width: 1,
         },
     }));
-    const [categoryName, setCategoryName] = React.useState('');
-    const [showButtonMoveWords, setShowButtonMoveWords] = React.useState(false);
-    const [showButtonDeleteWords, setShowButtonDeleteWords] = React.useState(true);
     const selectCategory = (event) => {
         setCategoryName(event.target.value);
         if (event.target.value === '') {
@@ -216,7 +216,6 @@ function TableWords(props) {
             setShowButtonMoveWords(true);
         }
     }
-    const [listIdWords, setListIdWords] = React.useState([]);
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
             const newSelecteds = rows.map((n) => n.name);
@@ -241,7 +240,10 @@ function TableWords(props) {
         }
     }
     async function deleteWords() {
-        setCountWords(0);
+        setValues({
+            ...values,
+            countWords: 0
+        });
         let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/delete/words?categoryName=${categoryName}`}`, {
             method: 'POST',
             headers: {
@@ -256,7 +258,7 @@ function TableWords(props) {
         let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
         let moveWords = [];
         user.categories.map((category) => {
-            if (currentNameCategory === category.name) {
+            if (values.currentNameCategory === category.name) {
                 response.map((wordName) => {
                     category.words.map((word, index) => {
                         if (wordName === word.name) {
@@ -279,9 +281,12 @@ function TableWords(props) {
             setCategoryName('');
         }
         localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-        setLoadWords(response);
+        setValues({
+            ...values,
+            loadWords: response
+        });
     }
-    const rows = words;
+    const rows = values.getContent;
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -330,8 +335,9 @@ function TableWords(props) {
             {
                 showChooseCategory === true &&
                 <ChooseCategory
-                    showChooseCategory={showChooseCategory}
                     selectCategory={selectCategory}
+                    values={values}
+                    setValues={setValues}
                 />
             }
             <Paper className={classes.paper}>
@@ -360,15 +366,14 @@ function TableWords(props) {
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     return (
                                         <TableRowWord
+                                            key={row.name}
                                             row={row}
                                             isItemSelected={isItemSelected}
                                             getIdWord={getIdWord}
                                             handleClick={handleClick}
                                             labelId={labelId}
-                                            currentNameCategory={currentNameCategory}
-                                            numberPageWord={numberPageWord}
-                                            setGetContent={setGetContent}
-                                            setLoadWords={setLoadWords}
+                                            values={values}
+                                            setValues={setValues}
                                         />
                                     );
                                 })}

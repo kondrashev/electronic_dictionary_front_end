@@ -2,17 +2,20 @@ import React from 'react';
 import Pagination from '@material-ui/lab/Pagination';
 
 const PaginationButtonsWords = (props) => {
-    const { setNumberPageWord, currentNameCategory, setGetContent, countWords, setLoadWords } = props;
+    const { values, setValues } = props;
     const handleChange = (event, value) => {
         if (event.target.value !== undefined) {
-            setNumberPageWord(value);
-            setGetContent([]);
-            setLoadWords(value);
+            setValues({
+                ...values,
+                numberPageWord: value,
+                getContent: [],
+                loadWords: value
+            });
         }
     }
     return (
         <Pagination
-            count={countWords}
+            count={values.countWords}
             variant="outlined"
             onChange={handleChange}
             shape="rounded"
