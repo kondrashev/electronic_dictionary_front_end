@@ -1,8 +1,9 @@
 import React from 'react';
 import Pagination from '@material-ui/lab/Pagination';
+import { ApplictationContext } from '../Application';
 
 const PaginationButtonsWords = (props) => {
-    const { values, setValues } = props;
+    const { values, setValues } = React.useContext(ApplictationContext);
     const handleChange = (event, value) => {
         if (event.target.value !== undefined) {
             setValues({

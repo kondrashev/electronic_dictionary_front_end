@@ -19,9 +19,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { ApplictationContext } from '../Application';
 
 export default function UsersTable(props) {
-    const { values, setValues } = props;
+    const { values, setValues } = React.useContext(ApplictationContext);
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
             return -1;

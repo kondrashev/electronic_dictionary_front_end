@@ -22,9 +22,11 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import ChooseCategory from './ChooseCategory';
 import TableRowWord from './TableRowWord';
+import { ApplictationContext } from '../Application';
 
+export const TableWordsContext = React.createContext();
 function TableWords(props) {
-    const { values, setValues } = props;
+    const { values, setValues } = React.useContext(ApplictationContext);
     const [showChooseCategory, setShowChooseCategory] = React.useState(false);
     const [categoryName, setCategoryName] = React.useState('');
     const [showButtonMoveWords, setShowButtonMoveWords] = React.useState(false);
@@ -336,8 +338,6 @@ function TableWords(props) {
                 showChooseCategory === true &&
                 <ChooseCategory
                     selectCategory={selectCategory}
-                    values={values}
-                    setValues={setValues}
                 />
             }
             <Paper className={classes.paper}>
@@ -365,16 +365,19 @@ function TableWords(props) {
                                     const isItemSelected = isSelected(row.name);
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     return (
-                                        <TableRowWord
-                                            key={row.name}
-                                            row={row}
-                                            isItemSelected={isItemSelected}
-                                            getIdWord={getIdWord}
-                                            handleClick={handleClick}
-                                            labelId={labelId}
-                                            values={values}
-                                            setValues={setValues}
-                                        />
+                                        <TableWordsContext.Provider
+                                            value={{
+                                                row: row,
+                                                isItemSelected: isItemSelected,
+                                                getIdWord: getIdWord,
+                                                handleClick: handleClick,
+                                                labelId: labelId
+                                            }}
+                                        >
+                                            <TableRowWord
+                                                key={row.name}
+                                            />
+                                        </TableWordsContext.Provider>
                                     );
                                 })}
                             {emptyRows > 0 && (

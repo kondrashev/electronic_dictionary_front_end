@@ -3,9 +3,12 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import Checkbox from '@material-ui/core/Checkbox';
 import Tooltip from '@material-ui/core/Tooltip';
+import { TableWordsContext } from './TableWords';
+import { ApplictationContext } from '../Application';
 
 const TableRowWord = (props) => {
-    const { row, isItemSelected, getIdWord, handleClick, labelId, values, setValues } = props;
+    const { values, setValues } = React.useContext(ApplictationContext);
+    const { row, isItemSelected, getIdWord, handleClick, labelId } = React.useContext(TableWordsContext);
     const [showEditNameWord, setShowEditNameWord] = React.useState(false);
     const [showEditMeaningWord, setShowEditMeaningWord] = React.useState(false);
     const [oldNameWord, setOldNameWord] = React.useState('');

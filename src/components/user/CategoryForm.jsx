@@ -1,10 +1,11 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import { ApplictationContext } from '../Application';
 
 const CategoryForm = (props) => {
+    const { values, setValues } = React.useContext(ApplictationContext);
     const [valueNameCategory, setValueNameCategory] = React.useState('');
-    const { values, setValues } = props;
     const nameChange = (event) => {
         setValueNameCategory(event.target.value);
     };

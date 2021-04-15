@@ -8,9 +8,10 @@ import SearchWord from './SearchWord';
 import PaginationButtonsCategories from './PaginationButtonsCategories';
 import PaginationButtonsWords from './PaginationButtonsWords';
 import ListCategories from './ListCategories';
+import { ApplictationContext } from '../Application';
 
 const Content = (props) => {
-    const { values, setValues } = props;
+    const { values, setValues } = React.useContext(ApplictationContext);
     async function deleteCategories() {
         setValues({
             ...values,
@@ -73,38 +74,24 @@ const Content = (props) => {
                 }
                 {
                     values.showListCategories === true &&
-                    <ListCategories
-                        values={values}
-                        setValues={setValues}
-                    />
+                    <ListCategories />
                 }
                 {
                     values.showListWords === true &&
-                    <TableWords
-                        values={values}
-                        setValues={setValues}
-                    />
+                    <TableWords />
                 }
-                {/* {
-                    showSearchWord === true &&
-                    <SearchWord
-                        searchWord={getContent}
-                    />
-                } */}
+                {
+                    values.showSearchWord === true &&
+                    <SearchWord />
+                }
             </div>
             {
                 values.showListCategories === true &&
-                <PaginationButtonsCategories
-                    values={values}
-                    setValues={setValues}
-                />
+                <PaginationButtonsCategories />
             }
             {
                 values.showListWords === true &&
-                <PaginationButtonsWords
-                    values={values}
-                    setValues={setValues}
-                />
+                <PaginationButtonsWords />
             }
         </div >
     )

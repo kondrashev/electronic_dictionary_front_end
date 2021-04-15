@@ -6,9 +6,10 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import CategoryForm from './CategoryForm';
 import WordForm from './WordForm';
 import { Transition, animated } from 'react-spring/renderprops';
+import { ApplictationContext } from '../Application';
 
 const OpenMenu = (props) => {
-    const { values, setValues } = props;
+    const { values, setValues } = React.useContext(ApplictationContext);
     const formCategoryShow = () => {
         setValues({
             ...values,
@@ -74,10 +75,7 @@ const OpenMenu = (props) => {
                     <animated.div
                         style={props}
                     >
-                        <CategoryForm
-                            values={values}
-                            setValues={setValues}
-                        />
+                        <CategoryForm />
                     </animated.div>
                 ))}
             </Transition>
@@ -93,11 +91,7 @@ const OpenMenu = (props) => {
                     <animated.div
                         style={props}
                     >
-                        <WordForm
-                            values={values}
-                            setValues={setValues}
-
-                        />
+                        <WordForm />
                     </animated.div>
                 ))}
             </Transition>

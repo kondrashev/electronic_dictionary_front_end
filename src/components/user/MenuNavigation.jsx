@@ -3,9 +3,10 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import { ApplictationContext } from '../Application';
 
 const MenuNavigation = (props) => {
-    const { values, setValues } = props;
+    const { values, setValues } = React.useContext(ApplictationContext);
     async function listCategories() {
         setValues({
             ...values,
@@ -58,7 +59,7 @@ const MenuNavigation = (props) => {
                         color="inherit"
                         onClick={currentCategory}
                     >
-                        {values.searchWord.categoryName}
+                        {values.getContent.categoryName}
                     </Link>
                 }
                 <Typography

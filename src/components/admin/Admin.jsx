@@ -1,9 +1,10 @@
 import React from 'react';
 import MenuAdmin from './MenuAdmin';
 import TableUsers from './TableUsers';
+import { ApplictationContext } from '../Application';
 
 const Admin = (props) => {
-    const { values, setValues } = props;
+    const { values, setValues } = React.useContext(ApplictationContext);
     React.useEffect(() => {
         (async () => {
             let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/users?pattern=${'user'}`}`);
@@ -18,12 +19,12 @@ const Admin = (props) => {
         return (
             <div>
                 <MenuAdmin
-                    values={values}
-                    setValues={setValues}
+                // values={values}
+                // setValues={setValues}
                 />
                 <TableUsers
-                    values={values}
-                    setValues={setValues}
+                // values={values}
+                // setValues={setValues}
                 />
             </div>
         )

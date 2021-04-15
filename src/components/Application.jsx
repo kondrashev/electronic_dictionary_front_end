@@ -5,6 +5,7 @@ import Admin from './admin/Admin';
 import Alerts from './authorization/Alerts';
 import RegistrationForm from './authorization/RegistrationForm';
 
+export const ApplictationContext = React.createContext();
 const Applictation = () => {
     const [values, setValues] = React.useState({
         listUsers: [],
@@ -38,47 +39,42 @@ const Applictation = () => {
         listIdCategories: []
     });
     return (
-        <>
-            {(() => {
-                if (window.location.search.replace('?', '') === '' ||
-                    window.location.search.replace('?', '') === 'logout') {
-                    return (
-                        <AuthorizationForm />
-                    )
-                } else {
-                    switch (window.location.search.replace('?', '')) {
-                        case 'admin':
-                            return (
-                                <Admin
-                                    values={values}
-                                    setValues={setValues}
-                                />
-                            )
-                        case 'user':
-                            return (
-                                <User
-                                    values={values}
-                                    setValues={setValues}
-                                />
-                            )
-                        case 'registration':
-                            return (
-                                <RegistrationForm
-                                    values={values}
-                                    setValues={setValues}
-                                />
-                            )
-                        default:
-                            return (
-                                <Alerts
-                                    values={values}
-                                    setValues={setValues}
-                                />
-                            )
+        <ApplictationContext.Provider
+            value={{
+                values: values,
+                setValues: setValues
+            }}
+        >
+            <>
+                {(() => {
+                    if (window.location.search.replace('?', '') === '' ||
+                        window.location.search.replace('?', '') === 'logout') {
+                        return (
+                            <AuthorizationForm />
+                        )
+                    } else {
+                        switch (window.location.search.replace('?', '')) {
+                            case 'admin':
+                                return (
+                                    <Admin />
+                                )
+                            case 'user':
+                                return (
+                                    <User />
+                                )
+                            case 'registration':
+                                return (
+                                    <RegistrationForm />
+                                )
+                            default:
+                                return (
+                                    <Alerts />
+                                )
+                        }
                     }
-                }
-            })()}
-        </>
+                })()}
+            </>
+        </ApplictationContext.Provider>
     )
 }
 export default Applictation;

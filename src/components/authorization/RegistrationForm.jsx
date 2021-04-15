@@ -1,9 +1,10 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import { ApplictationContext } from '../Application';
 
 const RegistrationForm = (props) => {
-    const { values, setValues } = props;
+    const { values, setValues } = React.useContext(ApplictationContext);
     const closeFormRegistration = () => {
         window.location.href = '/';
     }

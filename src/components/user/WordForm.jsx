@@ -6,16 +6,17 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import transformLetters from './TransformLetters';
 import { getAllCategories } from './GetAllCategories';
+import { ApplictationContext } from '../Application';
 
 const WordForm = (props) => {
-    const { values, setValues } = props;
+    const { values, setValues } = React.useContext(ApplictationContext);
     const [valuesWordForm, setValuesWordForm] = React.useState({
         valueName: '',
         valueMeaning: '',
         valueSelect: ''
     });
     React.useEffect(() => {
-        getAllCategories(props);
+        getAllCategories(values, setValues);
     }, []);
     const nameChange = (event) => {
         if (event.target.value === '') {

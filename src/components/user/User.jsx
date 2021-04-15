@@ -3,9 +3,10 @@ import MainMenu from './MainMenu';
 import MenuNavigation from './MenuNavigation';
 import Content from './Content';
 import Alerts from '../authorization/Alerts';
+import { ApplictationContext } from '../Application';
 
 const User = (props) => {
-    const { values, setValues } = props;
+    const { values, setValues } = React.useContext(ApplictationContext);
     React.useEffect(() => {
         (async () => {
             let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/categories?userName=${sessionStorage.userName}&page=${values.numberPageCategory - 1}`}`);
@@ -71,18 +72,9 @@ const User = (props) => {
             <div
                 className='user_page'
             >
-                <MainMenu
-                    values={values}
-                    setValues={setValues}
-                />
-                <MenuNavigation
-                    values={values}
-                    setValues={setValues}
-                />
-                <Content
-                    values={values}
-                    setValues={setValues}
-                />
+                <MainMenu />
+                <MenuNavigation />
+                <Content />
                 {values.alertMistakes === true &&
                     (() => {
                         setValues({
@@ -90,10 +82,7 @@ const User = (props) => {
                             number: 4
                         });
                         return (
-                            <Alerts
-                                values={values}
-                                setValues={setValues}
-                            />
+                            <Alerts />
                         )
                     })()
                 }

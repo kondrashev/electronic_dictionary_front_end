@@ -1,8 +1,10 @@
 import React from 'react';
 import Category from './Category';
+import { ApplictationContext } from '../Application';
 
+export const CategoriesContext = React.createContext();
 const ListCategories = (props) => {
-    const { values, setValues } = props;
+    const { values, setValues } = React.useContext(ApplictationContext);
     const getIdCategory = (event) => {
         let listId = values.listIdCategories;
         if (event.target.checked === true) {
@@ -23,14 +25,17 @@ const ListCategories = (props) => {
     return (
         values.getContent.map((category, index) => {
             return (
-                <Category
-                    key={category.name}
-                    itemCategory={category}
-                    indexCategory={index}
-                    getIdCategory={getIdCategory}
-                    values={values}
-                    setValues={setValues}
-                />
+                <CategoriesContext.Provider
+                    value={{
+                        itemCategory: category,
+                        indexCategory: index,
+                        getIdCategory: getIdCategory
+                    }}
+                >
+                    <Category
+                        key={category.name}
+                    />
+                </CategoriesContext.Provider>
             )
         })
     )

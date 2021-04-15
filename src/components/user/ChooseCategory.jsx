@@ -2,12 +2,14 @@ import React from 'react';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
+import { ApplictationContext } from '../Application';
 import { getAllCategories } from './GetAllCategories';
 
 const ChooseCategory = (props) => {
-    const { selectCategory, values } = props;
+    const { selectCategory } = props;
+    const { values, setValues } = React.useContext(ApplictationContext);
     React.useEffect(() => {
-        getAllCategories(props);
+        getAllCategories(values, setValues);
     }, []);
     return (
         <FormControl

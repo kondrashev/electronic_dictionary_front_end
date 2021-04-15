@@ -8,9 +8,10 @@ import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import HomeIcon from '@material-ui/icons/Home';
+import { ApplictationContext } from '../Application';
 
 export default function MenuAdmin(props) {
-    const { values, setValues } = props;
+    const { values, setValues } = React.useContext(ApplictationContext);
     const useStyles = makeStyles((theme) => ({
         root: {
             flexGrow: 1,

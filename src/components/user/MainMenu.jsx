@@ -9,9 +9,10 @@ import OpenMenu from './OpenMenu';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import HomeIcon from '@material-ui/icons/Home';
+import { ApplictationContext } from '../Application';
 
 const MainMenu = (props) => {
-    const { values, setValues } = props;
+    const { values, setValues } = React.useContext(ApplictationContext);
     const useStyles = makeStyles((theme) => ({
         root: {
             flexGrow: 1,
@@ -109,10 +110,7 @@ const MainMenu = (props) => {
                 position="static"
             >
                 <Toolbar>
-                    <OpenMenu
-                        values={values}
-                        setValues={setValues}
-                    />
+                    <OpenMenu />
                     <Typography
                         className={classes.title}
                         variant="h6" noWrap

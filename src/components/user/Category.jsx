@@ -9,9 +9,12 @@ import FolderIcon from '@material-ui/icons/Folder';
 import Checkbox from '@material-ui/core/Checkbox';
 import CreateIcon from '@material-ui/icons/Create';
 import Tooltip from '@material-ui/core/Tooltip';
+import { ApplictationContext } from '../Application';
+import { CategoriesContext } from './ListCategories';
 
 function Category(props) {
-    const { values, setValues, getIdCategory, itemCategory, indexCategory } = props;
+    const { values, setValues } = React.useContext(ApplictationContext);
+    const { getIdCategory, itemCategory, indexCategory } = React.useContext(CategoriesContext);
     const [valuesCategory, setValuesCategory] = useState({
         show: true,
         border: 0,

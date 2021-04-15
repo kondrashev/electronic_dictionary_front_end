@@ -1,9 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Alert, AlertTitle } from '@material-ui/lab';
+import { ApplictationContext } from '../Application';
 
 export default function Alerts(props) {
-    const { values, setValues } = props;
+    const { values, setValues } = React.useContext(ApplictationContext);
     const useStyles = makeStyles((theme) => ({
         root: {
             width: '100%',

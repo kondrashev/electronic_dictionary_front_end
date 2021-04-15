@@ -7,9 +7,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import { ApplictationContext } from '../Application';
 
 const SearchWord = (props) => {
-    const { searchWord } = props;
+    const { values, setValues } = React.useContext(ApplictationContext);
     const useStyles = makeStyles({
         table: {
             minWidth: 650,
@@ -19,7 +20,7 @@ const SearchWord = (props) => {
         return `${'https://translate.google.com/#view=home&op=translate&sl=en&tl=uk&text='}${name}`;
     }
     const classes = useStyles();
-    if (searchWord.name === null) {
+    if (values.getContent.name === null) {
         sessionStorage.setItem('mistake', 'This word not found-');
         window.location.href = '/?3';
     } else {
@@ -37,16 +38,16 @@ const SearchWord = (props) => {
                     <TableBody>
                         <TableRow>
                             <TableCell component="th" scope="row">
-                                {searchWord.name}
+                                {values.getContent.name}
                             </TableCell>
-                            <TableCell align="right">{searchWord.meaning}</TableCell>
-                            <TableCell align="right">{searchWord.date}</TableCell>
+                            <TableCell align="right">{values.getContent.meaning}</TableCell>
+                            <TableCell align="right">{values.getContent.date}</TableCell>
                             <TableCell align="right">
                                 <a
-                                    href={pronunciation(searchWord.name)}
+                                    href={pronunciation(values.getContent.name)}
                                     target='_blank'
                                 >
-                                    {searchWord.name}
+                                    {values.getContent.name}
                                 </a>
                             </TableCell>
                         </TableRow>
