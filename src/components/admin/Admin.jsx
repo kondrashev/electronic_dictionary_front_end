@@ -18,14 +18,8 @@ const Admin = (props) => {
     if (sessionStorage.login === 'log_in' && sessionStorage.userName === 'admin') {
         return (
             <div>
-                <MenuAdmin
-                // values={values}
-                // setValues={setValues}
-                />
-                <TableUsers
-                // values={values}
-                // setValues={setValues}
-                />
+                <MenuAdmin />
+                <TableUsers />
             </div>
         )
     } else {
