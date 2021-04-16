@@ -28,12 +28,6 @@ export const TableWordsContext = React.createContext();
 function TableWords(props) {
     const { values, setValues } = React.useContext(ApplictationContext);
     const [showChooseCategory, setShowChooseCategory] = React.useState(false);
-    const [valuesTableWords, setValuesTableWords] = React.useState({
-        categoryName: '',
-        showButtonMoveWords: false,
-        showButtonDeleteWords: true,
-        listIdWords: []
-    });
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
             return -1;
@@ -154,7 +148,7 @@ function TableWords(props) {
                 {numSelected > 0 && (
                     <div>
                         {
-                            valuesTableWords.showButtonDeleteWords === true &&
+                            values.showButtonDeleteWords === true &&
                             <Tooltip
                                 title="Delete"
                             >
@@ -167,7 +161,7 @@ function TableWords(props) {
                             </Tooltip>
                         }
                         {
-                            valuesTableWords.showButtonMoveWords === true &&
+                            values.showButtonMoveWords === true &&
                             <Tooltip
                                 title="Move"
                             >
@@ -212,15 +206,15 @@ function TableWords(props) {
     }));
     const selectCategory = (event) => {
         if (event.target.value === '') {
-            setValuesTableWords({
-                ...valuesTableWords,
+            setValues({
+                ...values,
                 categoryName: event.target.value,
                 showButtonDeleteWords: true,
                 showButtonMoveWords: false
             });
         } else {
-            setValuesTableWords({
-                ...valuesTableWords,
+            setValues({
+                ...values,
                 showButtonDeleteWords: false,
                 showButtonMoveWords: true
             });
@@ -230,36 +224,36 @@ function TableWords(props) {
         if (event.target.checked) {
             const newSelecteds = rows.map((n) => n.name);
             setSelected(newSelecteds);
-            setValuesTableWords({
-                ...valuesTableWords,
+            setValues({
+                ...values,
                 listIdWords: rows.map((row) => parseInt(row.id))
             });
             return;
         } else {
-            setValuesTableWords({
-                ...valuesTableWords,
+            setValues({
+                ...values,
                 listIdWords: []
             });
         }
         setSelected([]);
     };
     const getIdWord = (event) => {
-        let listId = valuesTableWords.listIdWords;
+        let listId = values.listIdWords;
         if (event.target.checked === true) {
             listId.push(parseInt(event.target.value));
-            setValuesTableWords({
-                ...valuesTableWords,
+            setValues({
+                ...values,
                 listIdWords: listId
             });
-            setValuesTableWords({
-                ...valuesTableWords,
+            setValues({
+                ...values,
                 showButtonMoveWords: false,
                 showButtonDeleteWords: true
             });
         } else {
-            setValuesTableWords({
-                ...valuesTableWords,
-                listIdWords: valuesTableWords.listIdWords.filter(item => item != parseInt(event.target.value)),
+            setValues({
+                ...values,
+                listIdWords: values.listIdWords.filter(item => item != parseInt(event.target.value)),
                 showButtonDeleteWords: false
             });
         }
@@ -269,17 +263,17 @@ function TableWords(props) {
             ...values,
             countWords: 0
         });
-        let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/delete/words?categoryName=${valuesTableWords.categoryName}`}`, {
+        let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/delete/words?categoryName=${values.categoryName}`}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(valuesTableWords.listIdWords)
+            body: JSON.stringify(values.listIdWords)
         })
         response = await response.json();
         setSelected([]);
-        setValuesTableWords({
-            ...valuesTableWords,
+        setValues({
+            ...values,
             listIdWords: [],
             showButtonDeleteWords: false
         });
@@ -290,24 +284,24 @@ function TableWords(props) {
                 response.map((wordName) => {
                     category.words.map((word, index) => {
                         if (wordName === word.name) {
-                            if (valuesTableWords.categoryName !== '') moveWords.push(word);
+                            if (values.categoryName !== '') moveWords.push(word);
                             category.words.splice(index, 1);
                         }
                     })
                 })
             }
         })
-        if (valuesTableWords.categoryName !== '') {
+        if (values.categoryName !== '') {
             Object.entries(user.categories).map(([, value]) => {
-                if (value.name === valuesTableWords.categoryName) {
+                if (value.name === values.categoryName) {
                     moveWords.map((word) => {
-                        word.categoryName = valuesTableWords.categoryName;
+                        word.categoryName = values.categoryName;
                         value.words.push(word);
                     })
                 }
             })
-            setValuesTableWords({
-                ...valuesTableWords,
+            setValues({
+                ...values,
                 categoryName: ''
             });
         }

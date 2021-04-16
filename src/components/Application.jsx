@@ -36,7 +36,17 @@ const Applictation = () => {
         showFormWord: false,
         allCategories: [],
         showDeleteButtonCategory: false,
-        listIdCategories: []
+        listIdCategories: [],
+        categoryName: '',
+        showButtonMoveWords: false,
+        showButtonDeleteWords: true,
+        listIdWords: [],
+        showEditNameWord: false,
+        showEditMeaningWord: false,
+        oldNameWord: '',
+        newNameWord: '',
+        oldMeaningWord: '',
+        newMeaningWord: ''
     });
     return (
         <ApplictationContext.Provider

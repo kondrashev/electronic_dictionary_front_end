@@ -9,36 +9,42 @@ import { ApplictationContext } from '../Application';
 const TableRowWord = (props) => {
     const { values, setValues } = React.useContext(ApplictationContext);
     const { row, isItemSelected, getIdWord, handleClick, labelId } = React.useContext(TableWordsContext);
-    const [showEditNameWord, setShowEditNameWord] = React.useState(false);
-    const [showEditMeaningWord, setShowEditMeaningWord] = React.useState(false);
-    const [oldNameWord, setOldNameWord] = React.useState('');
-    const [newNameWord, setNewNameWord] = React.useState('');
-    const [oldMeaningWord, setOldMeaningWord] = React.useState('');
-    const [newMeaningWord, setNewMeaningWord] = React.useState('');
     const pronunciation = (name) => {
         return `${'https://translate.google.com/#view=home&op=translate&sl=en&tl=uk&text='}${name}`;
     }
     const editNameWord = (event) => {
-        setNewNameWord(event.target.value);
+        setValues({
+            ...values,
+            newNameWord: event.target.value
+        });
     }
     const editMeaningWord = (event) => {
-        setNewMeaningWord(event.target.value);
+        setValues({
+            ...values,
+            newMeaningWord: event.target.value
+        });
     }
     const editNameWordShow = (oldName) => {
-        setOldNameWord(oldName);
-        setShowEditNameWord(!showEditNameWord);
+        setValues({
+            ...values,
+            oldNameWord: oldName,
+            showEditNameWord: !values.showEditNameWord
+        });
     }
     const editMeaningWordShow = (oldName, oldMeaning) => {
-        setOldNameWord(oldName);
-        setOldMeaningWord(oldMeaning);
-        setShowEditMeaningWord(!showEditMeaningWord);
+        setValues({
+            ...values,
+            oldNameWord: oldName,
+            oldMeaningWord: oldMeaning,
+            showEditMeaningWord: !values.showEditMeaningWord
+        });
     }
     async function changeNameWord(event) {
         if (event.keyCode == 13) {
             let editNameWord = {
                 userName: sessionStorage.userName,
-                name: oldNameWord,
-                newName: newNameWord,
+                name: values.oldNameWord,
+                newName: values.newNameWord,
                 mark: 'name'
             }
             let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/edit/word`}`, {
@@ -46,18 +52,21 @@ const TableRowWord = (props) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(editNameWord)
+                body: JSON.stringify(values.editNameWord)
             })
             response = await response.json();
             if (response.name !== null) {
-                setNewNameWord('');
-                setShowEditNameWord(false);
+                setValues({
+                    ...values,
+                    newNameWord: '',
+                    showEditNameWord: false
+                });
                 let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
                 Object.entries(user.categories).map(([, value]) => {
                     if (value.name === values.currentNameCategory) {
                         value.words.map((word) => {
-                            if (word.name === oldNameWord) {
-                                word.name = newNameWord
+                            if (word.name === values.oldNameWord) {
+                                word.name = values.newNameWord
                             }
                         })
                     }
@@ -74,9 +83,9 @@ const TableRowWord = (props) => {
         if (event.keyCode == 13) {
             let editMeaningWord = {
                 userName: sessionStorage.userName,
-                name: oldNameWord,
-                meaning: oldMeaningWord,
-                newMeaning: newMeaningWord,
+                name: values.oldNameWord,
+                meaning: values.oldMeaningWord,
+                newMeaning: values.newMeaningWord,
                 mark: 'meaning'
             }
             let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/edit/word`}`, {
@@ -88,14 +97,17 @@ const TableRowWord = (props) => {
             })
             response = await response.json();
             if (response.name !== null) {
-                setNewMeaningWord('');
-                setShowEditMeaningWord(false);
+                setValues({
+                    ...values,
+                    newMeaningWord: '',
+                    showEditMeaningWord: false
+                });
                 let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
                 Object.entries(user.categories).map(([, value]) => {
                     if (value.name === values.currentNameCategory) {
                         value.words.map((word) => {
-                            if (word.meaning === oldMeaningWord) {
-                                word.meaning = newMeaningWord
+                            if (word.meaning === values.oldMeaningWord) {
+                                word.meaning = values.newMeaningWord
                             }
                         })
                     }
@@ -144,7 +156,7 @@ const TableRowWord = (props) => {
                     {row.name}
                 </TableCell>
             </Tooltip>
-            {showEditNameWord === true &&
+            {values.showEditNameWord === true &&
                 <TableCell
                     className='edit_name_word'
                     style={{
@@ -177,7 +189,7 @@ const TableRowWord = (props) => {
                     {row.meaning}
                 </TableCell>
             </Tooltip>
-            {showEditMeaningWord === true &&
+            {values.showEditMeaningWord === true &&
                 <TableCell
                     className='edit_meaning_word'
                     style={{
