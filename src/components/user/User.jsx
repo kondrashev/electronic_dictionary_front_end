@@ -75,17 +75,7 @@ const User = (props) => {
                 <MainMenu />
                 <MenuNavigation />
                 <Content />
-                {values.alertMistakes === true &&
-                    (() => {
-                        setValues({
-                            ...values,
-                            number: 4
-                        });
-                        return (
-                            <Alerts />
-                        )
-                    })()
-                }
+                {values.alertMistakes === true && <Alerts />}
             </div>
         )
     }

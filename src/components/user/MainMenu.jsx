@@ -73,11 +73,7 @@ const MainMenu = (props) => {
         if (event.keyCode == 13) {
             setValues({
                 ...values,
-                getContent: [],
-                showListCategories: false,
-                showListWords: false,
-                showSearchWord: true,
-                valueSearchWord: event.target.value
+                getContent: []
             });
             let nameSearchWord = event.target.value;
             event.target.value = '';
@@ -86,11 +82,16 @@ const MainMenu = (props) => {
             if (response.name !== null) {
                 setValues({
                     ...values,
-                    getContent: response
+                    showListCategories: false,
+                    showListWords: false,
+                    showSearchWord: true,
+                    getContent: response,
+                    valueSearchWord: response.name
                 });
             } else {
                 setValues({
                     ...values,
+                    number: 4,
                     showSearchWord: false,
                     typeMistake: `This word didn't find-`,
                     alertMistakes: true

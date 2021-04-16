@@ -56,6 +56,7 @@ const CategoryForm = (props) => {
             setValueNameCategory('');
             setValues({
                 ...values,
+                number: 4,
                 typeMistake: 'This category already has in the dictionary-',
                 alertMistakes: true
             });

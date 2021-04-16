@@ -126,6 +126,7 @@ const WordForm = (props) => {
             });
             setValues({
                 ...values,
+                number: 4,
                 typeMistake: 'This word already has in the dictionary-',
                 alertMistakes: true
             });

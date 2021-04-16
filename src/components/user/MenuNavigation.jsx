@@ -21,11 +21,11 @@ const MenuNavigation = (props) => {
         setValues({
             ...values,
             getContent: [],
-            currentNameCategory: values.searchWord.categoryName,
+            currentNameCategory: values.getContent.categoryName,
             showListCategories: false,
             showSearchWord: false,
             showListWords: true,
-            loadWords: values.searchWord.categoryName
+            loadWords: values.getContent.categoryName
         });
     }
     return (
