@@ -28,10 +28,12 @@ export const TableWordsContext = React.createContext();
 function TableWords(props) {
     const { values, setValues } = React.useContext(ApplictationContext);
     const [showChooseCategory, setShowChooseCategory] = React.useState(false);
-    const [categoryName, setCategoryName] = React.useState('');
-    const [showButtonMoveWords, setShowButtonMoveWords] = React.useState(false);
-    const [showButtonDeleteWords, setShowButtonDeleteWords] = React.useState(true);
-    const [listIdWords, setListIdWords] = React.useState([]);
+    const [valuesTableWords, setValuesTableWords] = React.useState({
+        categoryName: '',
+        showButtonMoveWords: false,
+        showButtonDeleteWords: true,
+        listIdWords: []
+    });
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
             return -1;
@@ -152,7 +154,7 @@ function TableWords(props) {
                 {numSelected > 0 && (
                     <div>
                         {
-                            showButtonDeleteWords === true &&
+                            valuesTableWords.showButtonDeleteWords === true &&
                             <Tooltip
                                 title="Delete"
                             >
@@ -165,7 +167,7 @@ function TableWords(props) {
                             </Tooltip>
                         }
                         {
-                            showButtonMoveWords === true &&
+                            valuesTableWords.showButtonMoveWords === true &&
                             <Tooltip
                                 title="Move"
                             >
@@ -209,36 +211,57 @@ function TableWords(props) {
         },
     }));
     const selectCategory = (event) => {
-        setCategoryName(event.target.value);
         if (event.target.value === '') {
-            setShowButtonDeleteWords(true);
-            setShowButtonMoveWords(false);
+            setValuesTableWords({
+                ...valuesTableWords,
+                categoryName: event.target.value,
+                showButtonDeleteWords: true,
+                showButtonMoveWords: false
+            });
         } else {
-            setShowButtonDeleteWords(false);
-            setShowButtonMoveWords(true);
+            setValuesTableWords({
+                ...valuesTableWords,
+                showButtonDeleteWords: false,
+                showButtonMoveWords: true
+            });
         }
     }
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
             const newSelecteds = rows.map((n) => n.name);
             setSelected(newSelecteds);
-            setListIdWords(rows.map((row) => parseInt(row.id)));
+            setValuesTableWords({
+                ...valuesTableWords,
+                listIdWords: rows.map((row) => parseInt(row.id))
+            });
             return;
         } else {
-            setListIdWords([]);
+            setValuesTableWords({
+                ...valuesTableWords,
+                listIdWords: []
+            });
         }
         setSelected([]);
     };
     const getIdWord = (event) => {
-        let listId = listIdWords;
+        let listId = valuesTableWords.listIdWords;
         if (event.target.checked === true) {
             listId.push(parseInt(event.target.value));
-            setListIdWords(listId);
-            setShowButtonMoveWords(false);
-            setShowButtonDeleteWords(true);
+            setValuesTableWords({
+                ...valuesTableWords,
+                listIdWords: listId
+            });
+            setValuesTableWords({
+                ...valuesTableWords,
+                showButtonMoveWords: false,
+                showButtonDeleteWords: true
+            });
         } else {
-            setListIdWords(listIdWords.filter(item => item != parseInt(event.target.value)));
-            setShowButtonDeleteWords(false);
+            setValuesTableWords({
+                ...valuesTableWords,
+                listIdWords: valuesTableWords.listIdWords.filter(item => item != parseInt(event.target.value)),
+                showButtonDeleteWords: false
+            });
         }
     }
     async function deleteWords() {
@@ -246,17 +269,20 @@ function TableWords(props) {
             ...values,
             countWords: 0
         });
-        let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/delete/words?categoryName=${categoryName}`}`, {
+        let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/delete/words?categoryName=${valuesTableWords.categoryName}`}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(listIdWords)
+            body: JSON.stringify(valuesTableWords.listIdWords)
         })
         response = await response.json();
         setSelected([]);
-        setListIdWords([]);
-        setShowButtonDeleteWords(false);
+        setValuesTableWords({
+            ...valuesTableWords,
+            listIdWords: [],
+            showButtonDeleteWords: false
+        });
         let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
         let moveWords = [];
         user.categories.map((category) => {
@@ -264,23 +290,26 @@ function TableWords(props) {
                 response.map((wordName) => {
                     category.words.map((word, index) => {
                         if (wordName === word.name) {
-                            if (categoryName !== '') moveWords.push(word);
+                            if (valuesTableWords.categoryName !== '') moveWords.push(word);
                             category.words.splice(index, 1);
                         }
                     })
                 })
             }
         })
-        if (categoryName !== '') {
+        if (valuesTableWords.categoryName !== '') {
             Object.entries(user.categories).map(([, value]) => {
-                if (value.name === categoryName) {
+                if (value.name === valuesTableWords.categoryName) {
                     moveWords.map((word) => {
-                        word.categoryName = categoryName;
+                        word.categoryName = valuesTableWords.categoryName;
                         value.words.push(word);
                     })
                 }
             })
-            setCategoryName('');
+            setValuesTableWords({
+                ...valuesTableWords,
+                categoryName: ''
+            });
         }
         localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
         setValues({
