@@ -1,15 +1,7 @@
-export const ADD_USER_DATA_SUCCESS = 'ADD_USER_DATA_SUCCESS';
-
-export const addUserFetchDataSuccess = (user) => {
-    return {
-        type: ADD_USER_DATA_SUCCESS,
-        user
-    }
-}
 export const addUserFetchData = (data) => {
     const { url, user } = data;
     const { date } = data.user;
-    return async (dispatch) => {
+    return async () => {
         let response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -18,7 +10,6 @@ export const addUserFetchData = (data) => {
             body: JSON.stringify(user)
         });
         response = await response.json();
-        dispatch(addUserFetchDataSuccess(response));
         if (response.login !== null) {
             let user = {
                 login: response.login,

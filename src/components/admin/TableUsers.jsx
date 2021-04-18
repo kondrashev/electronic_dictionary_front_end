@@ -22,7 +22,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { ApplictationContext } from '../Application';
 import { connect } from 'react-redux';
 import { loadUsersFetchData } from '../../store/load_users/actions';
-import { deleteUsersFetchData } from '../../store/delete_users/actions';
+import { deleteUsersFetchData } from '../../store/update_users/action_delete';
 
 function UsersTable(props) {
     const { values, setValues } = React.useContext(ApplictationContext);
