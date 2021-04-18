@@ -1,28 +1,20 @@
 import React from 'react';
 import $ from 'jquery';
+import { connect } from 'react-redux';
+import { loadUsersFetchData } from '../store/load_users/actions';
 
 const AuthorizationForm = (props) => {
+    const { getUsers } = props;
+    React.useEffect(() => {
+        let getLoad = 1;
+        getUsers(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/load/users?pattern=${'user'}`}`, getLoad);
+    }, []);
     sessionStorage.setItem('userName', '');
     sessionStorage.setItem('searchUserMark', '');
     $('body')
         .css({
             background: '#999999'
         })
-    React.useEffect(() => {
-        (async () => {
-            let users = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                users[i] = JSON.parse(localStorage.getItem(localStorage.key(i)));
-            }
-            fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/load/users?pattern=${'user'}`}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(users)
-            });
-        })();
-    }, []);
     const loginChange = (event) => {
         sessionStorage.setItem('userName', event.target.value);
     }
@@ -84,4 +76,10 @@ const AuthorizationForm = (props) => {
         </form >
     )
 }
-export default AuthorizationForm;
+const mapStateToProps = null;
+const mapDispatchToProps = dispatch => {
+    return {
+        getUsers: (url, getLoad) => dispatch(loadUsersFetchData(url, getLoad))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(AuthorizationForm);

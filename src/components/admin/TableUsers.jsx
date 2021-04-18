@@ -20,9 +20,21 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { ApplictationContext } from '../Application';
+import { connect } from 'react-redux';
+import { loadUsersFetchData } from '../store/load_users/actions';
+import { deleteUsersFetchData } from '../store/delete_users/actions';
 
-export default function UsersTable(props) {
+function UsersTable(props) {
     const { values, setValues } = React.useContext(ApplictationContext);
+    const { getUsers, users, usersDelete } = props;
+    React.useEffect(() => {
+        let getLoad = 0;
+        const data = {
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/users?pattern=${'user'}`}`,
+            getLoad: getLoad
+        }
+        getUsers(data);
+    }, [values.listUsers]);
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
             return -1;
@@ -200,52 +212,49 @@ export default function UsersTable(props) {
             searchUserMark: false
         });
     }
-    const [userListId, setUserListId] = React.useState([]);
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
             const newSelecteds = rows.map((n) => n.login);
             setSelected(newSelecteds);
-            setUserListId(rows.map((row) => parseInt(row.id)));
+            setValues({
+                ...values,
+                userListId: rows.map((row) => parseInt(row.id))
+            });
             return;
         } else {
-            setUserListId([]);
+            setValues({
+                ...values,
+                userListId: []
+            });
         }
         setSelected([]);
     };
     const getIdUser = (event) => {
-        let listId = userListId;
+        let listId = values.userListId;
         if (event.target.checked === true) {
             listId.push(parseInt(event.target.value));
-            setUserListId(listId);
+            setValues({
+                ...values,
+                userListId: listId
+            });
         } else {
-            setUserListId(userListId.filter(item => item != parseInt(event.target.value)));
+            setValues({
+                ...values,
+                userListId: values.userListId.filter(item => item != parseInt(event.target.value))
+            });
         }
     }
-    async function deleteUsers() {
-        let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${'https://specialdictionary.herokuapp.com/delete/users'}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userListId)
-        })
-        response = await response.json();
-        response.map((login) => {
-            for (let i = 0; i < localStorage.length; i++) {
-                if (login === localStorage.key(i)) {
-                    localStorage.removeItem(localStorage.key(i));
-                }
-            }
-        })
-        setSelected([]);
-        response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/users?pattern=${'user'}`}`);
-        response = await response.json();
-        setValues({
-            ...values,
-            listUsers: response
-        });
+    const deleteUsers = () => {
+        let data = {
+            url: `${'https://cors-anywhere.herokuapp.com/'}${'https://specialdictionary.herokuapp.com/delete/users'}`,
+            userListId: values.userListId,
+            setSelected: setSelected,
+            values: values,
+            setValues: setValues
+        }
+        usersDelete(data);
     }
-    const rows = values.searchUserMark === false ? values.listUsers : values.getSearchUser;
+    const rows = values.searchUserMark === false ? users : users.filter(user => user.login === values.getSearchUser);
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -382,3 +391,15 @@ export default function UsersTable(props) {
         </div >
     );
 }
+const mapStateToProps = state => {
+    return {
+        users: state.loadUsersReducer
+    };
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        getUsers: (data) => dispatch(loadUsersFetchData(data)),
+        usersDelete: (data) => dispatch(deleteUsersFetchData(data))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(UsersTable);

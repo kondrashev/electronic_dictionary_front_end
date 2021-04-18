@@ -72,7 +72,7 @@ export default function MenuAdmin(props) {
         if (event.keyCode == 13) {
             setValues({
                 ...values,
-                getSearchUser: values.listUsers.filter(user => user.login === event.target.value),
+                getSearchUser: event.target.value,
                 searchUserMark: true
             });
             event.target.value = '';
