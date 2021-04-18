@@ -21,8 +21,8 @@ import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { ApplictationContext } from '../Application';
 import { connect } from 'react-redux';
-import { loadUsersFetchData } from '../store/load_users/actions';
-import { deleteUsersFetchData } from '../store/delete_users/actions';
+import { loadUsersFetchData } from '../../store/load_users/actions';
+import { deleteUsersFetchData } from '../../store/delete_users/actions';
 
 function UsersTable(props) {
     const { values, setValues } = React.useContext(ApplictationContext);

@@ -2,7 +2,7 @@ import React from 'react';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-import rootReducer from './store/redusers';
+import rootReducer from '../store/redusers';
 import AuthorizationForm from './authorization/AuthorizationForm';
 import User from './user/User';
 import Admin from './admin/Admin';
@@ -75,21 +75,13 @@ const Applictation = () => {
                         } else {
                             switch (window.location.search.replace('?', '')) {
                                 case 'admin':
-                                    return (
-                                        <Admin />
-                                    )
+                                    return <Admin />
                                 case 'user':
-                                    return (
-                                        <User />
-                                    )
+                                    return <User />
                                 case 'registration':
-                                    return (
-                                        <RegistrationForm />
-                                    )
+                                    return <RegistrationForm />
                                 default:
-                                    return (
-                                        <Alerts />
-                                    )
+                                    return <Alerts />
                             }
                         }
                     })()}

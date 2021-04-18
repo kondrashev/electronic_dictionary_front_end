@@ -1,13 +1,17 @@
 import React from 'react';
 import $ from 'jquery';
 import { connect } from 'react-redux';
-import { loadUsersFetchData } from '../store/load_users/actions';
+import { loadUsersFetchData } from '../../store/load_users/actions';
 
 const AuthorizationForm = (props) => {
     const { getUsers } = props;
     React.useEffect(() => {
         let getLoad = 1;
-        getUsers(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/load/users?pattern=${'user'}`}`, getLoad);
+        let data = {
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/load/users?pattern=${'user'}`}`,
+            getLoad: getLoad
+        }
+        getUsers(data);
     }, []);
     sessionStorage.setItem('userName', '');
     sessionStorage.setItem('searchUserMark', '');
@@ -79,7 +83,7 @@ const AuthorizationForm = (props) => {
 const mapStateToProps = null;
 const mapDispatchToProps = dispatch => {
     return {
-        getUsers: (url, getLoad) => dispatch(loadUsersFetchData(url, getLoad))
+        getUsers: (data) => dispatch(loadUsersFetchData(data))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(AuthorizationForm);

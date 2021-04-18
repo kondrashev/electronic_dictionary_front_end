@@ -3,7 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { ApplictationContext } from '../Application';
 import { connect } from 'react-redux';
-import { addUserFetchData } from '../store/add_user/actions';
+import { addUserFetchData } from '../../store/add_user/actions';
 
 const RegistrationForm = (props) => {
     const { values, setValues } = React.useContext(ApplictationContext);
