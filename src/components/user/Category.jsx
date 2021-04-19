@@ -11,10 +11,21 @@ import CreateIcon from '@material-ui/icons/Create';
 import Tooltip from '@material-ui/core/Tooltip';
 import { ApplictationContext } from '../Application';
 import { CategoriesContext } from './ListCategories';
+import { connect } from 'react-redux';
+import { editCategoryFetchData } from '../../store/update_categories/action_edit';
 
 function Category(props) {
     const { values, setValues } = React.useContext(ApplictationContext);
     const { getIdCategory, itemCategory, indexCategory } = React.useContext(CategoriesContext);
+    const { categoryEditName, newNameCategory } = props;
+    React.useEffect(() => {
+        if (newNameCategory) {
+            setValues({
+                ...values,
+                loadCategories: newNameCategory
+            });
+        }
+    }, [newNameCategory]);
     const [valuesCategory, setValuesCategory] = useState({
         show: true,
         border: 0,
@@ -24,7 +35,7 @@ function Category(props) {
     const getNameCategory = (name) => {
         setValues({
             ...values,
-            countWords: 0,
+            numberPage: 1,
             getContent: [],
             currentNameCategory: name,
             showListCategories: false,
@@ -48,40 +59,18 @@ function Category(props) {
     }
     const nameEditCategory = (event) => {
         if (event.keyCode == 13) {
-            (async function editCategory() {
-                let editCategory = {
-                    userName: sessionStorage.userName,
-                    name: valuesCategory.oldNameCategory,
-                    newName: valuesCategory.newNameCategory
-                }
-                let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/edit/category`}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(editCategory)
-                });
-                response = await response.json();
-                if (response.name !== null) {
-                    setValuesCategory({
-                        ...valuesCategory,
-                        show: !valuesCategory.show,
-                        border: valuesCategory.show == true ? 1 : 0,
-                        newNameCategory: ''
-                    });
-                    let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
-                    Object.entries(user.categories).map(([, value]) => {
-                        if (value.name === valuesCategory.oldNameCategory) {
-                            value.name = valuesCategory.newNameCategory;
-                        }
-                    })
-                    localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-                    setValues({
-                        ...values,
-                        loadCategories: response.name
-                    });
-                }
-            })();
+            let editCategory = {
+                userName: sessionStorage.userName,
+                name: valuesCategory.oldNameCategory,
+                newName: valuesCategory.newNameCategory
+            }
+            let data = {
+                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/edit/category`}`,
+                editCategory: editCategory,
+                setValuesCategory: setValuesCategory,
+                valuesCategory: valuesCategory
+            }
+            categoryEditName(data);
         }
     }
     return (
@@ -148,4 +137,14 @@ function Category(props) {
         </List >
     )
 }
-export default Category;
+const mapStateToProps = state => {
+    return {
+        newNameCategory: state.updateCategoriesReducer
+    };
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        categoryEditName: (data) => dispatch(editCategoryFetchData(data))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Category);

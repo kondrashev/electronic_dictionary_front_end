@@ -1,7 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 import { connect } from 'react-redux';
-import { loadUsersFetchData } from '../../store/load_users/actions';
+import { loadUsersFetchData } from '../../store/load_users/action';
 
 const AuthorizationForm = (props) => {
     const { getUsers } = props;
