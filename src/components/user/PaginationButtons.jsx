@@ -11,7 +11,6 @@ const PaginationButtons = (props) => {
             setValues({
                 ...values,
                 numberPage: value,
-                getContent: [],
                 loadCategories: values.showListCategories === true && value,
                 loadWords: values.showListWords === true && value
             });

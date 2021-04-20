@@ -23,11 +23,22 @@ import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import ChooseCategory from './ChooseCategory';
 import TableRowWord from './TableRowWord';
 import { ApplictationContext } from '../Application';
+import { connect } from 'react-redux';
+import { loadWordsFetchData } from '../../store/load_words/action';
 
 export const TableWordsContext = React.createContext();
 function TableWords(props) {
     const { values, setValues } = React.useContext(ApplictationContext);
     const [showChooseCategory, setShowChooseCategory] = React.useState(false);
+    const { getWords, getContent } = props;
+    React.useEffect(() => {
+        let data = {
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/words?page=${values.numberPage - 1}&categoryName=${values.currentNameCategory}&userName=${sessionStorage.userName}`}`,
+            values: values,
+            setValues: setValues
+        }
+        getWords(data);
+    }, [values.loadWords]);
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
             return -1;
@@ -311,7 +322,7 @@ function TableWords(props) {
             loadWords: response
         });
     }
-    const rows = values.getContent;
+    const rows = getContent;
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -428,4 +439,14 @@ function TableWords(props) {
         </div >
     );
 }
-export default TableWords;
+const mapStateToProps = state => {
+    return {
+        getContent: state.loadWordsReducer
+    };
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        getWords: (data) => dispatch(loadWordsFetchData(data))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(TableWords);

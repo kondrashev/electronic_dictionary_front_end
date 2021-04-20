@@ -30,7 +30,6 @@ const Applictation = () => {
         showSearchWord: false,
         valueSearchWord: '',
         currentNameCategory: '',
-        getContent: [],
         numberPage: 1,
         alertMistakes: false,
         typeMistake: '',
