@@ -31,6 +31,11 @@ function TableWords(props) {
     const { values, setValues } = React.useContext(ApplictationContext);
     const [showChooseCategory, setShowChooseCategory] = React.useState(false);
     const { getWords, getContent } = props;
+    const changePageWords = React.useMemo(() => {
+        if (values.showListWords) {
+            return values.numberPage;
+        }
+    }, [values.numberPage]);
     React.useEffect(() => {
         let data = {
             url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/words?page=${values.numberPage - 1}&categoryName=${values.currentNameCategory}&userName=${sessionStorage.userName}`}`,
@@ -38,7 +43,7 @@ function TableWords(props) {
             setValues: setValues
         }
         getWords(data);
-    }, [values.loadWords]);
+    }, [values.loadWords, changePageWords]);
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
             return -1;

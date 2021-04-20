@@ -33,7 +33,6 @@ const Applictation = () => {
         numberPage: 1,
         alertMistakes: false,
         typeMistake: '',
-        loadCategories: '',
         loadWords: '',
         changeCountPages: '',
         showMainMenu: true,

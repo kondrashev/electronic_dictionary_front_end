@@ -7,7 +7,12 @@ import { loadCategoriesFetchData } from '../../store/load_categories/action';
 export const CategoriesContext = React.createContext();
 const ListCategories = (props) => {
     const { values, setValues } = React.useContext(ApplictationContext);
-    const { loadCatogories, getContent } = props;
+    const { loadCatogories, getContent, updateCategories } = props;
+    const changePageCategories = React.useMemo(() => {
+        if (values.showListCategories) {
+            return values.numberPage;
+        }
+    }, [values.numberPage]);
     React.useEffect(() => {
         const data = {
             url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/categories?userName=${sessionStorage.userName}&page=${values.numberPage - 1}`}`,
@@ -15,7 +20,7 @@ const ListCategories = (props) => {
             setValues: setValues
         }
         loadCatogories(data);
-    }, [values.loadCategories]);
+    }, [changePageCategories, updateCategories]);
     const getIdCategory = (event) => {
         let listId = values.listIdCategories;
         if (event.target.checked === true) {
@@ -53,7 +58,8 @@ const ListCategories = (props) => {
 }
 const mapStateToProps = state => {
     return {
-        getContent: state.loadCategoriesReducer
+        getContent: state.loadCategoriesReducer,
+        updateCategories: state.updateCategoriesReducer
     };
 }
 const mapDispatchToProps = dispatch => {

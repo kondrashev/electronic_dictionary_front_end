@@ -17,15 +17,7 @@ import { editCategoryFetchData } from '../../store/update_categories/action_edit
 function Category(props) {
     const { values, setValues } = React.useContext(ApplictationContext);
     const { getIdCategory, itemCategory, indexCategory } = React.useContext(CategoriesContext);
-    const { categoryEditName, newNameCategory } = props;
-    React.useEffect(() => {
-        if (newNameCategory) {
-            setValues({
-                ...values,
-                loadCategories: newNameCategory
-            });
-        }
-    }, [newNameCategory]);
+    const { categoryEditName } = props;
     const [valuesCategory, setValuesCategory] = useState({
         show: true,
         border: 0,
@@ -36,7 +28,6 @@ function Category(props) {
         setValues({
             ...values,
             numberPage: 1,
-            getContent: [],
             currentNameCategory: name,
             showListCategories: false,
             showListWords: true,
@@ -137,11 +128,7 @@ function Category(props) {
         </List >
     )
 }
-const mapStateToProps = state => {
-    return {
-        newNameCategory: state.updateCategoriesReducer
-    };
-}
+const mapStateToProps = null;
 const mapDispatchToProps = dispatch => {
     return {
         categoryEditName: (data) => dispatch(editCategoryFetchData(data))

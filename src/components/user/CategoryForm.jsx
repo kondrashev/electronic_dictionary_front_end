@@ -8,15 +8,7 @@ import { addCategoryFetchData } from '../../store/update_categories/action_add';
 const CategoryForm = (props) => {
     const { values, setValues } = React.useContext(ApplictationContext);
     const [valueNameCategory, setValueNameCategory] = React.useState('');
-    const { catogoryAdd, getNewCategory } = props;
-    React.useEffect(() => {
-        if (getNewCategory && values.showListCategories === true) {
-            setValues({
-                ...values,
-                loadCategories: getNewCategory
-            });
-        }
-    }, [getNewCategory]);
+    const { catogoryAdd } = props;
     const nameChange = (event) => {
         setValueNameCategory(event.target.value);
     };
@@ -116,11 +108,7 @@ const CategoryForm = (props) => {
         </div>
     )
 }
-const mapStateToProps = state => {
-    return {
-        getNewCategory: state.updateCategoriesReducer
-    };
-}
+const mapStateToProps = null;
 const mapDispatchToProps = dispatch => {
     return {
         catogoryAdd: (data) => dispatch(addCategoryFetchData(data))

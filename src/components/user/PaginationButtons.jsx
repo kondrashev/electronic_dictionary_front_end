@@ -10,9 +10,7 @@ const PaginationButtons = (props) => {
         if (event.target.value !== undefined) {
             setValues({
                 ...values,
-                numberPage: value,
-                loadCategories: values.showListCategories === true && value,
-                loadWords: values.showListWords === true && value
+                numberPage: value
             });
         }
     }

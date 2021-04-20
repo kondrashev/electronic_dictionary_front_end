@@ -13,18 +13,8 @@ import { countPagesFetchData } from '../../store/count_pages/action';
 import { deleteCategoriesFetchData } from '../../store/update_categories/action_delete';
 
 const Content = (props) => {
-    const { values, setValues } = React.useContext(ApplictationContext);
-    const { getCountPages, categoriesDelete, categoriesDidDelete } = props;
-    React.useEffect(() => {
-        if (categoriesDidDelete) {
-            setValues({
-                ...values,
-                loadCategories: categoriesDidDelete,
-                listIdCategories: [],
-                showDeleteButtonCategory: false
-            });
-        }
-    }, [categoriesDidDelete]);
+    const { values } = React.useContext(ApplictationContext);
+    const { getCountPages, categoriesDelete } = props;
     React.useEffect(() => {
         getCountPages(values.changeCountPages);
     }, [values.changeCountPages]);
@@ -85,8 +75,7 @@ const Content = (props) => {
 }
 const mapStateToProps = state => {
     return {
-        pagesCount: state.countPagesReducer,
-        categoriesDidDelete: state.updateCategoriesReducer
+        pagesCount: state.countPagesReducer
     };
 }
 const mapDispatchToProps = dispatch => {
