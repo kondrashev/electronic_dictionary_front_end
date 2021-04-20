@@ -5,10 +5,13 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Tooltip from '@material-ui/core/Tooltip';
 import { TableWordsContext } from './TableWords';
 import { ApplictationContext } from '../Application';
+import { connect } from 'react-redux';
+import { editWordFetchData } from '../../store/update_words/action_edit';
 
 const TableRowWord = (props) => {
     const { values, setValues } = React.useContext(ApplictationContext);
     const { row, isItemSelected, getIdWord, handleClick, labelId } = React.useContext(TableWordsContext);
+    const { wordEdit } = props;
     const pronunciation = (name) => {
         return `${'https://translate.google.com/#view=home&op=translate&sl=en&tl=uk&text='}${name}`;
     }
@@ -39,85 +42,39 @@ const TableRowWord = (props) => {
             showEditMeaningWord: !values.showEditMeaningWord
         });
     }
-    async function changeNameWord(event) {
+    const changeNameWord = (event) => {
         if (event.keyCode == 13) {
-            let editNameWord = {
+            let editWord = {
                 userName: sessionStorage.userName,
                 name: values.oldNameWord,
                 newName: values.newNameWord,
                 mark: 'name'
             }
-            let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/edit/word`}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(values.editNameWord)
-            })
-            response = await response.json();
-            if (response.name !== null) {
-                setValues({
-                    ...values,
-                    newNameWord: '',
-                    showEditNameWord: false
-                });
-                let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
-                Object.entries(user.categories).map(([, value]) => {
-                    if (value.name === values.currentNameCategory) {
-                        value.words.map((word) => {
-                            if (word.name === values.oldNameWord) {
-                                word.name = values.newNameWord
-                            }
-                        })
-                    }
-                })
-                localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-                setValues({
-                    ...values,
-                    loadWords: response.name
-                });
+            let data = {
+                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/edit/word`}`,
+                editWord: editWord,
+                values: values,
+                setValues: setValues
             }
+            wordEdit(data);
         }
     }
-    async function changeMeaningWord(event) {
+    const changeMeaningWord = (event) => {
         if (event.keyCode == 13) {
-            let editMeaningWord = {
+            let editWord = {
                 userName: sessionStorage.userName,
                 name: values.oldNameWord,
                 meaning: values.oldMeaningWord,
                 newMeaning: values.newMeaningWord,
                 mark: 'meaning'
             }
-            let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/edit/word`}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(editMeaningWord)
-            })
-            response = await response.json();
-            if (response.name !== null) {
-                setValues({
-                    ...values,
-                    newMeaningWord: '',
-                    showEditMeaningWord: false
-                });
-                let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
-                Object.entries(user.categories).map(([, value]) => {
-                    if (value.name === values.currentNameCategory) {
-                        value.words.map((word) => {
-                            if (word.meaning === values.oldMeaningWord) {
-                                word.meaning = values.newMeaningWord
-                            }
-                        })
-                    }
-                })
-                localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-                setValues({
-                    ...values,
-                    loadWords: response.name
-                });
+            let data = {
+                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/edit/word`}`,
+                editWord: editWord,
+                values: values,
+                setValues: setValues
             }
+            wordEdit(data);
         }
     }
     return (
@@ -222,4 +179,10 @@ const TableRowWord = (props) => {
         </TableRow>
     )
 }
-export default TableRowWord;
+const mapStateToProps = null;
+const mapDispatchToProps = dispatch => {
+    return {
+        wordEdit: (data) => dispatch(editWordFetchData(data))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(TableRowWord);

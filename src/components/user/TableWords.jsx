@@ -25,12 +25,13 @@ import TableRowWord from './TableRowWord';
 import { ApplictationContext } from '../Application';
 import { connect } from 'react-redux';
 import { loadWordsFetchData } from '../../store/load_words/action';
+import { deleteWordsFetchData } from '../../store/update_words/action_delete';
 
 export const TableWordsContext = React.createContext();
 function TableWords(props) {
     const { values, setValues } = React.useContext(ApplictationContext);
     const [showChooseCategory, setShowChooseCategory] = React.useState(false);
-    const { getWords, getContent } = props;
+    const { getWords, getContent, wordsDelete, updateWords } = props;
     const changePageWords = React.useMemo(() => {
         if (values.showListWords) {
             return values.numberPage;
@@ -43,7 +44,7 @@ function TableWords(props) {
             setValues: setValues
         }
         getWords(data);
-    }, [values.loadWords, changePageWords]);
+    }, [values.loadWords, changePageWords, updateWords]);
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
             return -1;
@@ -274,58 +275,18 @@ function TableWords(props) {
             });
         }
     }
-    async function deleteWords() {
+    const deleteWords = () => {
         setValues({
             ...values,
             countWords: 0
         });
-        let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/delete/words?categoryName=${values.categoryName}`}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(values.listIdWords)
-        })
-        response = await response.json();
-        setSelected([]);
-        setValues({
-            ...values,
-            listIdWords: [],
-            showButtonDeleteWords: false
-        });
-        let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
-        let moveWords = [];
-        user.categories.map((category) => {
-            if (values.currentNameCategory === category.name) {
-                response.map((wordName) => {
-                    category.words.map((word, index) => {
-                        if (wordName === word.name) {
-                            if (values.categoryName !== '') moveWords.push(word);
-                            category.words.splice(index, 1);
-                        }
-                    })
-                })
-            }
-        })
-        if (values.categoryName !== '') {
-            Object.entries(user.categories).map(([, value]) => {
-                if (value.name === values.categoryName) {
-                    moveWords.map((word) => {
-                        word.categoryName = values.categoryName;
-                        value.words.push(word);
-                    })
-                }
-            })
-            setValues({
-                ...values,
-                categoryName: ''
-            });
+        let data = {
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/delete/words?categoryName=${values.categoryName}`}`,
+            values: values,
+            setValues: setValues,
+            setSelected: setSelected
         }
-        localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-        setValues({
-            ...values,
-            loadWords: response
-        });
+        wordsDelete(data);
     }
     const rows = getContent;
     const classes = useStyles();
@@ -446,12 +407,14 @@ function TableWords(props) {
 }
 const mapStateToProps = state => {
     return {
-        getContent: state.loadWordsReducer
+        getContent: state.loadWordsReducer,
+        updateWords: state.updateWordsReducer
     };
 }
 const mapDispatchToProps = dispatch => {
     return {
-        getWords: (data) => dispatch(loadWordsFetchData(data))
+        getWords: (data) => dispatch(loadWordsFetchData(data)),
+        wordsDelete: (data) => dispatch(deleteWordsFetchData(data))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TableWords);
