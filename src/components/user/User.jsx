@@ -6,7 +6,7 @@ import Alerts from '../authorization/Alerts';
 import { ApplictationContext } from '../Application';
 
 const User = (props) => {
-    const { values, setValues } = React.useContext(ApplictationContext);
+    const { values } = React.useContext(ApplictationContext);
     if (sessionStorage.userName === '' ||
         sessionStorage.getItem('login') === 'logout' ||
         sessionStorage.userName === 'admin') {

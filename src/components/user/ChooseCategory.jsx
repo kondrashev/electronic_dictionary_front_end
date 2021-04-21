@@ -2,14 +2,13 @@ import React from 'react';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
-import { ApplictationContext } from '../Application';
-import { getAllCategories } from './GetAllCategories';
+import { connect } from 'react-redux';
+import { getAllCategoriesFetchData } from '../../store/get_all_categories/action';
 
 const ChooseCategory = (props) => {
-    const { selectCategory } = props;
-    const { values, setValues } = React.useContext(ApplictationContext);
+    const { selectCategory, getAllCategories, allCategories } = props;
     React.useEffect(() => {
-        getAllCategories(values, setValues);
+        getAllCategories(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/all/categories?userName=${sessionStorage.userName}`}`);
     }, []);
     return (
         <FormControl
@@ -33,7 +32,7 @@ const ChooseCategory = (props) => {
             >
                 <option aria-label="None" value="" />
                 {
-                    values.allCategories.map((category) =>
+                    allCategories.map((category) =>
                         <option
                             value={category.name}
                         >
@@ -45,4 +44,14 @@ const ChooseCategory = (props) => {
         </FormControl>
     )
 }
-export default ChooseCategory;
+const mapStateToProps = state => {
+    return {
+        allCategories: state.getAllCategoriesReducer
+    };
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        getAllCategories: (url) => dispatch(getAllCategoriesFetchData(url))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(ChooseCategory);

@@ -5,21 +5,21 @@ import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import transformLetters from './TransformLetters';
-import { getAllCategories } from './GetAllCategories';
 import { ApplictationContext } from '../Application';
 import { connect } from 'react-redux';
 import { addWordFetchData } from '../../store/update_words/action_add';
+import { getAllCategoriesFetchData } from '../../store/get_all_categories/action';
 
 const WordForm = (props) => {
     const { values, setValues } = React.useContext(ApplictationContext);
-    const { wordAdd } = props;
+    const { wordAdd, getAllCategories, allCategories } = props;
     const [valuesWordForm, setValuesWordForm] = React.useState({
         valueName: '',
         valueMeaning: '',
         valueSelect: ''
     });
     React.useEffect(() => {
-        getAllCategories(values, setValues);
+        getAllCategories(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/all/categories?userName=${sessionStorage.userName}`}`);
     }, []);
     const nameChange = (event) => {
         if (event.target.value === '') {
@@ -106,7 +106,7 @@ const WordForm = (props) => {
             addWord();
         }
     };
-    const categories = values.allCategories.map(category =>
+    const categories = allCategories.map(category =>
         <option
             key={category.name}
             value={category.name}
@@ -203,10 +203,15 @@ const WordForm = (props) => {
         </div>
     )
 }
-const mapStateToProps = null;
+const mapStateToProps = state => {
+    return {
+        allCategories: state.getAllCategoriesReducer
+    };
+}
 const mapDispatchToProps = dispatch => {
     return {
-        wordAdd: (data) => dispatch(addWordFetchData(data))
+        wordAdd: (data) => dispatch(addWordFetchData(data)),
+        getAllCategories: (url) => dispatch(getAllCategoriesFetchData(url))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(WordForm);

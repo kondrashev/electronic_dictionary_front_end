@@ -26,6 +26,7 @@ import { ApplictationContext } from '../Application';
 import { connect } from 'react-redux';
 import { loadWordsFetchData } from '../../store/load_words/action';
 import { deleteWordsFetchData } from '../../store/update_words/action_delete';
+import { getAllCategoriesFetchData } from '../../store/get_all_categories/action';
 
 export const TableWordsContext = React.createContext();
 function TableWords(props) {
@@ -405,13 +406,15 @@ function TableWords(props) {
 const mapStateToProps = state => {
     return {
         getContent: state.loadWordsReducer,
-        updateWords: state.updateWordsReducer
+        updateWords: state.updateWordsReducer,
+        allCategories: state.getAllCategoriesReducer
     };
 }
 const mapDispatchToProps = dispatch => {
     return {
         getWords: (data) => dispatch(loadWordsFetchData(data)),
-        wordsDelete: (data) => dispatch(deleteWordsFetchData(data))
+        wordsDelete: (data) => dispatch(deleteWordsFetchData(data)),
+        getAllCategories: (url) => dispatch(getAllCategoriesFetchData(url))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TableWords);

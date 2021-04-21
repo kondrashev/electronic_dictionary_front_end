@@ -10,22 +10,22 @@ const MenuNavigation = (props) => {
     async function listCategories() {
         setValues({
             ...values,
-            getContent: [],
+            // getContent: [],
             showListCategories: true,
             showListWords: false,
             showSearchWord: false,
-            loadCategories: values.showListCategories
+            // loadCategories: values.showListCategories
         });
     }
-    async function currentCategory() {
+    const currentCategory = async () => {
         setValues({
             ...values,
-            getContent: [],
+            // getContent: [],
             currentNameCategory: values.getContent.categoryName,
             showListCategories: false,
             showSearchWord: false,
             showListWords: true,
-            loadWords: values.getContent.categoryName
+            // loadWords: values.getContent.categoryName
         });
     }
     return (

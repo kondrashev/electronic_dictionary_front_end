@@ -38,7 +38,6 @@ const Applictation = () => {
         showMainMenu: true,
         showFormCategory: false,
         showFormWord: false,
-        allCategories: [],
         showDeleteButtonCategory: false,
         listIdCategories: [],
         categoryName: '',

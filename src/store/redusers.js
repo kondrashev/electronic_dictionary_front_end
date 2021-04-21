@@ -5,6 +5,7 @@ import { countPagesReducer } from './count_pages/reducer';
 import { updateCategoriesReducer } from './update_categories/reducer';
 import { loadWordsReducer } from './load_words/reducer';
 import { updateWordsReducer } from './update_words/reducer';
+import { getAllCategoriesReducer } from './get_all_categories/reducer';
 
 export default combineReducers({
     loadUsersReducer,
@@ -12,5 +13,6 @@ export default combineReducers({
     countPagesReducer,
     updateCategoriesReducer,
     loadWordsReducer,
-    updateWordsReducer
+    updateWordsReducer,
+    getAllCategoriesReducer
 });
