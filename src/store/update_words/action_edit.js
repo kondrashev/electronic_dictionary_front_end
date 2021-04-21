@@ -18,35 +18,41 @@ export const editWordFetchData = (data) => {
         });
         response = await response.json();
         if (response.name !== null) {
-            if (editWord.mark === 'name') {
-                setValuesTableRowWord({
-                    ...valuesTableRowWord,
-                    newNameWord: '',
-                    showEditNameWord: false
-                });
-            } else {
-                setValuesTableRowWord({
-                    ...valuesTableRowWord,
-                    newMeaningWord: '',
-                    showEditMeaningWord: false
-                });
+            switch (editWord.mark) {
+                case 'name':
+                    setValuesTableRowWord({
+                        ...valuesTableRowWord,
+                        newNameWord: '',
+                        showEditNameWord: false
+                    });
+                    break;
+                case 'meaning':
+                    setValuesTableRowWord({
+                        ...valuesTableRowWord,
+                        newMeaningWord: '',
+                        showEditMeaningWord: false
+                    });
+                    break;
             }
             dispatch(editWordFetchDataSuccess(response));
             let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
             Object.entries(user.categories).map(([, value]) => {
                 if (value.name === values.currentNameCategory) {
-                    if (editWord.mark === 'name') {
-                        value.words.map((word) => {
-                            if (word.name === valuesTableRowWord.oldNameWord) {
-                                word.name = valuesTableRowWord.newNameWord
-                            }
-                        })
-                    } else {
-                        value.words.map((word) => {
-                            if (word.meaning === valuesTableRowWord.oldMeaningWord) {
-                                word.meaning = valuesTableRowWord.newMeaningWord
-                            }
-                        })
+                    switch (editWord.mark) {
+                        case 'name':
+                            value.words.map((word) => {
+                                if (word.name === valuesTableRowWord.oldNameWord) {
+                                    word.name = valuesTableRowWord.newNameWord
+                                }
+                            })
+                            break;
+                        case 'meaning':
+                            value.words.map((word) => {
+                                if (word.meaning === valuesTableRowWord.oldMeaningWord) {
+                                    word.meaning = valuesTableRowWord.newMeaningWord
+                                }
+                            })
+                            break;
                     }
                 }
             })

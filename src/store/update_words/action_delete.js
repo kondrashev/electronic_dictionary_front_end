@@ -24,6 +24,7 @@ export const deleteWordsFetchData = (data) => {
             listIdWords: [],
             showButtonDeleteWords: false
         });
+        dispatch(deleteWordsFetchDataSuccess(response));
         let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
         let moveWords = [];
         user.categories.map((category) => {
@@ -31,14 +32,14 @@ export const deleteWordsFetchData = (data) => {
                 response.map((wordName) => {
                     category.words.map((word, index) => {
                         if (wordName === word.name) {
-                            if (values.categoryName !== '') moveWords.push(word);
+                            if (values.categoryName) moveWords.push(word);
                             category.words.splice(index, 1);
                         }
                     })
                 })
             }
         })
-        if (values.categoryName !== '') {
+        if (values.categoryName) {
             Object.entries(user.categories).map(([, value]) => {
                 if (value.name === values.categoryName) {
                     moveWords.map((word) => {
@@ -53,6 +54,5 @@ export const deleteWordsFetchData = (data) => {
             });
         }
         localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-        dispatch(deleteWordsFetchDataSuccess(response));
     }
 }

@@ -32,6 +32,12 @@ function TableWords(props) {
     const { values, setValues } = React.useContext(ApplictationContext);
     const [showChooseCategory, setShowChooseCategory] = React.useState(false);
     const { getWords, getContent, wordsDelete, updateWords } = props;
+    const [order, setOrder] = React.useState('asc');
+    const [orderBy, setOrderBy] = React.useState('calories');
+    const [selected, setSelected] = React.useState([]);
+    const [page, setPage] = React.useState(0);
+    const [dense, setDense] = React.useState(false);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const changePageWords = React.useMemo(() => {
         if (values.showListWords) {
             return values.numberPage;
@@ -277,10 +283,6 @@ function TableWords(props) {
         }
     }
     const deleteWords = () => {
-        setValues({
-            ...values,
-            countWords: 0
-        });
         let data = {
             url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/delete/words?categoryName=${values.categoryName}`}`,
             values: values,
@@ -291,12 +293,6 @@ function TableWords(props) {
     }
     const rows = getContent;
     const classes = useStyles();
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
-    const [selected, setSelected] = React.useState([]);
-    const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(false);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
