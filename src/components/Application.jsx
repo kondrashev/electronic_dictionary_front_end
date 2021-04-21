@@ -44,13 +44,7 @@ const Applictation = () => {
         categoryName: '',
         showButtonMoveWords: false,
         showButtonDeleteWords: true,
-        listIdWords: [],
-        showEditNameWord: false,
-        showEditMeaningWord: false,
-        oldNameWord: '',
-        newNameWord: '',
-        oldMeaningWord: '',
-        newMeaningWord: ''
+        listIdWords: []
     });
     return (
         <Provider store={store}>

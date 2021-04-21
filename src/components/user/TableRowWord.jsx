@@ -9,52 +9,61 @@ import { connect } from 'react-redux';
 import { editWordFetchData } from '../../store/update_words/action_edit';
 
 const TableRowWord = (props) => {
-    const { values, setValues } = React.useContext(ApplictationContext);
+    const { values } = React.useContext(ApplictationContext);
     const { row, isItemSelected, getIdWord, handleClick, labelId } = React.useContext(TableWordsContext);
+    const [valuesTableRowWord, setValuesTableRowWord] = React.useState({
+        showEditNameWord: false,
+        showEditMeaningWord: false,
+        oldNameWord: '',
+        newNameWord: '',
+        oldMeaningWord: '',
+        newMeaningWord: ''
+    });
     const { wordEdit } = props;
     const pronunciation = (name) => {
         return `${'https://translate.google.com/#view=home&op=translate&sl=en&tl=uk&text='}${name}`;
     }
     const editNameWord = (event) => {
-        setValues({
-            ...values,
+        setValuesTableRowWord({
+            ...valuesTableRowWord,
             newNameWord: event.target.value
         });
     }
     const editMeaningWord = (event) => {
-        setValues({
-            ...values,
+        setValuesTableRowWord({
+            ...valuesTableRowWord,
             newMeaningWord: event.target.value
         });
     }
     const editNameWordShow = (oldName) => {
-        setValues({
-            ...values,
+        setValuesTableRowWord({
+            ...valuesTableRowWord,
             oldNameWord: oldName,
-            showEditNameWord: !values.showEditNameWord
+            showEditNameWord: !valuesTableRowWord.showEditNameWord
         });
     }
     const editMeaningWordShow = (oldName, oldMeaning) => {
-        setValues({
-            ...values,
+        setValuesTableRowWord({
+            ...valuesTableRowWord,
             oldNameWord: oldName,
             oldMeaningWord: oldMeaning,
-            showEditMeaningWord: !values.showEditMeaningWord
+            showEditMeaningWord: !valuesTableRowWord.showEditMeaningWord
         });
     }
     const changeNameWord = (event) => {
         if (event.keyCode == 13) {
             let editWord = {
                 userName: sessionStorage.userName,
-                name: values.oldNameWord,
-                newName: values.newNameWord,
+                name: valuesTableRowWord.oldNameWord,
+                newName: valuesTableRowWord.newNameWord,
                 mark: 'name'
             }
             let data = {
                 url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/edit/word`}`,
                 editWord: editWord,
                 values: values,
-                setValues: setValues
+                valuesTableRowWord: valuesTableRowWord,
+                setValuesTableRowWord: setValuesTableRowWord
             }
             wordEdit(data);
         }
@@ -63,16 +72,17 @@ const TableRowWord = (props) => {
         if (event.keyCode == 13) {
             let editWord = {
                 userName: sessionStorage.userName,
-                name: values.oldNameWord,
-                meaning: values.oldMeaningWord,
-                newMeaning: values.newMeaningWord,
+                name: valuesTableRowWord.oldNameWord,
+                meaning: valuesTableRowWord.oldMeaningWord,
+                newMeaning: valuesTableRowWord.newMeaningWord,
                 mark: 'meaning'
             }
             let data = {
                 url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/edit/word`}`,
                 editWord: editWord,
                 values: values,
-                setValues: setValues
+                valuesTableRowWord: valuesTableRowWord,
+                setValuesTableRowWord: setValuesTableRowWord
             }
             wordEdit(data);
         }
@@ -113,7 +123,7 @@ const TableRowWord = (props) => {
                     {row.name}
                 </TableCell>
             </Tooltip>
-            {values.showEditNameWord === true &&
+            {valuesTableRowWord.showEditNameWord === true &&
                 <TableCell
                     className='edit_name_word'
                     style={{
@@ -146,7 +156,7 @@ const TableRowWord = (props) => {
                     {row.meaning}
                 </TableCell>
             </Tooltip>
-            {values.showEditMeaningWord === true &&
+            {valuesTableRowWord.showEditMeaningWord === true &&
                 <TableCell
                     className='edit_meaning_word'
                     style={{

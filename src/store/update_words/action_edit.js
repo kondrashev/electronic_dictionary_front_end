@@ -1,4 +1,4 @@
-export const EDIT_WORD_DATA_SUCCESS = 'EDIT_NAME_WORD_DATA_SUCCESS';
+export const EDIT_WORD_DATA_SUCCESS = 'EDIT_WORD_DATA_SUCCESS';
 
 export const editWordFetchDataSuccess = (word) => {
     return {
@@ -7,8 +7,7 @@ export const editWordFetchDataSuccess = (word) => {
     }
 }
 export const editWordFetchData = (data) => {
-    const { url, editWord, values, setValues } = data;
-    const { mark } = editWord;
+    const { url, editWord, values, valuesTableRowWord, setValuesTableRowWord } = data;
     return async (dispatch) => {
         let response = await fetch(url, {
             method: 'POST',
@@ -19,15 +18,15 @@ export const editWordFetchData = (data) => {
         });
         response = await response.json();
         if (response.name !== null) {
-            if (mark === 'name') {
-                setValues({
-                    ...values,
+            if (editWord.mark === 'name') {
+                setValuesTableRowWord({
+                    ...valuesTableRowWord,
                     newNameWord: '',
                     showEditNameWord: false
                 });
-            } else if ('meaning') {
-                setValues({
-                    ...values,
+            } else {
+                setValuesTableRowWord({
+                    ...valuesTableRowWord,
                     newMeaningWord: '',
                     showEditMeaningWord: false
                 });
@@ -36,17 +35,19 @@ export const editWordFetchData = (data) => {
             let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
             Object.entries(user.categories).map(([, value]) => {
                 if (value.name === values.currentNameCategory) {
-                    value.words.map((word) => {
-                        if (mark === 'name') {
-                            if (word.name === values.oldNameWord) {
-                                word.name = values.newNameWord
+                    if (editWord.mark === 'name') {
+                        value.words.map((word) => {
+                            if (word.name === valuesTableRowWord.oldNameWord) {
+                                word.name = valuesTableRowWord.newNameWord
                             }
-                        } else if (mark === 'meaning') {
-                            if (word.meaning === values.oldMeaningWord) {
-                                word.meaning = values.newMeaningWord
+                        })
+                    } else {
+                        value.words.map((word) => {
+                            if (word.meaning === valuesTableRowWord.oldMeaningWord) {
+                                word.meaning = valuesTableRowWord.newMeaningWord
                             }
-                        }
-                    })
+                        })
+                    }
                 }
             })
             localStorage.setItem(sessionStorage.userName, JSON.stringify(user));

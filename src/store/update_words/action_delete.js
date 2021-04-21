@@ -18,7 +18,6 @@ export const deleteWordsFetchData = (data) => {
             body: JSON.stringify(listIdWords)
         });
         response = await response.json();
-        dispatch(deleteWordsFetchDataSuccess(response));
         setSelected([]);
         setValues({
             ...values,
@@ -52,6 +51,7 @@ export const deleteWordsFetchData = (data) => {
                 ...values,
                 categoryName: ''
             });
+            dispatch(deleteWordsFetchDataSuccess(response));
         }
         localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
     }
