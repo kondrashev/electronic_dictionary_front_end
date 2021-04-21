@@ -51,8 +51,8 @@ export const deleteWordsFetchData = (data) => {
                 ...values,
                 categoryName: ''
             });
-            dispatch(deleteWordsFetchDataSuccess(response));
         }
         localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
+        dispatch(deleteWordsFetchDataSuccess(response));
     }
 }

@@ -232,6 +232,7 @@ function TableWords(props) {
         } else {
             setValues({
                 ...values,
+                categoryName: event.target.value,
                 showButtonDeleteWords: false,
                 showButtonMoveWords: true
             });
