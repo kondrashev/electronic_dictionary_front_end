@@ -10,9 +10,12 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import HomeIcon from '@material-ui/icons/Home';
 import { ApplictationContext } from '../Application';
+import { connect } from 'react-redux';
+import { searchWordFetchData } from '../../store/search_word/action';
 
 const MainMenu = (props) => {
     const { values, setValues } = React.useContext(ApplictationContext);
+    const { getSearchWord } = props;
     const useStyles = makeStyles((theme) => ({
         root: {
             flexGrow: 1,
@@ -69,34 +72,16 @@ const MainMenu = (props) => {
     const logout = () => {
         window.location.href = '/?logout'
     }
-    async function searchWordGet(event) {
+    const searchWordGet = (event) => {
         if (event.keyCode == 13) {
-            setValues({
-                ...values,
-                getContent: []
-            });
             let nameSearchWord = event.target.value;
             event.target.value = '';
-            let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/search/word?wordName=${nameSearchWord}&userName=${sessionStorage.userName}`}`);
-            response = await response.json();
-            if (response.name !== null) {
-                setValues({
-                    ...values,
-                    showListCategories: false,
-                    showListWords: false,
-                    showSearchWord: true,
-                    getContent: response,
-                    valueSearchWord: response.name
-                });
-            } else {
-                setValues({
-                    ...values,
-                    number: 4,
-                    showSearchWord: false,
-                    typeMistake: `This word didn't find-`,
-                    alertMistakes: true
-                });
+            let data = {
+                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/search/word?wordName=${nameSearchWord}&userName=${sessionStorage.userName}`}`,
+                values: values,
+                setValues: setValues
             }
+            getSearchWord(data);
         }
     }
     const classes = useStyles();
@@ -154,4 +139,10 @@ const MainMenu = (props) => {
         </div >
     );
 }
-export default MainMenu;
+const mapStateToProps = null;
+const mapDispatchToProps = dispatch => {
+    return {
+        getSearchWord: (data) => dispatch(searchWordFetchData(data))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(MainMenu);

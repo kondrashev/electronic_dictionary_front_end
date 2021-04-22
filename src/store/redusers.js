@@ -6,6 +6,7 @@ import { updateCategoriesReducer } from './update_categories/reducer';
 import { loadWordsReducer } from './load_words/reducer';
 import { updateWordsReducer } from './update_words/reducer';
 import { getAllCategoriesReducer } from './get_all_categories/reducer';
+import { searchWordReducer } from './search_word/reducer';
 
 export default combineReducers({
     loadUsersReducer,
@@ -14,5 +15,6 @@ export default combineReducers({
     updateCategoriesReducer,
     loadWordsReducer,
     updateWordsReducer,
-    getAllCategoriesReducer
+    getAllCategoriesReducer,
+    searchWordReducer
 });

@@ -17,7 +17,7 @@ export const editCategoryFetchData = (data) => {
             body: JSON.stringify(editCategory)
         });
         response = await response.json();
-        if (response.name !== null) {
+        if (response.name) {
             dispatch(editCategoryFetchDataSuccess(response));
             setValuesCategory({
                 ...valuesCategory,

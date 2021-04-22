@@ -17,7 +17,7 @@ export const editWordFetchData = (data) => {
             body: JSON.stringify(editWord)
         });
         response = await response.json();
-        if (response.name !== null) {
+        if (response.name) {
             switch (editWord.mark) {
                 case 'name':
                     setValuesTableRowWord({

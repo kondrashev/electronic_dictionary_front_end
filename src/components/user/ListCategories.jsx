@@ -20,7 +20,7 @@ const ListCategories = (props) => {
             setValues: setValues
         }
         loadCatogories(data);
-    }, [changePageCategories, updateCategories]);
+    }, [values.loadCategories, changePageCategories, updateCategories]);
     const getIdCategory = (event) => {
         let listId = values.listIdCategories;
         if (event.target.checked === true) {

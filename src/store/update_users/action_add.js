@@ -10,7 +10,7 @@ export const addUserFetchData = (data) => {
             body: JSON.stringify(user)
         });
         response = await response.json();
-        if (response.login !== null) {
+        if (response.login) {
             let user = {
                 login: response.login,
                 password: response.password,

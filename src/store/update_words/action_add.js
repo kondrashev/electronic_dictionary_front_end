@@ -17,7 +17,7 @@ export const addWordFetchData = (data) => {
             body: JSON.stringify(word)
         });
         response = await response.json();
-        if (response.name !== null) {
+        if (response.name) {
             dispatch(addWordFetchDataSuccess(response));
             setValuesWordForm({
                 ...valuesWordForm,

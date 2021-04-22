@@ -17,7 +17,7 @@ export const addCategoryFetchData = (data) => {
             body: JSON.stringify(category)
         });
         response = await response.json();
-        if (response.name !== null) {
+        if (response.name) {
             dispatch(addCategoryFetchDataSuccess(response));
             setValueNameCategory('');
             let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
