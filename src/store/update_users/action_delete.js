@@ -1,6 +1,14 @@
+export const DELETE_USERS_DATA_SUCCESS = 'DELETE_USERS_DATA_SUCCESS';
+
+export const deleteUsersFetchDataSuccess = (users) => {
+    return {
+        type: DELETE_USERS_DATA_SUCCESS,
+        users
+    }
+}
 export const deleteUsersFetchData = (data) => {
     const { url, userListId, setSelected, values, setValues } = data;
-    return async () => {
+    return async (dispatch) => {
         let response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -9,6 +17,7 @@ export const deleteUsersFetchData = (data) => {
             body: JSON.stringify(userListId)
         });
         response = await response.json();
+        dispatch(deleteUsersFetchDataSuccess(response));
         setSelected([]);
         setValues({
             ...values,

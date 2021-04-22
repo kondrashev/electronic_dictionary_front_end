@@ -7,7 +7,7 @@ export const deleteCategoriesFetchDataSuccess = (categories) => {
     }
 }
 export const deleteCategoriesFetchData = (data) => {
-    const { url, listIdCategories } = data;
+    const { url, listIdCategories, values, setValues } = data;
     return async (dispatch) => {
         let response = await fetch(url, {
             method: 'POST',
@@ -17,6 +17,11 @@ export const deleteCategoriesFetchData = (data) => {
             body: JSON.stringify(listIdCategories)
         });
         response = await response.json();
+        setValues({
+            ...values,
+            listIdCategories: [],
+            showDeleteButtonCategory: false
+        });
         dispatch(deleteCategoriesFetchDataSuccess(response));
         let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
         response.map(categoryName => {

@@ -26,7 +26,7 @@ import { deleteUsersFetchData } from '../../store/update_users/action_delete';
 
 function UsersTable(props) {
     const { values, setValues } = React.useContext(ApplictationContext);
-    const { getUsers, users, usersDelete } = props;
+    const { getUsers, users, usersDelete, updateUsers } = props;
     React.useEffect(() => {
         let getLoad = 0;
         const data = {
@@ -34,7 +34,7 @@ function UsersTable(props) {
             getLoad: getLoad
         }
         getUsers(data);
-    }, [values.listUsers]);
+    }, [updateUsers]);
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
             return -1;
@@ -393,7 +393,8 @@ function UsersTable(props) {
 }
 const mapStateToProps = state => {
     return {
-        users: state.loadUsersReducer
+        users: state.loadUsersReducer,
+        updateUsers: state.updateUsersReducer
     };
 }
 const mapDispatchToProps = dispatch => {

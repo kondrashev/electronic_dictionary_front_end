@@ -13,7 +13,7 @@ import { countPagesFetchData } from '../../store/count_pages/action';
 import { deleteCategoriesFetchData } from '../../store/update_categories/action_delete';
 
 const Content = (props) => {
-    const { values } = React.useContext(ApplictationContext);
+    const { values, setValues } = React.useContext(ApplictationContext);
     const { getCountPages, categoriesDelete } = props;
     React.useEffect(() => {
         getCountPages(values.changeCountPages);
@@ -21,7 +21,9 @@ const Content = (props) => {
     const deleteCategories = () => {
         let data = {
             url: `${'https://cors-anywhere.herokuapp.com/'}${'https://specialdictionary.herokuapp.com/delete/categories'}`,
-            listIdCategories: values.listIdCategories
+            listIdCategories: values.listIdCategories,
+            values: values,
+            setValues: setValues
         }
         categoriesDelete(data);
     }
