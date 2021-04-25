@@ -3,12 +3,14 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import { connect } from 'react-redux';
+import { ApplictationContext } from '../Application';
 import { getAllCategoriesFetchData } from '../../store/get_all_categories/action';
 
 const ChooseCategory = (props) => {
+    const { values } = React.useContext(ApplictationContext);
     const { selectCategory, getAllCategories, allCategories } = props;
     React.useEffect(() => {
-        getAllCategories(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/all/categories?userName=${sessionStorage.userName}`}`);
+        getAllCategories(`${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/get/all/categories?userName=${sessionStorage.userName}`}`);
     }, []);
     return (
         <FormControl

@@ -1,14 +1,16 @@
 import React from 'react';
 import $ from 'jquery';
 import { connect } from 'react-redux';
+import { ApplictationContext } from '../Application';
 import { loadUsersFetchData } from '../../store/load_users/action';
 
 const AuthorizationForm = (props) => {
+    const { values } = React.useContext(ApplictationContext);
     const { getUsers } = props;
     React.useEffect(() => {
         let getLoad = 1;
         let data = {
-            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/load/users?pattern=${'user'}`}`,
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/load/users?pattern=${'user'}`}`,
             getLoad: getLoad
         }
         getUsers(data);
@@ -39,7 +41,7 @@ const AuthorizationForm = (props) => {
     return (
         <form
             className='authorization_form'
-            action='https://specialdictionary.herokuapp.com/j_spring_security_check'
+            action={`https://${values.prefixURL}.herokuapp.com/j_spring_security_check`}
             method='POST'
         >
             <h

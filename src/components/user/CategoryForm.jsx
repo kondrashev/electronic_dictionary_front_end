@@ -38,7 +38,7 @@ const CategoryForm = (props) => {
             words: []
         }
         let data = {
-            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/add/category?userName=${sessionStorage.userName}`}`,
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/add/category?userName=${sessionStorage.userName}`}`,
             category: category,
             values: values,
             setValues: setValues,

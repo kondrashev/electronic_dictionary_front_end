@@ -18,9 +18,10 @@ function Category(props) {
     const { values, setValues } = React.useContext(ApplictationContext);
     const { getIdCategory, itemCategory, indexCategory } = React.useContext(CategoriesContext);
     const { categoryEditName } = props;
+    const inputEditNameCategory = React.useRef('');
+    const nameOldCategory = React.useRef('');
     const [valuesCategory, setValuesCategory] = useState({
-        show: true,
-        border: 0,
+        showInputEditNameCategory: true,
         oldNameCategory: '',
         newNameCategory: ''
     });
@@ -37,14 +38,16 @@ function Category(props) {
     const showEdit = (event) => {
         setValuesCategory({
             ...valuesCategory,
-            show: !valuesCategory.show,
-            border: valuesCategory.show == true ? 1 : 0
+            showInputEditNameCategory: !valuesCategory.showInputEditNameCategory
         });
     }
-    const editNameCategory = (event, name) => {
+    React.useEffect(() => {
+        inputEditNameCategory.current.focus();
+    }, [valuesCategory.showInputEditNameCategory]);
+    const editNameCategory = (event) => {
         setValuesCategory({
             ...valuesCategory,
-            oldNameCategory: name,
+            oldNameCategory: nameOldCategory.current.innerText,
             newNameCategory: event.target.value
         });
     }
@@ -56,7 +59,7 @@ function Category(props) {
                 newName: valuesCategory.newNameCategory
             }
             let data = {
-                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/edit/category`}`,
+                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/edit/category`}`,
                 editCategory: editCategory,
                 setValuesCategory: setValuesCategory,
                 valuesCategory: valuesCategory
@@ -92,19 +95,21 @@ function Category(props) {
                         cursor: 'pointer',
                         width: '300px'
                     }}
+                    ref={nameOldCategory}
                     primary={itemCategory.name}
                     onClick={() => getNameCategory(itemCategory.name)}
                 />
                 <input
-                    disabled={valuesCategory.show}
+                    ref={inputEditNameCategory}
                     name={indexCategory}
                     value={valuesCategory.newNameCategory}
-                    onChange={(event) => editNameCategory(event, itemCategory.name)}
+                    onChange={(event) => editNameCategory(event)}
                     onKeyUp={nameEditCategory}
+                    disabled={valuesCategory.showInputEditNameCategory}
                     style={{
                         width: '150px',
                         height: '20px',
-                        border: `${valuesCategory.border}px solid black`,
+                        border: 'none',
                         background: 'none'
                     }}
                 >

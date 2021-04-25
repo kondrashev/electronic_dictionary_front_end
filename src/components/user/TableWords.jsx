@@ -46,7 +46,7 @@ function TableWords(props) {
     }, [values.numberPage]);
     React.useEffect(() => {
         let data = {
-            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/words?page=${values.numberPage - 1}&categoryName=${values.currentNameCategory}&userName=${sessionStorage.userName}`}`,
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/get/words?page=${values.numberPage - 1}&categoryName=${values.currentNameCategory}&userName=${sessionStorage.userName}`}`,
             values: values,
             setValues: setValues
         }
@@ -285,7 +285,7 @@ function TableWords(props) {
     }
     const deleteWords = () => {
         let data = {
-            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/delete/words?categoryName=${values.categoryName}`}`,
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/delete/words?categoryName=${values.categoryName}`}`,
             values: values,
             setValues: setValues,
             setSelected: setSelected

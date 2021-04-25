@@ -77,7 +77,7 @@ const MainMenu = (props) => {
             let nameSearchWord = event.target.value;
             event.target.value = '';
             let data = {
-                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/search/word?wordName=${nameSearchWord}&userName=${sessionStorage.userName}`}`,
+                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/search/word?wordName=${nameSearchWord}&userName=${sessionStorage.userName}`}`,
                 values: values,
                 setValues: setValues
             }

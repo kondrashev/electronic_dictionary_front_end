@@ -59,7 +59,7 @@ const TableRowWord = (props) => {
                 mark: 'name'
             }
             let data = {
-                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/edit/word`}`,
+                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/edit/word`}`,
                 editWord: editWord,
                 values: values,
                 valuesTableRowWord: valuesTableRowWord,
@@ -78,7 +78,7 @@ const TableRowWord = (props) => {
                 mark: 'meaning'
             }
             let data = {
-                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/edit/word`}`,
+                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/edit/word`}`,
                 editWord: editWord,
                 values: values,
                 valuesTableRowWord: valuesTableRowWord,

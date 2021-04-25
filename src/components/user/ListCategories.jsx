@@ -15,7 +15,7 @@ const ListCategories = (props) => {
     }, [values.numberPage]);
     React.useEffect(() => {
         const data = {
-            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/categories?userName=${sessionStorage.userName}&page=${values.numberPage - 1}`}`,
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/get/categories?userName=${sessionStorage.userName}&page=${values.numberPage - 1}`}`,
             values,
             setValues: setValues
         }

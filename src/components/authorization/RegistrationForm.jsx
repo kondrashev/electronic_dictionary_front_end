@@ -44,7 +44,7 @@ const RegistrationForm = (props) => {
             date: `${checkDate()}.${checkMonth()}.${new Date().getFullYear()}p.`
         }
         let data = {
-            url: `${'https://cors-anywhere.herokuapp.com/'}${'https://specialdictionary.herokuapp.com/add/user'}`,
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/add/user`}`,
             user: user
         }
         userAdd(data);

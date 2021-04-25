@@ -30,7 +30,7 @@ function UsersTable(props) {
     React.useEffect(() => {
         let getLoad = 0;
         const data = {
-            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/users?pattern=${'user'}`}`,
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/get/users?pattern=${'user'}`}`,
             getLoad: getLoad
         }
         getUsers(data);
@@ -246,7 +246,7 @@ function UsersTable(props) {
     }
     const deleteUsers = () => {
         let data = {
-            url: `${'https://cors-anywhere.herokuapp.com/'}${'https://specialdictionary.herokuapp.com/delete/users'}`,
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/delete/users`}`,
             userListId: values.userListId,
             setSelected: setSelected,
             values: values,

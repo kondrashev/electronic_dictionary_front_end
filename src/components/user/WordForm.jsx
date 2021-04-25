@@ -19,7 +19,7 @@ const WordForm = (props) => {
         valueSelect: ''
     });
     React.useEffect(() => {
-        getAllCategories(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/get/all/categories?userName=${sessionStorage.userName}`}`);
+        getAllCategories(`${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefoxURL}.herokuapp.com/get/all/categories?userName=${sessionStorage.userName}`}`);
     }, []);
     const nameChange = (event) => {
         if (event.target.value === '') {
@@ -92,7 +92,7 @@ const WordForm = (props) => {
             categoryName: valuesWordForm.valueSelect
         }
         let data = {
-            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/add/word?userName=${sessionStorage.userName}&categoryName=${valuesWordForm.valueSelect}`}`,
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefoxURL}.herokuapp.com/add/word?userName=${sessionStorage.userName}&categoryName=${valuesWordForm.valueSelect}`}`,
             word: word,
             values,
             setValues,

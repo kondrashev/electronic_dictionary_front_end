@@ -20,7 +20,7 @@ const Content = (props) => {
     }, [values.changeCountPages]);
     const deleteCategories = () => {
         let data = {
-            url: `${'https://cors-anywhere.herokuapp.com/'}${'https://specialdictionary.herokuapp.com/delete/categories'}`,
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/delete/categories`}`,
             listIdCategories: values.listIdCategories,
             values: values,
             setValues: setValues
