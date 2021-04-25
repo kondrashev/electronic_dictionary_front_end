@@ -16,7 +16,7 @@ import { editCategoryFetchData } from '../../store/update_categories/action_edit
 
 function Category(props) {
     const { values, setValues } = React.useContext(ApplictationContext);
-    const { getIdCategory, itemCategory, indexCategory } = React.useContext(CategoriesContext);
+    const { getIdCategory, itemCategory } = React.useContext(CategoriesContext);
     const { categoryEditName } = props;
     const inputEditNameCategory = React.useRef('');
     const nameOldCategory = React.useRef('');
@@ -101,7 +101,6 @@ function Category(props) {
                 />
                 <input
                     ref={inputEditNameCategory}
-                    name={indexCategory}
                     value={valuesCategory.newNameCategory}
                     onChange={(event) => editNameCategory(event)}
                     onKeyUp={nameEditCategory}
@@ -122,8 +121,6 @@ function Category(props) {
                 >
                     <IconButton
                         aria-label='Edit'
-                        value={indexCategory}
-                        name={itemCategory.name}
                         onClick={showEdit}
                     >
                         <CreateIcon />

@@ -39,12 +39,11 @@ const ListCategories = (props) => {
         }
     }
     return (
-        getContent.map((category, index) => {
+        getContent.map((category) => {
             return (
                 <CategoriesContext.Provider
                     value={{
                         itemCategory: category,
-                        indexCategory: index,
                         getIdCategory: getIdCategory
                     }}
                 >

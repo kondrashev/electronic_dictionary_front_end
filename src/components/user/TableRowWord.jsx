@@ -11,6 +11,10 @@ import { editWordFetchData } from '../../store/update_words/action_edit';
 const TableRowWord = (props) => {
     const { values } = React.useContext(ApplictationContext);
     const { row, isItemSelected, getIdWord, handleClick, labelId } = React.useContext(TableWordsContext);
+    const inputEditNameWord = React.useRef('');
+    const inputEditMeaningWord = React.useRef('');
+    const nameOldWord = React.useRef('');
+    const meaningOldWord = React.useRef('');
     const [valuesTableRowWord, setValuesTableRowWord] = React.useState({
         showEditNameWord: false,
         showEditMeaningWord: false,
@@ -35,21 +39,27 @@ const TableRowWord = (props) => {
             newMeaningWord: event.target.value
         });
     }
-    const editNameWordShow = (oldName) => {
+    const editNameWordShow = () => {
         setValuesTableRowWord({
             ...valuesTableRowWord,
-            oldNameWord: oldName,
+            oldNameWord: nameOldWord.current.innerText,
             showEditNameWord: !valuesTableRowWord.showEditNameWord
         });
     }
-    const editMeaningWordShow = (oldName, oldMeaning) => {
+    React.useEffect(() => {
+        valuesTableRowWord.showEditNameWord && inputEditNameWord.current.focus();
+    }, [valuesTableRowWord.showEditNameWord]);
+    const editMeaningWordShow = () => {
         setValuesTableRowWord({
             ...valuesTableRowWord,
-            oldNameWord: oldName,
-            oldMeaningWord: oldMeaning,
+            oldNameWord: nameOldWord.current.innerText,
+            oldMeaningWord: meaningOldWord.current.innerText,
             showEditMeaningWord: !valuesTableRowWord.showEditMeaningWord
         });
     }
+    React.useEffect(() => {
+        valuesTableRowWord.showEditMeaningWord && inputEditMeaningWord.current.focus();
+    }, [valuesTableRowWord.showEditMeaningWord]);
     const changeNameWord = (event) => {
         if (event.keyCode == 13) {
             let editWord = {
@@ -110,12 +120,13 @@ const TableRowWord = (props) => {
                 title='Edit name'
             >
                 <TableCell
+                    ref={nameOldWord}
                     component="th"
                     id={labelId}
                     scope="row"
                     padding="none"
                     className='name_word'
-                    onClick={() => editNameWordShow(row.name)}
+                    onClick={() => editNameWordShow()}
                     style={{
                         cursor: 'pointer'
                     }}
@@ -131,6 +142,7 @@ const TableRowWord = (props) => {
                     }}
                 >
                     <input
+                        ref={inputEditNameWord}
                         className='edit_word_name'
                         onChange={editNameWord}
                         onKeyUp={changeNameWord}
@@ -146,9 +158,10 @@ const TableRowWord = (props) => {
                 title='Edit meaning'
             >
                 <TableCell
+                    ref={meaningOldWord}
                     align="right"
                     className='meaning_word'
-                    onClick={() => editMeaningWordShow(row.name, row.meaning)}
+                    onClick={() => editMeaningWordShow()}
                     style={{
                         cursor: 'pointer'
                     }}
@@ -164,6 +177,7 @@ const TableRowWord = (props) => {
                     }}
                 >
                     <input
+                        ref={inputEditMeaningWord}
                         className='edit_word_meaning'
                         onChange={editMeaningWord}
                         onKeyUp={changeMeaningWord}
