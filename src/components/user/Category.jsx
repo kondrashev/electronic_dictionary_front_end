@@ -91,13 +91,13 @@ function Category(props) {
                     </Avatar>
                 </ListItemAvatar>
                 <ListItemText
+                    ref={nameOldCategory}
                     style={{
                         cursor: 'pointer',
                         width: '300px'
                     }}
-                    ref={nameOldCategory}
                     primary={itemCategory.name}
-                    onClick={() => getNameCategory(itemCategory.name)}
+                    onClick={() => getNameCategory()}
                 />
                 <input
                     ref={inputEditNameCategory}
