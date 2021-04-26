@@ -45,8 +45,8 @@ const Applictation = () => {
         showButtonMoveWords: false,
         showButtonDeleteWords: true,
         listIdWords: [],
-        prefixURL: 'specialdictionary',
-        // prefixURL: 'storageinformation'
+        // prefixURL: 'specialdictionary', //'development_version'
+        prefixURL: 'storageinformation' //'prodaction_version'
     });
     return (
         <Provider store={store}>
