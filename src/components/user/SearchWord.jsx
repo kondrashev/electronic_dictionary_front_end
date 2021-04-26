@@ -11,14 +11,13 @@ import { connect } from 'react-redux';
 
 const SearchWord = (props) => {
     const { searchWord } = props;
-    console.log(searchWord);
     const useStyles = makeStyles({
         table: {
             minWidth: 650,
         },
     });
-    const pronunciation = (name) => {
-        return `${'https://translate.google.com/#view=home&op=translate&sl=en&tl=uk&text='}${name}`;
+    const pronunciation = () => {
+        return `${'https://translate.google.com/#view=home&op=translate&sl=en&tl=uk&text='}${searchWord.name}`;
     }
     const classes = useStyles();
     if (!searchWord.name) {
@@ -38,14 +37,17 @@ const SearchWord = (props) => {
                     </TableHead>
                     <TableBody>
                         <TableRow>
-                            <TableCell component="th" scope="row">
+                            <TableCell
+                                component="th"
+                                scope="row"
+                            >
                                 {searchWord.name}
                             </TableCell>
                             <TableCell align="right">{searchWord.meaning}</TableCell>
                             <TableCell align="right">{searchWord.date}</TableCell>
                             <TableCell align="right">
                                 <a
-                                    href={pronunciation(searchWord.name)}
+                                    href={pronunciation()}
                                     target='_blank'
                                 >
                                     {searchWord.name}

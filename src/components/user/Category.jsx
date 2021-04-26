@@ -25,14 +25,14 @@ function Category(props) {
         oldNameCategory: '',
         newNameCategory: ''
     });
-    const getNameCategory = (name) => {
+    const getNameCategory = () => {
         setValues({
             ...values,
             numberPage: 1,
-            currentNameCategory: name,
+            currentNameCategory: nameOldCategory.current.innerText,
             showListCategories: false,
             showListWords: true,
-            loadWords: name
+            loadWords: nameOldCategory.current.innerText
         });
     }
     const showEdit = (event) => {
@@ -91,11 +91,11 @@ function Category(props) {
                     </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                    ref={nameOldCategory}
                     style={{
                         cursor: 'pointer',
                         width: '300px'
                     }}
+                    ref={nameOldCategory}
                     primary={itemCategory.name}
                     onClick={() => getNameCategory()}
                 />

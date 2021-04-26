@@ -11,8 +11,7 @@ import { editWordFetchData } from '../../store/update_words/action_edit';
 const TableRowWord = (props) => {
     const { values } = React.useContext(ApplictationContext);
     const { row, isItemSelected, getIdWord, handleClick, labelId } = React.useContext(TableWordsContext);
-    const inputEditNameWord = React.useRef('');
-    const inputEditMeaningWord = React.useRef('');
+    const inputEditWord = React.useRef('');
     const nameOldWord = React.useRef('');
     const meaningOldWord = React.useRef('');
     const [valuesTableRowWord, setValuesTableRowWord] = React.useState({
@@ -24,8 +23,8 @@ const TableRowWord = (props) => {
         newMeaningWord: ''
     });
     const { wordEdit } = props;
-    const pronunciation = (name) => {
-        return `${'https://translate.google.com/#view=home&op=translate&sl=en&tl=uk&text='}${name}`;
+    const pronunciation = () => {
+        return `${'https://translate.google.com/#view=home&op=translate&sl=en&tl=uk&text='}${nameOldWord.current.innerText}`;
     }
     const editNameWord = (event) => {
         setValuesTableRowWord({
@@ -47,7 +46,7 @@ const TableRowWord = (props) => {
         });
     }
     React.useEffect(() => {
-        valuesTableRowWord.showEditNameWord && inputEditNameWord.current.focus();
+        valuesTableRowWord.showEditNameWord && inputEditWord.current.focus();
     }, [valuesTableRowWord.showEditNameWord]);
     const editMeaningWordShow = () => {
         setValuesTableRowWord({
@@ -58,7 +57,7 @@ const TableRowWord = (props) => {
         });
     }
     React.useEffect(() => {
-        valuesTableRowWord.showEditMeaningWord && inputEditMeaningWord.current.focus();
+        valuesTableRowWord.showEditMeaningWord && inputEditWord.current.focus();
     }, [valuesTableRowWord.showEditMeaningWord]);
     const changeNameWord = (event) => {
         if (event.keyCode == 13) {
@@ -113,7 +112,7 @@ const TableRowWord = (props) => {
                     inputProps={{ 'aria-labelledby': labelId }}
                     value={row.id}
                     onChange={getIdWord}
-                    onClick={(event) => handleClick(event, row.name)}
+                    onClick={() => handleClick(nameOldWord)}
                 />
             </TableCell>
             <Tooltip
@@ -134,7 +133,7 @@ const TableRowWord = (props) => {
                     {row.name}
                 </TableCell>
             </Tooltip>
-            {valuesTableRowWord.showEditNameWord === true &&
+            {valuesTableRowWord.showEditNameWord &&
                 <TableCell
                     className='edit_name_word'
                     style={{
@@ -142,7 +141,7 @@ const TableRowWord = (props) => {
                     }}
                 >
                     <input
-                        ref={inputEditNameWord}
+                        ref={inputEditWord}
                         className='edit_word_name'
                         onChange={editNameWord}
                         onKeyUp={changeNameWord}
@@ -169,7 +168,7 @@ const TableRowWord = (props) => {
                     {row.meaning}
                 </TableCell>
             </Tooltip>
-            {valuesTableRowWord.showEditMeaningWord === true &&
+            {valuesTableRowWord.showEditMeaningWord &&
                 <TableCell
                     className='edit_meaning_word'
                     style={{
@@ -177,7 +176,7 @@ const TableRowWord = (props) => {
                     }}
                 >
                     <input
-                        ref={inputEditMeaningWord}
+                        ref={inputEditWord}
                         className='edit_word_meaning'
                         onChange={editMeaningWord}
                         onKeyUp={changeMeaningWord}
@@ -194,7 +193,7 @@ const TableRowWord = (props) => {
             </TableCell>
             <TableCell align="right">
                 <a
-                    href={pronunciation(row.name)}
+                    href={pronunciation()}
                     target='_blank'
                 >
                     {row.name}

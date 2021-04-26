@@ -172,7 +172,7 @@ function TableWords(props) {
                 {numSelected > 0 && (
                     <div>
                         {
-                            values.showButtonDeleteWords === true &&
+                            values.showButtonDeleteWords &&
                             <Tooltip
                                 title="Delete"
                             >
@@ -185,7 +185,7 @@ function TableWords(props) {
                             </Tooltip>
                         }
                         {
-                            values.showButtonMoveWords === true &&
+                            values.showButtonMoveWords &&
                             <Tooltip
                                 title="Move"
                             >
@@ -299,11 +299,11 @@ function TableWords(props) {
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
     };
-    const handleClick = (event, name) => {
-        const selectedIndex = selected.indexOf(name);
+    const handleClick = (name) => {
+        const selectedIndex = selected.indexOf(name.current.innerText);
         let newSelected = [];
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
+            newSelected = newSelected.concat(selected, name.current.innerText);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -333,7 +333,7 @@ function TableWords(props) {
             className={classes.root}
         >
             {
-                showChooseCategory === true &&
+                showChooseCategory &&
                 <ChooseCategory
                     selectCategory={selectCategory}
                 />

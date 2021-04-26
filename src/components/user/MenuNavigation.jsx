@@ -51,7 +51,7 @@ const MenuNavigation = (props) => {
                     Categories
                 </Link>
                 {
-                    values.showSearchWord === true &&
+                    values.showSearchWord &&
                     <Link
                         style={{
                             cursor: 'pointer'
@@ -66,11 +66,11 @@ const MenuNavigation = (props) => {
                     color="textPrimary"
                 >
                     {
-                        values.showListWords === true &&
+                        values.showListWords &&
                         values.currentNameCategory
                     }
                     {
-                        values.showSearchWord === true &&
+                        values.showSearchWord &&
                         searchWord.name
                     }
                 </Typography>

@@ -40,7 +40,7 @@ const Content = (props) => {
                 }}
             >
                 {
-                    values.showDeleteButtonCategory === true &&
+                    values.showDeleteButtonCategory &&
                     <List
                         style={{
                             float: 'right'
@@ -59,15 +59,15 @@ const Content = (props) => {
                     </List>
                 }
                 {
-                    values.showListCategories === true &&
+                    values.showListCategories &&
                     <ListCategories />
                 }
                 {
-                    values.showListWords === true &&
+                    values.showListWords &&
                     <TableWords />
                 }
                 {
-                    values.showSearchWord === true &&
+                    values.showSearchWord &&
                     <SearchWord />
                 }
             </div>
