@@ -16,7 +16,7 @@ export const loadCategoriesFetchData = (data) => {
             setValues({
                 ...values,
                 changeCountPages: {
-                    url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/categories?userName=${sessionStorage.userName}`}`,
+                    url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/count/categories?userName=${sessionStorage.userName}`}`,
                     range: 5
                 }
             });

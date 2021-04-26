@@ -13,10 +13,6 @@ const CategoryForm = (props) => {
         setValueNameCategory(event.target.value);
     };
     const addCategory = () => {
-        setValues({
-            ...values,
-            countCategories: 0
-        });
         const checkDate = () => {
             if (new Date().getDate() < 10) {
                 return `${'0'}${new Date().getDate()}`;
