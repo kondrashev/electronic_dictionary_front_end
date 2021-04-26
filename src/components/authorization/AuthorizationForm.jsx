@@ -5,13 +5,15 @@ import { ApplictationContext } from '../Application';
 import { loadUsersFetchData } from '../../store/load_users/action';
 
 const AuthorizationForm = (props) => {
-    const { values } = React.useContext(ApplictationContext);
+    const { values, setValues } = React.useContext(ApplictationContext);
     const { getUsers } = props;
     React.useEffect(() => {
         let getLoad = 1;
         let data = {
             url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/load/users?pattern=${'user'}`}`,
-            getLoad: getLoad
+            getLoad: getLoad,
+            values: values,
+            setValues: setValues
         }
         getUsers(data);
     }, []);

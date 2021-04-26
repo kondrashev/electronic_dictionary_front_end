@@ -31,7 +31,9 @@ function UsersTable(props) {
         let getLoad = 0;
         const data = {
             url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/get/users?pattern=${'user'}`}`,
-            getLoad: getLoad
+            getLoad: getLoad,
+            values: values,
+            setValues: setValues
         }
         getUsers(data);
     }, [updateUsers]);

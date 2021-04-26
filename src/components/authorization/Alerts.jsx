@@ -92,5 +92,23 @@ export default function Alerts(props) {
                     </Alert>
                 </div>
             )
+        case 5:
+            return (
+                <div
+                    className={classes.root}
+                    style={position}
+                >
+                    <Alert
+                        severity="info"
+                        onClose={() => setValues({
+                            ...values,
+                            alertMistakes: false
+                        })}
+                    >
+                        <AlertTitle>Info</AlertTitle>
+                        {values.typeMistake}
+                    </Alert>
+                </div>
+            )
     }
 }

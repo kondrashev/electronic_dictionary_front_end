@@ -9,23 +9,32 @@ export const searchWordFetchDataSuccess = (word) => {
 export const searchWordFetchData = (data) => {
     const { url, values, setValues } = data;
     return async (dispatch) => {
-        let response = await fetch(url);
-        response = await response.json();
-        if (response.name) {
-            dispatch(searchWordFetchDataSuccess(response));
+        try {
+            let response = await fetch(url);
+            response = await response.json();
+            if (response.name) {
+                dispatch(searchWordFetchDataSuccess(response));
+                setValues({
+                    ...values,
+                    showListCategories: false,
+                    showListWords: false,
+                    showSearchWord: true,
+                    valueSearchWord: response.name
+                });
+            } else {
+                setValues({
+                    ...values,
+                    number: 4,
+                    showSearchWord: false,
+                    typeMistake: `This word didn't find-`,
+                    alertMistakes: true
+                });
+            }
+        } catch {
             setValues({
                 ...values,
-                showListCategories: false,
-                showListWords: false,
-                showSearchWord: true,
-                valueSearchWord: response.name
-            });
-        } else {
-            setValues({
-                ...values,
-                number: 4,
-                showSearchWord: false,
-                typeMistake: `This word didn't find-`,
+                number: 5,
+                typeMistake: 'Too many requests!!!',
                 alertMistakes: true
             });
         }

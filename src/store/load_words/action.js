@@ -9,15 +9,24 @@ export const loadWordsFetchDataSuccess = (words) => {
 export const loadWordsFetchData = (data) => {
     const { url, values, setValues } = data;
     return async (dispatch) => {
-        let response = await fetch(url);
-        response = await response.json();
-        dispatch(loadWordsFetchDataSuccess(response));
-        setValues({
-            ...values,
-            changeCountPages: {
-                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/words?categoryName=${values.currentNameCategory}&userName=${sessionStorage.userName}`}`,
-                range: 24
-            }
-        });
+        try {
+            let response = await fetch(url);
+            response = await response.json();
+            dispatch(loadWordsFetchDataSuccess(response));
+            setValues({
+                ...values,
+                changeCountPages: {
+                    url: `${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/count/words?categoryName=${values.currentNameCategory}&userName=${sessionStorage.userName}`}`,
+                    range: 24
+                }
+            });
+        } catch {
+            setValues({
+                ...values,
+                number: 5,
+                typeMistake: 'Too many requests!!!',
+                alertMistakes: true
+            });
+        }
     }
 }
