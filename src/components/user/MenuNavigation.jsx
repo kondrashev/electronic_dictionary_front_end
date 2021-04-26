@@ -4,28 +4,28 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import { ApplictationContext } from '../Application';
+import { connect } from 'react-redux';
 
 const MenuNavigation = (props) => {
     const { values, setValues } = React.useContext(ApplictationContext);
-    async function listCategories() {
+    const { searchWord } = props;
+    const listCategories = () => {
         setValues({
             ...values,
-            getContent: [],
             showListCategories: true,
             showListWords: false,
             showSearchWord: false,
             loadCategories: values.showListCategories
         });
     }
-    async function currentCategory() {
+    const currentCategory = () => {
         setValues({
             ...values,
-            getContent: [],
-            currentNameCategory: values.getContent.categoryName,
+            currentNameCategory: searchWord.categoryName,
             showListCategories: false,
             showSearchWord: false,
             showListWords: true,
-            loadWords: values.getContent.categoryName
+            loadWords: searchWord.categoryName
         });
     }
     return (
@@ -51,7 +51,7 @@ const MenuNavigation = (props) => {
                     Categories
                 </Link>
                 {
-                    values.showSearchWord === true &&
+                    values.showSearchWord &&
                     <Link
                         style={{
                             cursor: 'pointer'
@@ -59,23 +59,29 @@ const MenuNavigation = (props) => {
                         color="inherit"
                         onClick={currentCategory}
                     >
-                        {values.getContent.categoryName}
+                        {searchWord.categoryName}
                     </Link>
                 }
                 <Typography
                     color="textPrimary"
                 >
                     {
-                        values.showListWords === true &&
+                        values.showListWords &&
                         values.currentNameCategory
                     }
                     {
-                        values.showSearchWord === true &&
-                        values.valueSearchWord
+                        values.showSearchWord &&
+                        searchWord.name
                     }
                 </Typography>
             </Breadcrumbs>
         </div>
     );
 }
-export default MenuNavigation;
+const mapStateToProps = state => {
+    return {
+        searchWord: state.searchWordReducer
+    };
+}
+const mapDispatchToProps = null;
+export default connect(mapStateToProps, mapDispatchToProps)(MenuNavigation);

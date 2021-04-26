@@ -23,11 +23,35 @@ import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import ChooseCategory from './ChooseCategory';
 import TableRowWord from './TableRowWord';
 import { ApplictationContext } from '../Application';
+import { connect } from 'react-redux';
+import { loadWordsFetchData } from '../../store/load_words/action';
+import { deleteWordsFetchData } from '../../store/update_words/action_delete';
+import { getAllCategoriesFetchData } from '../../store/get_all_categories/action';
 
 export const TableWordsContext = React.createContext();
 function TableWords(props) {
     const { values, setValues } = React.useContext(ApplictationContext);
     const [showChooseCategory, setShowChooseCategory] = React.useState(false);
+    const { getWords, getContent, wordsDelete, updateWords } = props;
+    const [order, setOrder] = React.useState('asc');
+    const [orderBy, setOrderBy] = React.useState('calories');
+    const [selected, setSelected] = React.useState([]);
+    const [page, setPage] = React.useState(0);
+    const [dense, setDense] = React.useState(false);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const changePageWords = React.useMemo(() => {
+        if (values.showListWords) {
+            return values.numberPage;
+        }
+    }, [values.numberPage]);
+    React.useEffect(() => {
+        let data = {
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/get/words?page=${values.numberPage - 1}&categoryName=${values.currentNameCategory}&userName=${sessionStorage.userName}`}`,
+            values: values,
+            setValues: setValues
+        }
+        getWords(data);
+    }, [values.loadWords, changePageWords, updateWords]);
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
             return -1;
@@ -148,7 +172,7 @@ function TableWords(props) {
                 {numSelected > 0 && (
                     <div>
                         {
-                            values.showButtonDeleteWords === true &&
+                            values.showButtonDeleteWords &&
                             <Tooltip
                                 title="Delete"
                             >
@@ -161,7 +185,7 @@ function TableWords(props) {
                             </Tooltip>
                         }
                         {
-                            values.showButtonMoveWords === true &&
+                            values.showButtonMoveWords &&
                             <Tooltip
                                 title="Move"
                             >
@@ -215,6 +239,7 @@ function TableWords(props) {
         } else {
             setValues({
                 ...values,
+                categoryName: event.target.value,
                 showButtonDeleteWords: false,
                 showButtonMoveWords: true
             });
@@ -258,77 +283,27 @@ function TableWords(props) {
             });
         }
     }
-    async function deleteWords() {
-        setValues({
-            ...values,
-            countWords: 0
-        });
-        let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/delete/words?categoryName=${values.categoryName}`}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(values.listIdWords)
-        })
-        response = await response.json();
-        setSelected([]);
-        setValues({
-            ...values,
-            listIdWords: [],
-            showButtonDeleteWords: false
-        });
-        let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
-        let moveWords = [];
-        user.categories.map((category) => {
-            if (values.currentNameCategory === category.name) {
-                response.map((wordName) => {
-                    category.words.map((word, index) => {
-                        if (wordName === word.name) {
-                            if (values.categoryName !== '') moveWords.push(word);
-                            category.words.splice(index, 1);
-                        }
-                    })
-                })
-            }
-        })
-        if (values.categoryName !== '') {
-            Object.entries(user.categories).map(([, value]) => {
-                if (value.name === values.categoryName) {
-                    moveWords.map((word) => {
-                        word.categoryName = values.categoryName;
-                        value.words.push(word);
-                    })
-                }
-            })
-            setValues({
-                ...values,
-                categoryName: ''
-            });
+    const deleteWords = () => {
+        let data = {
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/delete/words?categoryName=${values.categoryName}`}`,
+            values: values,
+            setValues: setValues,
+            setSelected: setSelected
         }
-        localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-        setValues({
-            ...values,
-            loadWords: response
-        });
+        wordsDelete(data);
     }
-    const rows = values.getContent;
+    const rows = getContent;
     const classes = useStyles();
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
-    const [selected, setSelected] = React.useState([]);
-    const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(false);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
     };
-    const handleClick = (event, name) => {
-        const selectedIndex = selected.indexOf(name);
+    const handleClick = (name) => {
+        const selectedIndex = selected.indexOf(name.current.innerText);
         let newSelected = [];
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
+            newSelected = newSelected.concat(selected, name.current.innerText);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -358,7 +333,7 @@ function TableWords(props) {
             className={classes.root}
         >
             {
-                showChooseCategory === true &&
+                showChooseCategory &&
                 <ChooseCategory
                     selectCategory={selectCategory}
                 />
@@ -428,4 +403,18 @@ function TableWords(props) {
         </div >
     );
 }
-export default TableWords;
+const mapStateToProps = state => {
+    return {
+        getContent: state.loadWordsReducer,
+        updateWords: state.updateWordsReducer,
+        allCategories: state.getAllCategoriesReducer
+    };
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        getWords: (data) => dispatch(loadWordsFetchData(data)),
+        wordsDelete: (data) => dispatch(deleteWordsFetchData(data)),
+        getAllCategories: (url) => dispatch(getAllCategoriesFetchData(url))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(TableWords);

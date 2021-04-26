@@ -2,14 +2,17 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { ApplictationContext } from '../Application';
+import { connect } from 'react-redux';
+import { addCategoryFetchData } from '../../store/update_categories/action_add';
 
 const CategoryForm = (props) => {
     const { values, setValues } = React.useContext(ApplictationContext);
     const [valueNameCategory, setValueNameCategory] = React.useState('');
+    const { catogoryAdd } = props;
     const nameChange = (event) => {
         setValueNameCategory(event.target.value);
     };
-    async function addCategory() {
+    const addCategory = () => {
         setValues({
             ...values,
             countCategories: 0
@@ -34,33 +37,14 @@ const CategoryForm = (props) => {
             date: `${checkDate()}.${checkMonth()}.${new Date().getFullYear()}p.`,
             words: []
         }
-        let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/add/category?userName=${sessionStorage.userName}`}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(category)
-        })
-        response = await response.json();
-        if (response.name !== null) {
-            setValueNameCategory('');
-            let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
-            user.categories.push(category);
-            localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-            values.showListCategories === true &&
-                setValues({
-                    ...values,
-                    loadCategories: response.name
-                });
-        } else {
-            setValueNameCategory('');
-            setValues({
-                ...values,
-                number: 4,
-                typeMistake: 'This category already has in the dictionary-',
-                alertMistakes: true
-            });
+        let data = {
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/add/category?userName=${sessionStorage.userName}`}`,
+            category: category,
+            values: values,
+            setValues: setValues,
+            setValueNameCategory: setValueNameCategory
         }
+        catogoryAdd(data);
     }
     const onKeyPress = (event) => {
         if (event.key === 'Enter') {
@@ -124,4 +108,10 @@ const CategoryForm = (props) => {
         </div>
     )
 }
-export default CategoryForm;
+const mapStateToProps = null;
+const mapDispatchToProps = dispatch => {
+    return {
+        catogoryAdd: (data) => dispatch(addCategoryFetchData(data))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(CategoryForm);

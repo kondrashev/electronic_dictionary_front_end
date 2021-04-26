@@ -5,18 +5,21 @@ import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import transformLetters from './TransformLetters';
-import { getAllCategories } from './GetAllCategories';
 import { ApplictationContext } from '../Application';
+import { connect } from 'react-redux';
+import { addWordFetchData } from '../../store/update_words/action_add';
+import { getAllCategoriesFetchData } from '../../store/get_all_categories/action';
 
 const WordForm = (props) => {
     const { values, setValues } = React.useContext(ApplictationContext);
+    const { wordAdd, getAllCategories, allCategories } = props;
     const [valuesWordForm, setValuesWordForm] = React.useState({
         valueName: '',
         valueMeaning: '',
         valueSelect: ''
     });
     React.useEffect(() => {
-        getAllCategories(values, setValues);
+        getAllCategories(`${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/get/all/categories?userName=${sessionStorage.userName}`}`);
     }, []);
     const nameChange = (event) => {
         if (event.target.value === '') {
@@ -62,7 +65,7 @@ const WordForm = (props) => {
             showFormWord: false
         });
     }
-    async function addWord() {
+    const addWord = () => {
         setValues({
             ...values,
             countWords: 0
@@ -88,56 +91,22 @@ const WordForm = (props) => {
             date: `${checkDate()}.${checkMonth()}.${new Date().getFullYear()}p.`,
             categoryName: valuesWordForm.valueSelect
         }
-        let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/add/word?userName=${sessionStorage.userName}&categoryName=${valuesWordForm.valueSelect}`}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(word)
-        })
-        response = await response.json();
-        if (response.name !== null) {
-            setValuesWordForm({
-                ...valuesWordForm,
-                valueSelect: '',
-                valueName: '',
-                valueMeaning: ''
-            });
-            let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
-            Object.entries(user.categories).map(([, value]) => {
-                if (value.name === valuesWordForm.valueSelect) {
-                    value.words.push(word);
-                }
-            })
-            localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-            setValues({
-                ...values,
-                showListCategories: false,
-                showListWords: true,
-                currentNameCategory: valuesWordForm.valueSelect,
-                loadWords: response.name
-            });
-        } else {
-            setValuesWordForm({
-                ...valuesWordForm,
-                valueSelect: '',
-                valueName: '',
-                valueMeaning: ''
-            });
-            setValues({
-                ...values,
-                number: 4,
-                typeMistake: 'This word already has in the dictionary-',
-                alertMistakes: true
-            });
+        let data = {
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/add/word?userName=${sessionStorage.userName}&categoryName=${valuesWordForm.valueSelect}`}`,
+            word: word,
+            values,
+            setValues,
+            valuesWordForm,
+            setValuesWordForm
         }
+        wordAdd(data);
     }
     const onKeyPress = (event) => {
         if (event.key === 'Enter') {
             addWord();
         }
     };
-    const categories = values.allCategories.map(category =>
+    const categories = allCategories.map(category =>
         <option
             key={category.name}
             value={category.name}
@@ -234,4 +203,15 @@ const WordForm = (props) => {
         </div>
     )
 }
-export default WordForm;
+const mapStateToProps = state => {
+    return {
+        allCategories: state.getAllCategoriesReducer
+    };
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        wordAdd: (data) => dispatch(addWordFetchData(data)),
+        getAllCategories: (url) => dispatch(getAllCategoriesFetchData(url))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(WordForm);

@@ -1,28 +1,26 @@
 import React from 'react';
 import $ from 'jquery';
+import { connect } from 'react-redux';
+import { ApplictationContext } from '../Application';
+import { loadUsersFetchData } from '../../store/load_users/action';
 
 const AuthorizationForm = (props) => {
+    const { values } = React.useContext(ApplictationContext);
+    const { getUsers } = props;
+    React.useEffect(() => {
+        let getLoad = 1;
+        let data = {
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/load/users?pattern=${'user'}`}`,
+            getLoad: getLoad
+        }
+        getUsers(data);
+    }, []);
     sessionStorage.setItem('userName', '');
     sessionStorage.setItem('searchUserMark', '');
     $('body')
         .css({
             background: '#999999'
         })
-    React.useEffect(() => {
-        (async () => {
-            let users = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                users[i] = JSON.parse(localStorage.getItem(localStorage.key(i)));
-            }
-            fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/load/users?pattern=${'user'}`}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(users)
-            });
-        })();
-    }, []);
     const loginChange = (event) => {
         sessionStorage.setItem('userName', event.target.value);
     }
@@ -43,7 +41,7 @@ const AuthorizationForm = (props) => {
     return (
         <form
             className='authorization_form'
-            action='https://specialdictionary.herokuapp.com/j_spring_security_check'
+            action={`https://${values.prefixURL}.herokuapp.com/j_spring_security_check`}
             method='POST'
         >
             <h
@@ -84,4 +82,10 @@ const AuthorizationForm = (props) => {
         </form >
     )
 }
-export default AuthorizationForm;
+const mapStateToProps = null;
+const mapDispatchToProps = dispatch => {
+    return {
+        getUsers: (data) => dispatch(loadUsersFetchData(data))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(AuthorizationForm);

@@ -5,119 +5,95 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Tooltip from '@material-ui/core/Tooltip';
 import { TableWordsContext } from './TableWords';
 import { ApplictationContext } from '../Application';
+import { connect } from 'react-redux';
+import { editWordFetchData } from '../../store/update_words/action_edit';
 
 const TableRowWord = (props) => {
-    const { values, setValues } = React.useContext(ApplictationContext);
+    const { values } = React.useContext(ApplictationContext);
     const { row, isItemSelected, getIdWord, handleClick, labelId } = React.useContext(TableWordsContext);
-    const pronunciation = (name) => {
-        return `${'https://translate.google.com/#view=home&op=translate&sl=en&tl=uk&text='}${name}`;
+    const inputEditWord = React.useRef('');
+    const nameOldWord = React.useRef('');
+    const meaningOldWord = React.useRef('');
+    const [valuesTableRowWord, setValuesTableRowWord] = React.useState({
+        showEditNameWord: false,
+        showEditMeaningWord: false,
+        oldNameWord: '',
+        newNameWord: '',
+        oldMeaningWord: '',
+        newMeaningWord: ''
+    });
+    const { wordEdit } = props;
+    const pronunciation = () => {
+        return `${'https://translate.google.com/#view=home&op=translate&sl=en&tl=uk&text='}${nameOldWord.current.innerText}`;
     }
     const editNameWord = (event) => {
-        setValues({
-            ...values,
+        setValuesTableRowWord({
+            ...valuesTableRowWord,
             newNameWord: event.target.value
         });
     }
     const editMeaningWord = (event) => {
-        setValues({
-            ...values,
+        setValuesTableRowWord({
+            ...valuesTableRowWord,
             newMeaningWord: event.target.value
         });
     }
-    const editNameWordShow = (oldName) => {
-        setValues({
-            ...values,
-            oldNameWord: oldName,
-            showEditNameWord: !values.showEditNameWord
+    const editNameWordShow = () => {
+        setValuesTableRowWord({
+            ...valuesTableRowWord,
+            oldNameWord: nameOldWord.current.innerText,
+            showEditNameWord: !valuesTableRowWord.showEditNameWord
         });
     }
-    const editMeaningWordShow = (oldName, oldMeaning) => {
-        setValues({
-            ...values,
-            oldNameWord: oldName,
-            oldMeaningWord: oldMeaning,
-            showEditMeaningWord: !values.showEditMeaningWord
+    React.useEffect(() => {
+        valuesTableRowWord.showEditNameWord && inputEditWord.current.focus();
+    }, [valuesTableRowWord.showEditNameWord]);
+    const editMeaningWordShow = () => {
+        setValuesTableRowWord({
+            ...valuesTableRowWord,
+            oldNameWord: nameOldWord.current.innerText,
+            oldMeaningWord: meaningOldWord.current.innerText,
+            showEditMeaningWord: !valuesTableRowWord.showEditMeaningWord
         });
     }
-    async function changeNameWord(event) {
+    React.useEffect(() => {
+        valuesTableRowWord.showEditMeaningWord && inputEditWord.current.focus();
+    }, [valuesTableRowWord.showEditMeaningWord]);
+    const changeNameWord = (event) => {
         if (event.keyCode == 13) {
-            let editNameWord = {
+            let editWord = {
                 userName: sessionStorage.userName,
-                name: values.oldNameWord,
-                newName: values.newNameWord,
+                name: valuesTableRowWord.oldNameWord,
+                newName: valuesTableRowWord.newNameWord,
                 mark: 'name'
             }
-            let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/edit/word`}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(values.editNameWord)
-            })
-            response = await response.json();
-            if (response.name !== null) {
-                setValues({
-                    ...values,
-                    newNameWord: '',
-                    showEditNameWord: false
-                });
-                let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
-                Object.entries(user.categories).map(([, value]) => {
-                    if (value.name === values.currentNameCategory) {
-                        value.words.map((word) => {
-                            if (word.name === values.oldNameWord) {
-                                word.name = values.newNameWord
-                            }
-                        })
-                    }
-                })
-                localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-                setValues({
-                    ...values,
-                    loadWords: response.name
-                });
+            let data = {
+                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/edit/word`}`,
+                editWord: editWord,
+                values: values,
+                valuesTableRowWord: valuesTableRowWord,
+                setValuesTableRowWord: setValuesTableRowWord
             }
+            wordEdit(data);
         }
     }
-    async function changeMeaningWord(event) {
+    const changeMeaningWord = (event) => {
         if (event.keyCode == 13) {
-            let editMeaningWord = {
+            let editWord = {
                 userName: sessionStorage.userName,
-                name: values.oldNameWord,
-                meaning: values.oldMeaningWord,
-                newMeaning: values.newMeaningWord,
+                name: valuesTableRowWord.oldNameWord,
+                meaning: valuesTableRowWord.oldMeaningWord,
+                newMeaning: valuesTableRowWord.newMeaningWord,
                 mark: 'meaning'
             }
-            let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/edit/word`}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(editMeaningWord)
-            })
-            response = await response.json();
-            if (response.name !== null) {
-                setValues({
-                    ...values,
-                    newMeaningWord: '',
-                    showEditMeaningWord: false
-                });
-                let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
-                Object.entries(user.categories).map(([, value]) => {
-                    if (value.name === values.currentNameCategory) {
-                        value.words.map((word) => {
-                            if (word.meaning === values.oldMeaningWord) {
-                                word.meaning = values.newMeaningWord
-                            }
-                        })
-                    }
-                })
-                localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-                setValues({
-                    ...values,
-                    loadWords: response.name
-                });
+            let data = {
+                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/edit/word`}`,
+                editWord: editWord,
+                values: values,
+                valuesTableRowWord: valuesTableRowWord,
+                setValuesTableRowWord: setValuesTableRowWord
             }
+            wordEdit(data);
         }
     }
     return (
@@ -136,19 +112,20 @@ const TableRowWord = (props) => {
                     inputProps={{ 'aria-labelledby': labelId }}
                     value={row.id}
                     onChange={getIdWord}
-                    onClick={(event) => handleClick(event, row.name)}
+                    onClick={() => handleClick(nameOldWord)}
                 />
             </TableCell>
             <Tooltip
                 title='Edit name'
             >
                 <TableCell
+                    ref={nameOldWord}
                     component="th"
                     id={labelId}
                     scope="row"
                     padding="none"
                     className='name_word'
-                    onClick={() => editNameWordShow(row.name)}
+                    onClick={() => editNameWordShow()}
                     style={{
                         cursor: 'pointer'
                     }}
@@ -156,7 +133,7 @@ const TableRowWord = (props) => {
                     {row.name}
                 </TableCell>
             </Tooltip>
-            {values.showEditNameWord === true &&
+            {valuesTableRowWord.showEditNameWord &&
                 <TableCell
                     className='edit_name_word'
                     style={{
@@ -164,6 +141,7 @@ const TableRowWord = (props) => {
                     }}
                 >
                     <input
+                        ref={inputEditWord}
                         className='edit_word_name'
                         onChange={editNameWord}
                         onKeyUp={changeNameWord}
@@ -179,9 +157,10 @@ const TableRowWord = (props) => {
                 title='Edit meaning'
             >
                 <TableCell
+                    ref={meaningOldWord}
                     align="right"
                     className='meaning_word'
-                    onClick={() => editMeaningWordShow(row.name, row.meaning)}
+                    onClick={() => editMeaningWordShow()}
                     style={{
                         cursor: 'pointer'
                     }}
@@ -189,7 +168,7 @@ const TableRowWord = (props) => {
                     {row.meaning}
                 </TableCell>
             </Tooltip>
-            {values.showEditMeaningWord === true &&
+            {valuesTableRowWord.showEditMeaningWord &&
                 <TableCell
                     className='edit_meaning_word'
                     style={{
@@ -197,6 +176,7 @@ const TableRowWord = (props) => {
                     }}
                 >
                     <input
+                        ref={inputEditWord}
                         className='edit_word_meaning'
                         onChange={editMeaningWord}
                         onKeyUp={changeMeaningWord}
@@ -213,7 +193,7 @@ const TableRowWord = (props) => {
             </TableCell>
             <TableCell align="right">
                 <a
-                    href={pronunciation(row.name)}
+                    href={pronunciation()}
                     target='_blank'
                 >
                     {row.name}
@@ -222,4 +202,10 @@ const TableRowWord = (props) => {
         </TableRow>
     )
 }
-export default TableRowWord;
+const mapStateToProps = null;
+const mapDispatchToProps = dispatch => {
+    return {
+        wordEdit: (data) => dispatch(editWordFetchData(data))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(TableRowWord);

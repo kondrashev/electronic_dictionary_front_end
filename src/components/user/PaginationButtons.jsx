@@ -1,22 +1,22 @@
 import React from 'react';
 import Pagination from '@material-ui/lab/Pagination';
 import { ApplictationContext } from '../Application';
+import { connect } from 'react-redux';
 
-const PaginationButtonsWords = (props) => {
+const PaginationButtons = (props) => {
     const { values, setValues } = React.useContext(ApplictationContext);
+    const { pagesCount } = props;
     const handleChange = (event, value) => {
         if (event.target.value !== undefined) {
             setValues({
                 ...values,
-                numberPageWord: value,
-                getContent: [],
-                loadWords: value
+                numberPage: value
             });
         }
     }
     return (
         <Pagination
-            count={values.countWords}
+            count={pagesCount}
             variant="outlined"
             onChange={handleChange}
             shape="rounded"
@@ -29,4 +29,10 @@ const PaginationButtonsWords = (props) => {
         />
     )
 }
-export default PaginationButtonsWords;
+const mapStateToProps = state => {
+    return {
+        pagesCount: state.countPagesReducer
+    };
+}
+const mapDispatchToProps = null;
+export default connect(mapStateToProps, mapDispatchToProps)(PaginationButtons);

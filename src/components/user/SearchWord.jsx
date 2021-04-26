@@ -7,20 +7,20 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { ApplictationContext } from '../Application';
+import { connect } from 'react-redux';
 
 const SearchWord = (props) => {
-    const { values, setValues } = React.useContext(ApplictationContext);
+    const { searchWord } = props;
     const useStyles = makeStyles({
         table: {
             minWidth: 650,
         },
     });
-    const pronunciation = (name) => {
-        return `${'https://translate.google.com/#view=home&op=translate&sl=en&tl=uk&text='}${name}`;
+    const pronunciation = () => {
+        return `${'https://translate.google.com/#view=home&op=translate&sl=en&tl=uk&text='}${searchWord.name}`;
     }
     const classes = useStyles();
-    if (values.getContent.name === null) {
+    if (!searchWord.name) {
         sessionStorage.setItem('mistake', 'This word not found-');
         window.location.href = '/?3';
     } else {
@@ -37,17 +37,20 @@ const SearchWord = (props) => {
                     </TableHead>
                     <TableBody>
                         <TableRow>
-                            <TableCell component="th" scope="row">
-                                {values.getContent.name}
+                            <TableCell
+                                component="th"
+                                scope="row"
+                            >
+                                {searchWord.name}
                             </TableCell>
-                            <TableCell align="right">{values.getContent.meaning}</TableCell>
-                            <TableCell align="right">{values.getContent.date}</TableCell>
+                            <TableCell align="right">{searchWord.meaning}</TableCell>
+                            <TableCell align="right">{searchWord.date}</TableCell>
                             <TableCell align="right">
                                 <a
-                                    href={pronunciation(values.getContent.name)}
+                                    href={pronunciation()}
                                     target='_blank'
                                 >
-                                    {values.getContent.name}
+                                    {searchWord.name}
                                 </a>
                             </TableCell>
                         </TableRow>
@@ -57,4 +60,10 @@ const SearchWord = (props) => {
         )
     }
 }
-export default SearchWord;
+const mapStateToProps = state => {
+    return {
+        searchWord: state.searchWordReducer
+    };
+}
+const mapDispatchToProps = null;
+export default connect(mapStateToProps, mapDispatchToProps)(SearchWord);

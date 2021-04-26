@@ -2,9 +2,12 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { ApplictationContext } from '../Application';
+import { connect } from 'react-redux';
+import { addUserFetchData } from '../../store/update_users/action_add';
 
 const RegistrationForm = (props) => {
     const { values, setValues } = React.useContext(ApplictationContext);
+    const { userAdd } = props;
     const closeFormRegistration = () => {
         window.location.href = '/';
     }
@@ -20,7 +23,7 @@ const RegistrationForm = (props) => {
             password: event.target.value
         });
     }
-    async function addUser() {
+    const addUser = () => {
         const checkDate = () => {
             if (new Date().getDate() < 10) {
                 return `${'0'}${new Date().getDate()}`;
@@ -40,27 +43,11 @@ const RegistrationForm = (props) => {
             password: values.password,
             date: `${checkDate()}.${checkMonth()}.${new Date().getFullYear()}p.`
         }
-        let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${'https://specialdictionary.herokuapp.com/add/user'}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        })
-        response = await response.json();
-        if (response.login !== null) {
-            let user = {
-                login: response.login,
-                password: response.password,
-                date: `${checkDate()}.${checkMonth()}.${new Date().getFullYear()}p.`,
-                role: 'user',
-                categories: []
-            }
-            localStorage.setItem(response.login, JSON.stringify(user));
-            window.location.href = '/?1'
-        } else {
-            window.location.href = '/?2'
+        let data = {
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/add/user`}`,
+            user: user
         }
+        userAdd(data);
     }
     const onKeyPress = (event) => {
         if (event.key === 'Enter') {
@@ -130,4 +117,10 @@ const RegistrationForm = (props) => {
         </div>
     )
 }
-export default RegistrationForm;
+const mapStateToProps = null;
+const mapDispatchToProps = dispatch => {
+    return {
+        userAdd: (data) => dispatch(addUserFetchData(data))
+    };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(RegistrationForm);

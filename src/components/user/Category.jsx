@@ -11,77 +11,60 @@ import CreateIcon from '@material-ui/icons/Create';
 import Tooltip from '@material-ui/core/Tooltip';
 import { ApplictationContext } from '../Application';
 import { CategoriesContext } from './ListCategories';
+import { connect } from 'react-redux';
+import { editCategoryFetchData } from '../../store/update_categories/action_edit';
 
 function Category(props) {
     const { values, setValues } = React.useContext(ApplictationContext);
-    const { getIdCategory, itemCategory, indexCategory } = React.useContext(CategoriesContext);
+    const { getIdCategory, itemCategory } = React.useContext(CategoriesContext);
+    const { categoryEditName } = props;
+    const inputEditNameCategory = React.useRef('');
+    const nameOldCategory = React.useRef('');
     const [valuesCategory, setValuesCategory] = useState({
-        show: true,
-        border: 0,
+        showInputEditNameCategory: true,
         oldNameCategory: '',
         newNameCategory: ''
     });
-    const getNameCategory = (name) => {
+    const getNameCategory = () => {
         setValues({
             ...values,
-            countWords: 0,
-            getContent: [],
-            currentNameCategory: name,
+            numberPage: 1,
+            currentNameCategory: nameOldCategory.current.innerText,
             showListCategories: false,
             showListWords: true,
-            loadWords: name
+            loadWords: nameOldCategory.current.innerText
         });
     }
     const showEdit = (event) => {
         setValuesCategory({
             ...valuesCategory,
-            show: !valuesCategory.show,
-            border: valuesCategory.show == true ? 1 : 0
+            showInputEditNameCategory: !valuesCategory.showInputEditNameCategory
         });
     }
-    const editNameCategory = (event, name) => {
+    React.useEffect(() => {
+        inputEditNameCategory.current.focus();
+    }, [valuesCategory.showInputEditNameCategory]);
+    const editNameCategory = (event) => {
         setValuesCategory({
             ...valuesCategory,
-            oldNameCategory: name,
+            oldNameCategory: nameOldCategory.current.innerText,
             newNameCategory: event.target.value
         });
     }
     const nameEditCategory = (event) => {
         if (event.keyCode == 13) {
-            (async function editCategory() {
-                let editCategory = {
-                    userName: sessionStorage.userName,
-                    name: valuesCategory.oldNameCategory,
-                    newName: valuesCategory.newNameCategory
-                }
-                let response = await fetch(`${'https://cors-anywhere.herokuapp.com/'}${`https://specialdictionary.herokuapp.com/edit/category`}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(editCategory)
-                });
-                response = await response.json();
-                if (response.name !== null) {
-                    setValuesCategory({
-                        ...valuesCategory,
-                        show: !valuesCategory.show,
-                        border: valuesCategory.show == true ? 1 : 0,
-                        newNameCategory: ''
-                    });
-                    let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
-                    Object.entries(user.categories).map(([, value]) => {
-                        if (value.name === valuesCategory.oldNameCategory) {
-                            value.name = valuesCategory.newNameCategory;
-                        }
-                    })
-                    localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-                    setValues({
-                        ...values,
-                        loadCategories: response.name
-                    });
-                }
-            })();
+            let editCategory = {
+                userName: sessionStorage.userName,
+                name: valuesCategory.oldNameCategory,
+                newName: valuesCategory.newNameCategory
+            }
+            let data = {
+                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/edit/category`}`,
+                editCategory: editCategory,
+                setValuesCategory: setValuesCategory,
+                valuesCategory: valuesCategory
+            }
+            categoryEditName(data);
         }
     }
     return (
@@ -112,19 +95,20 @@ function Category(props) {
                         cursor: 'pointer',
                         width: '300px'
                     }}
+                    ref={nameOldCategory}
                     primary={itemCategory.name}
-                    onClick={() => getNameCategory(itemCategory.name)}
+                    onClick={() => getNameCategory()}
                 />
                 <input
-                    disabled={valuesCategory.show}
-                    name={indexCategory}
+                    ref={inputEditNameCategory}
                     value={valuesCategory.newNameCategory}
-                    onChange={(event) => editNameCategory(event, itemCategory.name)}
+                    onChange={(event) => editNameCategory(event)}
                     onKeyUp={nameEditCategory}
+                    disabled={valuesCategory.showInputEditNameCategory}
                     style={{
                         width: '150px',
                         height: '20px',
-                        border: `${valuesCategory.border}px solid black`,
+                        border: 'none',
                         background: 'none'
                     }}
                 >
@@ -137,8 +121,6 @@ function Category(props) {
                 >
                     <IconButton
                         aria-label='Edit'
-                        value={indexCategory}
-                        name={itemCategory.name}
                         onClick={showEdit}
                     >
                         <CreateIcon />
@@ -148,4 +130,10 @@ function Category(props) {
         </List >
     )
 }
-export default Category;
+const mapStateToProps = null;
+const mapDispatchToProps = dispatch => {
+    return {
+        categoryEditName: (data) => dispatch(editCategoryFetchData(data))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Category);

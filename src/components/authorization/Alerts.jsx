@@ -35,7 +35,7 @@ export default function Alerts(props) {
                         }}
                     >
                         <AlertTitle>Success</AlertTitle>
-                        The registration is — <strong>successful!</strong>
+                        The registration is <strong>successful!</strong>
                     </Alert>
                 </div>
             )
@@ -52,7 +52,7 @@ export default function Alerts(props) {
                         }}
                     >
                         <AlertTitle>Error</AlertTitle>
-                        This login is already — <strong>use!</strong>
+                        This login is already <strong>use!</strong>
                     </Alert>
                 </div>
             )
@@ -69,7 +69,7 @@ export default function Alerts(props) {
                         }}
                     >
                         <AlertTitle>Warning</AlertTitle>
-                        Warning you must — <strong>to register!</strong>
+                        You have to <strong>register!</strong>
                     </Alert>
                 </div>
             )
