@@ -25,6 +25,7 @@ export const deleteWordsFetchData = (data) => {
                 typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
                 alertMistakes: true
             });
+        } else {
             response = await response.json();
             setSelected([]);
             setValues({

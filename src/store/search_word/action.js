@@ -18,6 +18,7 @@ export const searchWordFetchData = (data) => {
                 typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
                 alertMistakes: true
             });
+        } else {
             response = await response.json();
             if (response.name) {
                 dispatch(searchWordFetchDataSuccess(response));

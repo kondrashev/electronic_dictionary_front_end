@@ -42,6 +42,7 @@ export const loadUsersFetchData = (data) => {
                     typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
                     alertMistakes: true
                 });
+            } else {
                 response = await response.json();
                 dispatch(loadUsersFetchDataSuccess(response));
             }
