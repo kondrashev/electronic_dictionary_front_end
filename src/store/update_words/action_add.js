@@ -16,6 +16,14 @@ export const addWordFetchData = (data) => {
             },
             body: JSON.stringify(word)
         });
+        let error = response;
+        error.status !== 200 &&
+            setValues({
+                ...values,
+                number: 5,
+                typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
+                alertMistakes: true
+            });
         response = await response.json();
         if (response.name) {
             dispatch(addWordFetchDataSuccess(response));

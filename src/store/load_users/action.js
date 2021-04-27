@@ -14,37 +14,35 @@ export const loadUsersFetchData = (data) => {
             users[i] = JSON.parse(localStorage.getItem(localStorage.key(i)));
         }
         return async () => {
-            try {
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(users)
-                })
-            } catch {
+            let response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(users)
+            })
+            let error = response;
+            error.status !== 200 &&
                 setValues({
                     ...values,
                     number: 5,
-                    typeMistake: 'Too many requests!!!',
+                    typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
                     alertMistakes: true
                 });
-            }
         }
     } else {
         return async (dispatch) => {
-            try {
-                let response = await fetch(url);
-                response = await response.json();
-                dispatch(loadUsersFetchDataSuccess(response));
-            } catch {
+            let response = await fetch(url);
+            let error = response;
+            error.status !== 200 &&
                 setValues({
                     ...values,
                     number: 5,
-                    typeMistake: 'Too many requests!!!',
+                    typeMistake: error.status !== 200 && `Error from server-${error.statusText} №${error.status}!!!`,
                     alertMistakes: true
                 });
-            }
+            response = await response.json();
+            dispatch(loadUsersFetchDataSuccess(response));
         }
     }
 }

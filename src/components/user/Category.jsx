@@ -61,8 +61,10 @@ function Category(props) {
             let data = {
                 url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/edit/category`}`,
                 editCategory: editCategory,
-                setValuesCategory: setValuesCategory,
-                valuesCategory: valuesCategory
+                values: values,
+                setValues: setValues,
+                valuesCategory: valuesCategory,
+                setValuesCategory: setValuesCategory
             }
             categoryEditName(data);
         }

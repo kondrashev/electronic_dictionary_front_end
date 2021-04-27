@@ -45,7 +45,9 @@ const RegistrationForm = (props) => {
         }
         let data = {
             url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/add/user`}`,
-            user: user
+            user: user,
+            values: values,
+            setValues: setValues
         }
         userAdd(data);
     }

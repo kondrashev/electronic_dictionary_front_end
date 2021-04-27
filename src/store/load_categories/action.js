@@ -9,24 +9,23 @@ export const loadCategoriesFetchDataSuccess = (categories) => {
 export const loadCategoriesFetchData = (data) => {
     const { url, values, setValues } = data;
     return async (dispatch) => {
-        try {
-            let response = await fetch(url);
-            response = await response.json();
-            dispatch(loadCategoriesFetchDataSuccess(response));
-            setValues({
-                ...values,
-                changeCountPages: {
-                    url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/count/categories?userName=${sessionStorage.userName}`}`,
-                    range: 5
-                }
-            });
-        } catch {
+        let response = await fetch(url);
+        let error = response;
+        error.status !== 200 &&
             setValues({
                 ...values,
                 number: 5,
-                typeMistake: 'Too many requests!!!',
+                typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
                 alertMistakes: true
             });
-        }
+        response = await response.json();
+        dispatch(loadCategoriesFetchDataSuccess(response));
+        setValues({
+            ...values,
+            changeCountPages: {
+                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/count/categories?userName=${sessionStorage.userName}`}`,
+                range: 5
+            }
+        });
     }
 }

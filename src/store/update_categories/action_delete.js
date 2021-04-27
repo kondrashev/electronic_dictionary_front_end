@@ -16,6 +16,14 @@ export const deleteCategoriesFetchData = (data) => {
             },
             body: JSON.stringify(listIdCategories)
         });
+        let error = response;
+        error.status !== 200 &&
+            setValues({
+                ...values,
+                number: 5,
+                typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
+                alertMistakes: true
+            });
         response = await response.json();
         setValues({
             ...values,

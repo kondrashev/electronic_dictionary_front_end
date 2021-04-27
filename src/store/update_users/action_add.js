@@ -1,5 +1,5 @@
 export const addUserFetchData = (data) => {
-    const { url, user } = data;
+    const { url, user, values, setValues } = data;
     const { date } = data.user;
     return async () => {
         let response = await fetch(url, {
@@ -9,6 +9,14 @@ export const addUserFetchData = (data) => {
             },
             body: JSON.stringify(user)
         });
+        let error = response;
+        error.status !== 200 &&
+            setValues({
+                ...values,
+                number: 5,
+                typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
+                alertMistakes: true
+            });
         response = await response.json();
         if (response.login) {
             let user = {

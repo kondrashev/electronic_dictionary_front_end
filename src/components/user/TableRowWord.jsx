@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { editWordFetchData } from '../../store/update_words/action_edit';
 
 const TableRowWord = (props) => {
-    const { values } = React.useContext(ApplictationContext);
+    const { values, setValues } = React.useContext(ApplictationContext);
     const { row, isItemSelected, getIdWord, handleClick, labelId } = React.useContext(TableWordsContext);
     const inputEditWord = React.useRef('');
     const nameOldWord = React.useRef('');
@@ -71,6 +71,7 @@ const TableRowWord = (props) => {
                 url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/edit/word`}`,
                 editWord: editWord,
                 values: values,
+                setValues: setValues,
                 valuesTableRowWord: valuesTableRowWord,
                 setValuesTableRowWord: setValuesTableRowWord
             }

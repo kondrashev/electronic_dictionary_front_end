@@ -45,8 +45,8 @@ const Applictation = () => {
         showButtonMoveWords: false,
         showButtonDeleteWords: true,
         listIdWords: [],
-        prefixURL: 'specialdictionary', //'development_version'
-        // prefixURL: 'storageinformation' //'prodaction_version'
+        prefixURL: 'storageinformation' //'development_version',
+        // prefixURL: 'specialdictionary', //'prodaction_version'
     });
     return (
         <Provider store={store}>
@@ -61,7 +61,10 @@ const Applictation = () => {
                         if (window.location.search.replace('?', '') === '' ||
                             window.location.search.replace('?', '') === 'logout') {
                             return (
-                                <AuthorizationForm />
+                                <>
+                                    <AuthorizationForm />
+                                    {values.alertMistakes && <Alerts />}
+                                </>
                             )
                         } else {
                             switch (window.location.search.replace('?', '')) {
