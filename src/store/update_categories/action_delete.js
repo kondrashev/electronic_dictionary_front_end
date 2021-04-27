@@ -17,28 +17,29 @@ export const deleteCategoriesFetchData = (data) => {
             body: JSON.stringify(listIdCategories)
         });
         let error = response;
-        error.status !== 200 &&
+        if (error.status !== 200) {
             setValues({
                 ...values,
                 number: 5,
                 typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
                 alertMistakes: true
             });
-        response = await response.json();
-        setValues({
-            ...values,
-            listIdCategories: [],
-            showDeleteButtonCategory: false
-        });
-        dispatch(deleteCategoriesFetchDataSuccess(response));
-        let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
-        response.map(categoryName => {
-            user.categories.map((category, index) => {
-                if (categoryName === category.name) {
-                    user.categories.splice(index, 1);
-                }
+            response = await response.json();
+            setValues({
+                ...values,
+                listIdCategories: [],
+                showDeleteButtonCategory: false
+            });
+            dispatch(deleteCategoriesFetchDataSuccess(response));
+            let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
+            response.map(categoryName => {
+                user.categories.map((category, index) => {
+                    if (categoryName === category.name) {
+                        user.categories.splice(index, 1);
+                    }
+                })
             })
-        })
-        localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
+            localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
+        }
     }
 }

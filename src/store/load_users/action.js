@@ -22,27 +22,29 @@ export const loadUsersFetchData = (data) => {
                 body: JSON.stringify(users)
             })
             let error = response;
-            error.status !== 200 &&
+            if (error.status !== 200) {
                 setValues({
                     ...values,
                     number: 5,
                     typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
                     alertMistakes: true
                 });
+            }
         }
     } else {
         return async (dispatch) => {
             let response = await fetch(url);
             let error = response;
-            error.status !== 200 &&
+            if (error.status !== 200) {
                 setValues({
                     ...values,
                     number: 5,
-                    typeMistake: error.status !== 200 && `Error from server-${error.statusText} №${error.status}!!!`,
+                    typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
                     alertMistakes: true
                 });
-            response = await response.json();
-            dispatch(loadUsersFetchDataSuccess(response));
+                response = await response.json();
+                dispatch(loadUsersFetchDataSuccess(response));
+            }
         }
     }
 }

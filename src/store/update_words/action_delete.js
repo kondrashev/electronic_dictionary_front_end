@@ -18,49 +18,50 @@ export const deleteWordsFetchData = (data) => {
             body: JSON.stringify(listIdWords)
         });
         let error = response;
-        error.status !== 200 &&
+        if (error.status !== 200) {
             setValues({
                 ...values,
                 number: 5,
                 typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
                 alertMistakes: true
             });
-        response = await response.json();
-        setSelected([]);
-        setValues({
-            ...values,
-            listIdWords: [],
-            showButtonDeleteWords: false
-        });
-        dispatch(deleteWordsFetchDataSuccess(response));
-        let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
-        let moveWords = [];
-        user.categories.map((category) => {
-            if (values.currentNameCategory === category.name) {
-                response.map((wordName) => {
-                    category.words.map((word, index) => {
-                        if (wordName === word.name) {
-                            if (values.categoryName) moveWords.push(word);
-                            category.words.splice(index, 1);
-                        }
-                    })
-                })
-            }
-        })
-        if (values.categoryName) {
-            Object.entries(user.categories).map(([, value]) => {
-                if (value.name === values.categoryName) {
-                    moveWords.map((word) => {
-                        word.categoryName = values.categoryName;
-                        value.words.push(word);
+            response = await response.json();
+            setSelected([]);
+            setValues({
+                ...values,
+                listIdWords: [],
+                showButtonDeleteWords: false
+            });
+            dispatch(deleteWordsFetchDataSuccess(response));
+            let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
+            let moveWords = [];
+            user.categories.map((category) => {
+                if (values.currentNameCategory === category.name) {
+                    response.map((wordName) => {
+                        category.words.map((word, index) => {
+                            if (wordName === word.name) {
+                                if (values.categoryName) moveWords.push(word);
+                                category.words.splice(index, 1);
+                            }
+                        })
                     })
                 }
             })
-            setValues({
-                ...values,
-                categoryName: ''
-            });
+            if (values.categoryName) {
+                Object.entries(user.categories).map(([, value]) => {
+                    if (value.name === values.categoryName) {
+                        moveWords.map((word) => {
+                            word.categoryName = values.categoryName;
+                            value.words.push(word);
+                        })
+                    }
+                })
+                setValues({
+                    ...values,
+                    categoryName: ''
+                });
+            }
+            localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
         }
-        localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
     }
 }

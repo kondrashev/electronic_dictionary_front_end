@@ -17,48 +17,46 @@ export const addWordFetchData = (data) => {
             body: JSON.stringify(word)
         });
         let error = response;
-        error.status !== 200 &&
+        if (error.status !== 200) {
             setValues({
                 ...values,
                 number: 5,
                 typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
                 alertMistakes: true
             });
-        response = await response.json();
-        if (response.name) {
-            dispatch(addWordFetchDataSuccess(response));
-            setValuesWordForm({
-                ...valuesWordForm,
-                valueSelect: '',
-                valueName: '',
-                valueMeaning: ''
-            });
-            let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
-            Object.entries(user.categories).map(([, value]) => {
-                if (value.name === valuesWordForm.valueSelect) {
-                    value.words.push(word);
-                }
-            })
-            localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-            setValues({
-                ...values,
-                showListCategories: false,
-                showListWords: true,
-                currentNameCategory: valuesWordForm.valueSelect
-            });
-        } else {
-            setValuesWordForm({
-                ...valuesWordForm,
-                valueSelect: '',
-                valueName: '',
-                valueMeaning: ''
-            });
-            setValues({
-                ...values,
-                number: 4,
-                typeMistake: 'This word already has in the dictionary-',
-                alertMistakes: true
-            });
+            response = await response.json();
+            if (response.name) {
+                dispatch(addWordFetchDataSuccess(response));
+                setValuesWordForm({
+                    ...valuesWordForm,
+                    valueSelect: '',
+                    valueName: '',
+                    valueMeaning: ''
+                });
+                let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
+                Object.entries(user.categories).map(([, value]) => {
+                    if (value.name === valuesWordForm.valueSelect) {
+                        value.words.push(word);
+                    }
+                })
+                localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
+                setValues({
+                    ...values,
+                    showListCategories: false,
+                    showListWords: true,
+                    currentNameCategory: valuesWordForm.valueSelect
+                });
+            } else {
+                setValuesWordForm({
+                    ...valuesWordForm,
+                    valueSelect: '',
+                    valueName: '',
+                    valueMeaning: '',
+                    number: 4,
+                    typeMistake: 'This word already has in the dictionary-',
+                    alertMistakes: true
+                });
+            }
         }
     }
 }

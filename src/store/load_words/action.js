@@ -11,21 +11,22 @@ export const loadWordsFetchData = (data) => {
     return async (dispatch) => {
         let response = await fetch(url);
         let error = response;
-        error.status !== 200 &&
+        if (error.status !== 200) {
             setValues({
                 ...values,
                 number: 5,
                 typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
                 alertMistakes: true
             });
-        response = await response.json();
-        dispatch(loadWordsFetchDataSuccess(response));
-        setValues({
-            ...values,
-            changeCountPages: {
-                url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/count/words?categoryName=${values.currentNameCategory}&userName=${sessionStorage.userName}`}`,
-                range: 24
-            }
-        });
+            response = await response.json();
+            dispatch(loadWordsFetchDataSuccess(response));
+            setValues({
+                ...values,
+                changeCountPages: {
+                    url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/count/words?categoryName=${values.currentNameCategory}&userName=${sessionStorage.userName}`}`,
+                    range: 24
+                }
+            });
+        }
     }
 }

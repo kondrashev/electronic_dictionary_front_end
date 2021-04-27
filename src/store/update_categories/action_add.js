@@ -17,28 +17,29 @@ export const addCategoryFetchData = (data) => {
             body: JSON.stringify(category)
         });
         let error = response;
-        error.status !== 200 &&
+        if (error.status !== 200) {
             setValues({
                 ...values,
                 number: 5,
                 typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
                 alertMistakes: true
             });
-        response = await response.json();
-        if (response.name) {
-            dispatch(addCategoryFetchDataSuccess(response));
-            setValueNameCategory('');
-            let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
-            user.categories.push(category);
-            localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
-        } else {
-            setValueNameCategory('');
-            setValues({
-                ...values,
-                number: 4,
-                typeMistake: 'This category already has in the dictionary-',
-                alertMistakes: true
-            });
+            response = await response.json();
+            if (response.name) {
+                dispatch(addCategoryFetchDataSuccess(response));
+                setValueNameCategory('');
+                let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
+                user.categories.push(category);
+                localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
+            } else {
+                setValueNameCategory('');
+                setValues({
+                    ...values,
+                    number: 4,
+                    typeMistake: 'This category already has in the dictionary-',
+                    alertMistakes: true
+                });
+            }
         }
     }
 }

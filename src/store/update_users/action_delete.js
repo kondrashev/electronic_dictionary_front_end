@@ -17,26 +17,27 @@ export const deleteUsersFetchData = (data) => {
             body: JSON.stringify(userListId)
         });
         let error = response;
-        error.status !== 200 &&
+        if (error.status !== 200) {
             setValues({
                 ...values,
                 number: 5,
                 typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
                 alertMistakes: true
             });
-        response = await response.json();
-        dispatch(deleteUsersFetchDataSuccess(response));
-        setSelected([]);
-        setValues({
-            ...values,
-            listUsers: response
-        });
-        response.map((login) => {
-            for (let i = 0; i < localStorage.length; i++) {
-                if (login === localStorage.key(i)) {
-                    localStorage.removeItem(localStorage.key(i));
+            response = await response.json();
+            dispatch(deleteUsersFetchDataSuccess(response));
+            setSelected([]);
+            setValues({
+                ...values,
+                listUsers: response
+            });
+            response.map((login) => {
+                for (let i = 0; i < localStorage.length; i++) {
+                    if (login === localStorage.key(i)) {
+                        localStorage.removeItem(localStorage.key(i));
+                    }
                 }
-            }
-        })
+            })
+        }
     }
 }

@@ -17,29 +17,30 @@ export const editCategoryFetchData = (data) => {
             body: JSON.stringify(editCategory)
         });
         let error = response;
-        error.status !== 200 &&
+        if (error.status !== 200) {
             setValues({
                 ...values,
                 number: 5,
                 typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
                 alertMistakes: true
             });
-        response = await response.json();
-        if (response.name) {
-            dispatch(editCategoryFetchDataSuccess(response));
-            setValuesCategory({
-                ...valuesCategory,
-                show: !valuesCategory.show,
-                border: valuesCategory.show == true ? 1 : 0,
-                newNameCategory: ''
-            });
-            let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
-            Object.entries(user.categories).map(([, value]) => {
-                if (value.name === valuesCategory.oldNameCategory) {
-                    value.name = valuesCategory.newNameCategory;
-                }
-            })
-            localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
+            response = await response.json();
+            if (response.name) {
+                dispatch(editCategoryFetchDataSuccess(response));
+                setValuesCategory({
+                    ...valuesCategory,
+                    show: !valuesCategory.show,
+                    border: valuesCategory.show == true ? 1 : 0,
+                    newNameCategory: ''
+                });
+                let user = JSON.parse(localStorage.getItem(sessionStorage.userName));
+                Object.entries(user.categories).map(([, value]) => {
+                    if (value.name === valuesCategory.oldNameCategory) {
+                        value.name = valuesCategory.newNameCategory;
+                    }
+                })
+                localStorage.setItem(sessionStorage.userName, JSON.stringify(user));
+            }
         }
     }
 }
