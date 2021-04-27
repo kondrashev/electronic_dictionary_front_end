@@ -11,6 +11,14 @@ export const searchWordFetchData = (data) => {
     return async (dispatch) => {
         try {
             let response = await fetch(url);
+            let error = response;
+            error.status !== 200 &&
+                setValues({
+                    ...values,
+                    number: 5,
+                    typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
+                    alertMistakes: true
+                });
             response = await response.json();
             if (response.name) {
                 dispatch(searchWordFetchDataSuccess(response));
