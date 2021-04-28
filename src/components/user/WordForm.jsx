@@ -51,6 +51,10 @@ const WordForm = (props) => {
             ...valuesWordForm,
             valueSelect: event.target.value
         });
+        setValues({
+            ...values,
+            currentNameCategory: event.target.value
+        });
     }
     const keyLetter = (event) => {
         setValuesWordForm({
@@ -66,10 +70,6 @@ const WordForm = (props) => {
         });
     }
     const addWord = () => {
-        setValues({
-            ...values,
-            countWords: 0
-        });
         const checkDate = () => {
             if (new Date().getDate() < 10) {
                 return `${'0'}${new Date().getDate()}`;
