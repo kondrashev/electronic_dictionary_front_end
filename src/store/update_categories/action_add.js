@@ -16,15 +16,7 @@ export const addCategoryFetchData = (data) => {
             },
             body: JSON.stringify(category)
         });
-        let error = response;
-        if (error.status !== 200) {
-            setValues({
-                ...values,
-                number: 5,
-                typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
-                alertMistakes: true
-            });
-        } else {
+        if (response.status === 200) {
             response = await response.json();
             if (response.name) {
                 dispatch(addCategoryFetchDataSuccess(response));
@@ -41,6 +33,13 @@ export const addCategoryFetchData = (data) => {
                     alertMistakes: true
                 });
             }
+        } else {
+            setValues({
+                ...values,
+                number: 5,
+                typeMistake: `Error from server-${response.statusText} №${response.status}!!!`,
+                alertMistakes: true
+            });
         }
     }
 }

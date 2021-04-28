@@ -9,15 +9,7 @@ export const addUserFetchData = (data) => {
             },
             body: JSON.stringify(user)
         });
-        let error = response;
-        if (error.status !== 200) {
-            setValues({
-                ...values,
-                number: 5,
-                typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
-                alertMistakes: true
-            });
-        } else {
+        if (response.status === 200) {
             response = await response.json();
             if (response.login) {
                 let user = {
@@ -32,6 +24,13 @@ export const addUserFetchData = (data) => {
             } else {
                 window.location.href = '/?2'
             }
+        } else {
+            setValues({
+                ...values,
+                number: 5,
+                typeMistake: `Error from server-${response.statusText} №${response.status}!!!`,
+                alertMistakes: true
+            });
         }
     }
 }

@@ -21,12 +21,11 @@ export const loadUsersFetchData = (data) => {
                 },
                 body: JSON.stringify(users)
             })
-            let error = response;
-            if (error.status !== 200) {
+            if (response.status !== 200) {
                 setValues({
                     ...values,
                     number: 5,
-                    typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
+                    typeMistake: `Error from server-${response.statusText} №${response.status}!!!`,
                     alertMistakes: true
                 });
             }
@@ -34,17 +33,16 @@ export const loadUsersFetchData = (data) => {
     } else {
         return async (dispatch) => {
             let response = await fetch(url);
-            let error = response;
-            if (error.status !== 200) {
+            if (response.status === 200) {
+                response = await response.json();
+                dispatch(loadUsersFetchDataSuccess(response));
+            } else {
                 setValues({
                     ...values,
                     number: 5,
-                    typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
+                    typeMistake: `Error from server-${response.statusText} №${response.status}!!!`,
                     alertMistakes: true
                 });
-            } else {
-                response = await response.json();
-                dispatch(loadUsersFetchDataSuccess(response));
             }
         }
     }

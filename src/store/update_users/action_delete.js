@@ -16,15 +16,7 @@ export const deleteUsersFetchData = (data) => {
             },
             body: JSON.stringify(userListId)
         });
-        let error = response;
-        if (error.status !== 200) {
-            setValues({
-                ...values,
-                number: 5,
-                typeMistake: `Error from server-${error.statusText} №${error.status}!!!`,
-                alertMistakes: true
-            });
-        } else {
+        if (response.status === 200) {
             response = await response.json();
             dispatch(deleteUsersFetchDataSuccess(response));
             setSelected([]);
@@ -38,7 +30,14 @@ export const deleteUsersFetchData = (data) => {
                         localStorage.removeItem(localStorage.key(i));
                     }
                 }
-            })
+            });
+        } else {
+            setValues({
+                ...values,
+                number: 5,
+                typeMistake: `Error from server-${response.statusText} №${response.status}!!!`,
+                alertMistakes: true
+            });
         }
     }
 }
