@@ -9,13 +9,17 @@ const ListCategories = (props) => {
     const { values, setValues } = React.useContext(ApplictationContext);
     const { loadCatogories, getContent, updateCategories } = props;
     const changePageCategories = React.useMemo(() => {
-        if (values.showListCategories) {
-            return values.numberPage;
+        if (values.showListCategories && values.returnListCategories) {
+            setValues({
+                ...values,
+                numberPageCategories: values.numberPage
+            });
         }
+        return values.numberPageCategories;
     }, [values.numberPage]);
     React.useEffect(() => {
         const data = {
-            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/get/categories?userName=${sessionStorage.userName}&page=${values.numberPage - 1}`}`,
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/get/categories?userName=${sessionStorage.userName}&page=${values.numberPageCategories - 1}`}`,
             values,
             setValues: setValues
         }

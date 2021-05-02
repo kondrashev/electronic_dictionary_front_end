@@ -10,7 +10,8 @@ const PaginationButtons = (props) => {
         if (event.target.value !== undefined) {
             setValues({
                 ...values,
-                numberPage: value
+                numberPage: value,
+                returnListCategories: true
             });
         }
     }

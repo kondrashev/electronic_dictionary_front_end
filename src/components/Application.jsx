@@ -26,6 +26,8 @@ const Applictation = () => {
         password: '',
         number: 0,
         showListCategories: true,
+        returnListCategories: true,
+        numberPageCategories: 1,
         showListWords: false,
         showSearchWord: false,
         valueSearchWord: '',

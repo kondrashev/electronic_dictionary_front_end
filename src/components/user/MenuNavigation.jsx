@@ -13,6 +13,7 @@ const MenuNavigation = (props) => {
         setValues({
             ...values,
             showListCategories: true,
+            returnListCategories: false,
             showListWords: false,
             showSearchWord: false,
             loadCategories: values.showListCategories
