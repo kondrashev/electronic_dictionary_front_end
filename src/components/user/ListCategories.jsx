@@ -8,15 +8,6 @@ export const CategoriesContext = React.createContext();
 const ListCategories = (props) => {
     const { values, setValues } = React.useContext(ApplictationContext);
     const { loadCatogories, getContent, updateCategories } = props;
-    const changePageCategories = React.useMemo(() => {
-        if (values.showListCategories && values.returnListCategories) {
-            setValues({
-                ...values,
-                numberPageCategories: values.numberPage
-            });
-        }
-        return values.numberPageCategories;
-    }, [values.numberPage]);
     React.useEffect(() => {
         const data = {
             url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/get/categories?userName=${sessionStorage.userName}&page=${values.numberPageCategories - 1}`}`,
@@ -24,7 +15,7 @@ const ListCategories = (props) => {
             setValues: setValues
         }
         loadCatogories(data);
-    }, [values.loadCategories, changePageCategories, updateCategories]);
+    }, [values.loadCategories, updateCategories]);
     const getIdCategory = (event) => {
         let listId = values.listIdCategories;
         if (event.target.checked === true) {

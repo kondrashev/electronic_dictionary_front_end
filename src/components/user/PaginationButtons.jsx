@@ -8,11 +8,18 @@ const PaginationButtons = (props) => {
     const { pagesCount } = props;
     const handleChange = (event, value) => {
         if (event.target.value !== undefined) {
-            setValues({
-                ...values,
-                numberPage: value,
-                returnListCategories: true
-            });
+            values.showListCategories &&
+                setValues({
+                    ...values,
+                    numberPageCategories: value,
+                    loadCategories: value
+                });
+            values.showListWords &&
+                setValues({
+                    ...values,
+                    numberPageWords: value,
+                    loadWords: value
+                });
         }
     }
     return (

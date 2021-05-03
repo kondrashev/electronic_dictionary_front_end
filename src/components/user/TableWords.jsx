@@ -39,19 +39,14 @@ function TableWords(props) {
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const changePageWords = React.useMemo(() => {
-        if (values.showListWords) {
-            return values.numberPage;
-        }
-    }, [values.numberPage]);
     React.useEffect(() => {
         let data = {
-            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/get/words?page=${values.numberPage - 1}&categoryName=${values.currentNameCategory}&userName=${sessionStorage.userName}`}`,
+            url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/get/words?page=${values.numberPageWords - 1}&categoryName=${values.currentNameCategory}&userName=${sessionStorage.userName}`}`,
             values: values,
             setValues: setValues
         }
         getWords(data);
-    }, [values.loadWords, changePageWords, updateWords]);
+    }, [values.loadWords, updateWords]);
     function descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
             return -1;
