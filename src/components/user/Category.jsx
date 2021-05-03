@@ -28,7 +28,7 @@ function Category(props) {
     const getNameCategory = () => {
         setValues({
             ...values,
-            numberPage: 1,
+            numberPageWords: 1,
             currentNameCategory: nameOldCategory.current.innerText,
             showListCategories: false,
             showListWords: true,
