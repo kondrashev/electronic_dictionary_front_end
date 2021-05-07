@@ -17,7 +17,7 @@ export const loadWordsFetchData = (data) => {
                 ...values,
                 changeCountPages: {
                     url: `${'https://cors-anywhere.herokuapp.com/'}${`https://${values.prefixURL}.herokuapp.com/count/words?categoryName=${values.currentNameCategory}&userName=${sessionStorage.userName}`}`,
-                    range: 24
+                    range: 25
                 }
             });
         } else {
